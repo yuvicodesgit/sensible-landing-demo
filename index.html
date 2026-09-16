@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Sensible vs LlamaParse — Production Document Extraction</title>
+  <meta name="description" content="LlamaParse accuracy plateaus on complex documents. Sensible combines LLMs with SenseML deterministic rules for 100% precision, bounding-box audit trails, and predictable document pricing."/>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"/>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+
+  <style>
+    /* Sensible Editorial Tokens */
+    :root {
+      --bg-stone: #FBFBF9;
+      --bg-white: #FFFFFF;
+      --bg-stone-subtle: #F4F3EF;
+      --bg-dark-accent: #17121C;
+      
+      --brand-magenta: #840055;
+      --brand-magenta-dark: #4B0532;
+      --brand-magenta-light: #9A1066;
+      --brand-magenta-accent: #E279BF;
+      --brand-magenta-glow: rgba(132, 0, 85, 0.15);
+      --brand-gradient: linear-gradient(135deg, #840055 0%, #9A1066 100%);
+      
+      --text-dark: #141118;
+      --text-body: #4A454F;
+      --text-muted: #8C8691;
+      --text-light: #FFFFFF;
+      
+      --border-stone: #E6E2DA;
+      --border-light: #F0EDE6;
+      
+      --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.03);
+      --shadow-medium: 0 12px 36px rgba(0, 0, 0, 0.06);
+      --shadow-float: 0 24px 60px rgba(20, 17, 24, 0.08);
+
+      --font-sans: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'IBM Plex Mono', monospace;
+
+      --check-green: #00875A;
+      --cross-red: #E03E2E;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
+
+    body {
+      background-color: var(--bg-stone);
+      color: var(--text-dark);
+      font-family: var(--font-sans);
+      line-height: 1.55;
+    }
+
+    a { text-decoration: none; color: inherit; }
+
+    .container {
+      max-width: 1260px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Navbar */
+    .navbar {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-stone);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .navbar-inner {
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 20px;
+      color: var(--text-dark);
+    }
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-body);
+    }
+    .nav-links a:hover { color: var(--brand-magenta); }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 26px;
+      border-radius: 6px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      border: 1px solid transparent;
+      white-space: nowrap;
+    }
+    .btn-primary {
+      background: var(--brand-gradient);
+      color: var(--text-light);
+      box-shadow: 0 2px 8px var(--brand-magenta-glow);
+    }
+    .btn-primary:hover {
+      background: linear-gradient(135deg, var(--brand-magenta-dark), var(--brand-magenta));
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(132, 0, 85, 0.25);
+    }
+    .btn-secondary {
+      background: var(--bg-white);
+      color: var(--text-dark);
+      border-color: var(--border-stone);
+    }
+    .btn-secondary:hover {
+      background: var(--bg-stone-subtle);
+      border-color: var(--text-muted);
+    }
+
+    /* 1. HERO FOLD: LEFT-ALIGNED SPLIT WITH STATS */
+    .hero-section {
+      min-height: calc(100vh - 72px);
+      display: flex;
+      align-items: center;
+      padding: 40px 0;
+      background: var(--bg-stone-subtle);
+    }
+    .hero-container-1fold {
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      gap: 60px;
+      align-items: center;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* Left Column Content */
+    .hero-text-col {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .hero-badge-top {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 16px;
+      border-radius: 100px;
+      background: transparent;
+      border: 1px solid rgba(120, 0, 58, 0.4);
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--brand-magenta-dark);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 32px;
+    }
+
+    .hero-h1 {
+      font-size: 56px;
+      font-weight: 700;
+      line-height: 1.12;
+      letter-spacing: -0.03em;
+      margin-bottom: 24px;
+      color: var(--text-dark);
+      text-wrap: balance;
+    }
+    .hero-h1 span { 
+      color: var(--brand-magenta); 
+    }
+    
+    .hero-intro {
+      font-size: 19px;
+      color: var(--text-dark);
+      line-height: 1.6;
+      margin-bottom: 40px;
+      max-width: 540px;
+    }
+
+    .hero-actions-left {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 48px;
+    }
+    .hero-actions-left .btn-primary {
+      padding: 14px 28px;
+      font-size: 15px;
+      background: var(--brand-magenta-dark);
+      border-radius: 8px;
+    }
+    .hero-actions-left .btn-secondary {
+      padding: 14px 28px;
+      font-size: 15px;
+      background: transparent;
+      border: 1px solid var(--border-stone);
+      border-radius: 8px;
+      color: #121214;
+    }
+
+    /* Stats Row */
+    .hero-stats-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding-top: 24px;
+      border-top: 1px solid var(--border-stone);
+    }
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .stat-val {
+      font-size: 24px;
+      font-weight: 700;
+      color: #121214;
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 13px;
+      color: var(--text-body);
+    }
+
+    /* Right Column Image */
+    .hero-img-col {
+      width: 100%;
+      position: relative;
+    }
+    .hero-img-frame {
+      width: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+    }
+    .hero-img-frame img {
+      width: 100%;
+      height: auto;
+      display: block;
+      transform: scale(1.05); /* Slight crop to mimic edge bleeding */
+    }
+
+
+
+    /* ANIMATED LOGO MARQUEE SCROLLER */
+    .marquee-section {
+      padding: 36px 0;
+      background: var(--bg-white);
+      border-bottom: 1px solid var(--border-stone);
+      overflow: hidden;
+    }
+    .marquee-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .marquee-container {
+      width: 100%;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .marquee-track {
+      display: inline-flex;
+      align-items: center;
+      gap: 60px;
+      animation: marqueeScroll 25s linear infinite;
+    }
+    .marquee-item {
+      font-weight: 700;
+      font-size: 17px;
+      color: #38333D;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      opacity: 0.75;
+    }
+
+    @keyframes marqueeScroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* 2. TWO-CARD SIDE-BY-SIDE COMPARISON */
+    .sec-head {
+      text-align: center;
+      margin-bottom: 48px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .sec-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 16px;
+      border-radius: 100px;
+      background: rgba(132, 0, 85, 0.06);
+      border: 1px solid rgba(132, 0, 85, 0.18);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--brand-magenta);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 16px;
+    }
+    .sec-h2 {
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--text-dark);
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+    .sec-desc {
+      font-size: 18px;
+      color: var(--text-body);
+      max-width: 640px;
+      margin: 0 auto;
+      line-height: 1.6;
+      text-align: center;
+    }
+
+    .compare-2card-section {
+      padding: 90px 0;
+      background: var(--bg-stone-subtle);
+      border-bottom: 1px solid var(--border-stone);
+    }
+    .compare-2card-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      max-width: 1140px;
+      margin: 0 auto;
+    }
+    .comp-card {
+      background-color: var(--bg-white);
+      border: 1px solid var(--border-stone);
+      border-radius: 24px;
+      padding: 56px 48px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.03);
+      display: flex;
+      flex-direction: column;
+    }
+    .comp-card-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 24px;
+    }
+    .sensible-logo svg {
+      width: 32px;
+      height: 32px;
+    }
+    .llamaparse-logo {
+      color: #9C95A3; /* Similar to text-muted but slightly more solid */
+    }
+    .llamaparse-logo svg {
+      width: 32px;
+      height: 32px;
+      color: #9C95A3;
+    }
+    .comp-card-p {
+      font-size: 17px;
+      color: var(--text-body);
+      line-height: 1.75;
+    }
+
+    /* 3. SLEEK MATRIX TABLE */
+    .table-section {
+      padding: 90px 0;
+      background: var(--bg-white);
+      border-bottom: 1px solid var(--border-stone);
+    }
+    .matrix-wrap {
+      border: 1px solid var(--border-stone);
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--bg-white);
+    }
+    .matrix-row {
+      display: grid;
+      grid-template-columns: 1.1fr 1.4fr 1.4fr 1.3fr;
+      border-bottom: 1px solid var(--border-stone);
+    }
+    .matrix-row:last-child { border-bottom: none; }
+    
+    .th-empty {
+      background: var(--bg-stone-subtle);
+    }
+    .th-cell { 
+      padding: 24px 28px; 
+      display: flex; 
+      align-items: center; 
+      background: var(--bg-stone-subtle);
+      color: var(--text-body);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    .th-sensible { 
+      padding: 24px 28px; 
+      display: flex; 
+      align-items: center; 
+      background: var(--brand-magenta-dark); 
+      color: #FFF; 
+    }
+
+    .td-cell { padding: 32px 28px; font-size: 15px; line-height: 1.6; }
+    
+    .td-feature { 
+      font-weight: 600; 
+      color: var(--text-dark); 
+      background: var(--bg-stone-subtle); 
+    }
+    
+    .td-sensible { 
+      color: #FFF; 
+      font-weight: 500; 
+    }
+    .matrix-row:nth-child(odd) .td-sensible { background: var(--brand-magenta-dark); }
+    .matrix-row:nth-child(even) .td-sensible { background: var(--brand-magenta); }
+
+    .td-competitor { color: var(--text-body); background: var(--bg-stone-subtle); }
+    .td-why { color: var(--text-body); background: var(--bg-white); font-style: italic; }
+
+    /* 4. DIAGRAM SECTION */
+    .diagram-section {
+      min-height: calc(100vh - 72px);
+      display: flex;
+      align-items: center;
+      padding: 24px 0;
+      background: var(--bg-stone-subtle);
+      border-bottom: 1px solid var(--border-stone);
+    }
+    .diagram-container-1fold {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      height: 100%;
+      justify-content: center;
+    }
+    .workflow-container {
+      background: var(--bg-white);
+      border: 1px solid var(--border-stone);
+      border-radius: 14px;
+      padding: 24px;
+      box-shadow: var(--shadow-float);
+      max-width: 1040px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      width: 100%;
+    }
+
+    .pipeline-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .pipeline-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #121214;
+      text-align: center;
+    }
+    .pipeline-row {
+      display: grid;
+      grid-template-columns: 120px 1fr 240px 1fr 300px;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .flow-node {
+      background: var(--bg-stone-subtle);
+      border: 1px solid var(--border-stone);
+      border-radius: 12px;
+      padding: 12px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      min-height: 100px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    }
+    .flow-node.highlight {
+      background: rgba(132, 0, 85, 0.04);
+      border-color: rgba(132, 0, 85, 0.3);
+    }
+    .flow-node-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #121214;
+      margin-bottom: 4px;
+    }
+    
+    .flow-icon {
+      font-size: 28px;
+      margin-bottom: 4px;
+    }
+    .flow-doc-icon {
+      width: 40px;
+      height: 52px;
+      background: var(--text-body);
+      border-radius: 4px 10px 4px 4px;
+      color: #FFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 12px;
+      position: relative;
+    }
+    .flow-doc-icon.magenta {
+      background: var(--brand-magenta);
+    }
+    .flow-doc-icon::before {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 12px; height: 12px;
+      background: var(--bg-white);
+      border-bottom-left-radius: 4px;
+    }
+
+    /* Animated Flow Arrows */
+    .flow-arrow-container {
+      width: 100%;
+      display: flex;
+      align-items: center;
+    }
+    .flow-arrow-svg {
+      width: 100%;
+      height: 20px;
+    }
+    @keyframes flow-dash {
+      from { stroke-dashoffset: 24; }
+      to { stroke-dashoffset: 0; }
+    }
+    .flow-line {
+      stroke: var(--brand-magenta);
+      stroke-width: 2;
+      stroke-dasharray: 6 6;
+      animation: flow-dash 1s linear infinite;
+    }
+    .flow-head {
+      fill: var(--brand-magenta);
+    }
+
+    /* Code Block Output Nodes (Light Theme) */
+    .code-node {
+      background: var(--bg-white);
+      border: 1px solid var(--border-stone);
+      border-radius: 8px;
+      padding: 12px 16px;
+      color: var(--text-dark);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      text-align: left;
+      min-height: 120px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+    }
+    .code-header {
+      font-size: 10px;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border-stone);
+      padding-bottom: 6px;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-family: var(--font-sans);
+      font-weight: 600;
+    }
+    .code-body {
+      color: var(--text-body);
+      white-space: pre;
+      line-height: 1.3;
+    }
+    .code-body span.val { color: var(--brand-magenta); font-weight: 500; }
+    
+    .code-body.markdown {
+      color: var(--text-body);
+    }
+    .code-body.markdown span.dim { color: var(--text-muted); font-style: italic; }
+
+    /* Subtle pulsing animation for engine nodes */
+    @keyframes pulse-engine {
+      0% { transform: scale(1); box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+      50% { transform: scale(1.03); box-shadow: 0 12px 24px rgba(132,0,85,0.08); }
+      100% { transform: scale(1); box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+    }
+    .flow-node.engine-node {
+      animation: pulse-engine 3s ease-in-out infinite;
+      border: 1px solid var(--border-stone);
+    }
+    .flow-node.engine-node.highlight {
+      border: 1px solid rgba(132, 0, 85, 0.3);
+      background: rgba(132, 0, 85, 0.02);
+    }
+
+    /* 5. INTERACTIVE ACCORDION FAQS */
+    .faq-section {
+      padding: 100px 0;
+      background: var(--bg-white);
+    }
+    .faq-container {
+      max-width: 980px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .faq-accordion {
+      background: var(--bg-stone-subtle);
+      border: 1px solid var(--border-stone);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: all 0.2s ease;
+    }
+    .faq-accordion[open] {
+      border-color: var(--brand-magenta);
+      background: var(--bg-white);
+    }
+    .faq-summary {
+      padding: 28px 32px;
+      font-size: 19px;
+      font-weight: 600;
+      color: var(--text-dark);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      list-style: none;
+    }
+    .faq-summary::-webkit-details-marker { display: none; }
+    .faq-icon {
+      font-size: 24px;
+      line-height: 1;
+      font-weight: 300;
+      color: var(--brand-magenta);
+      transition: transform 0.2s ease;
+    }
+    .faq-accordion[open] .faq-icon { transform: rotate(45deg); }
+    .faq-content {
+      padding: 0 32px 32px;
+      font-size: 16px;
+      color: var(--text-body);
+      line-height: 1.6;
+    }
+
+    /* 6. KEY TAKEAWAYS SECTION */
+    .takeaways-section {
+      padding: 120px 0;
+      background: var(--bg-stone-subtle);
+    }
+    .takeaway-single-card {
+      max-width: 900px;
+      margin: 0 auto;
+      background: var(--bg-white);
+      border: 1px solid var(--border-stone);
+      border-radius: 24px;
+      padding: 64px 72px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.02);
+    }
+    .takeaway-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--brand-magenta);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+    .takeaway-large-p {
+      font-size: 26px;
+      color: var(--text-dark);
+      line-height: 1.6;
+      font-weight: 400;
+    }
+
+    /* 7. CTA BANNER & FOOTER */
+    .cta-banner {
+      background: var(--bg-dark-accent);
+      border-radius: 16px;
+      padding: 72px 40px;
+      text-align: center;
+      color: #FFF;
+      margin: 80px 0 100px;
+      box-shadow: var(--shadow-float);
+    }
+    .cta-h2 { font-size: 38px; font-weight: 700; margin-bottom: 16px; letter-spacing: -0.02em; }
+    .cta-p { font-size: 17px; color: #A69EAD; max-width: 620px; margin: 0 auto 32px; }
+
+    .footer {
+      border-top: 1px solid var(--border-stone);
+      padding: 36px 0;
+      font-size: 13px;
+      color: var(--text-muted);
+      background: var(--bg-white);
+    }
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    @media (max-width: 991px) {
+      .hero-horizontal-split { grid-template-columns: 1fr; }
+      .hero-section { min-height: auto; }
+      .details-grid { grid-template-columns: repeat(2, 1fr); }
+      .matrix-row { grid-template-columns: 1fr 1fr; }
+      .td-why, .td-feature { display: none; }
+      .takeaways-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="container navbar-inner">
+      <a href="https://www.sensible.so" class="nav-logo" style="display: flex; align-items: center;">
+        <img src="https://cdn.prod.website-files.com/69d90e4abf8f50428ec28825/69d90e4abf8f50428ec2888c_LogoDefault.svg" alt="Sensible" style="height: 28px; display: block;" />
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="https://www.sensible.so/how-it-works">How it works</a></li>
+        <li><a href="https://www.sensible.so/solutions">Solutions</a></li>
+        <li><a href="https://www.sensible.so/pricing">Pricing</a></li>
+        <li><a href="https://docs.sensible.so">Docs ↗</a></li>
+      </ul>
+
+      <div style="display: flex; gap: 16px; align-items: center;">
+        <a href="https://app.sensible.so/signin/" class="btn btn-secondary">Sign in</a>
+        <a href="https://www.sensible.so/meeting" class="btn btn-primary">Book a Demo</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 1. HERO FOLD: LEFT-ALIGNED SPLIT WITH STATS -->
+  <section class="hero-section">
+    <div class="container hero-container-1fold">
+      
+      <!-- Left Column: Text & Stats -->
+      <div class="hero-text-col">
+        <div class="hero-badge-top">Sensible vs LlamaParse</div>
+        
+        <h1 class="hero-h1">
+          LLMs summarize documents.<br/>
+          <span>Sensible extracts production data.</span>
+        </h1>
+        
+        <p class="hero-intro">
+          LlamaParse accuracy plateaus on complex documents and charges per page. Getting a document 80% right is the easy part. Getting it <span style="color: var(--brand-magenta);">production-right</span> is the challenge.
+        </p>
+
+        <div class="hero-actions-left">
+          <a href="https://app.sensible.so/signup" class="btn btn-primary">Start Free</a>
+          <a href="https://www.sensible.so/meeting" class="btn btn-secondary">Book a Demo</a>
+        </div>
+        
+        <div style="font-size: 14px; color: var(--text-muted); margin-top: 24px; margin-bottom: 40px;">
+          No credit card &nbsp;&middot;&nbsp; Sample documents loaded
+        </div>
+
+        <div class="hero-stats-row">
+          <div class="stat-item">
+            <span class="stat-val">75M+</span>
+            <span class="stat-label">Documents Processed</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-val">150+</span>
+            <span class="stat-label">Library Configurations</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-val">SOC 2</span>
+            <span class="stat-label">+ HIPAA</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Image -->
+      <div class="hero-img-col">
+        <div class="hero-img-frame">
+          <img src="sensible_document_to_json_hero_1789568914704.jpg" alt="Sensible Document to JSON Extraction Engine"/>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ANIMATED LOGO MARQUEE SCROLLER -->
+  <section class="marquee-section">
+    <div class="marquee-eyebrow">Trusted by teams turning complex documents into production data</div>
+    <div class="marquee-container">
+      <div class="marquee-track">
+        <div class="marquee-item">🌊 Neptune Flood</div>
+        <div class="marquee-item">🛡 Vouch Insurance</div>
+        <div class="marquee-item">🏛 Founder Shield</div>
+        <div class="marquee-item">📈 Inclined Capital</div>
+        <div class="marquee-item">🔒 SterlingRisk</div>
+        <div class="marquee-item">🚀 Apollo Cover</div>
+        <div class="marquee-item">⚡ Limit Financial</div>
+        <div class="marquee-item">🔬 CompScience</div>
+        <div class="marquee-item">🌊 Neptune Flood</div>
+        <div class="marquee-item">🛡 Vouch Insurance</div>
+        <div class="marquee-item">🏛 Founder Shield</div>
+        <div class="marquee-item">📈 Inclined Capital</div>
+        <div class="marquee-item">🔒 SterlingRisk</div>
+        <div class="marquee-item">🚀 Apollo Cover</div>
+        <div class="marquee-item">⚡ Limit Financial</div>
+        <div class="marquee-item">🔬 CompScience</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. TWO-CARD SIDE-BY-SIDE COMPARISON -->
+  <section class="compare-2card-section">
+    <div class="container">
+      <div class="sec-head">
+        <div class="sec-eyebrow">Technical Comparison</div>
+        <h2 class="sec-h2">Sensible vs LlamaParse</h2>
+
+      </div>
+
+      <div class="compare-2card-grid">
+        <!-- CARD 1: SENSIBLE -->
+        <div class="comp-card">
+          <div class="comp-card-logo sensible-logo">
+            <img src="https://cdn.prod.website-files.com/6033da353ede9143c0c56ff8/603523db465026cb1e88e905_LogoDefault.svg" alt="Sensible" style="height: 32px;"/>
+          </div>
+          <p class="comp-card-p">Sensible is a production-grade extraction engine that combines LLM flexibility with SenseML layout rules to guarantee 100% field precision on complex documents. It provides pixel-perfect bounding box traceability for every field and predictable flat per-document pricing, making it ideal for scalable pipelines and automated workflows.</p>
+        </div>
+
+        <!-- CARD 2: LLAMAPARSE -->
+        <div class="comp-card">
+          <div class="comp-card-logo llamaparse-logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path d="M15.855 17.122c-2.092.924-4.358.545-5.23.24 0 .21-.01.857-.048 1.78-.038.924-.332 1.507-.475 1.684.016.577.029 1.837-.047 2.26a1.93 1.93 0 01-.476.914H8.295c.114-.577.555-.946.761-1.058.114-1.193-.11-2.229-.238-2.597-.126.449-.437 1.49-.665 2.068a6.418 6.418 0 01-.713 1.299h-.951c-.048-.578.27-.77.475-.77.095-.177.323-.731.476-1.54.152-.807-.064-2.324-.19-2.981v-2.068c-1.522-.818-2.092-1.636-2.473-2.55-.304-.73-.222-1.843-.142-2.308-.096-.176-.373-.625-.476-1.25-.142-.866-.063-1.491 0-1.828-.095-.096-.285-.587-.285-1.78 0-1.192.349-1.811.523-1.972v-.529c-.666-.048-1.331-.336-1.712-.721-.38-.385-.095-.962.143-1.154.238-.193.475-.049.808-.145.333-.096.618-.192.76-.48C4.512 1.403 4.287.448 4.16 0c.57.077.935.577 1.046.818V0c.713.337 1.997 1.154 2.425 2.934.342 1.424.586 4.409.665 5.723 1.823.016 4.137-.26 6.229.193 1.901.412 2.757 1.25 3.755 1.25.999 0 1.57-.577 2.282-.096.714.481 1.094 1.828.999 2.838-.076.808-.697 1.074-.998 1.106-.38 1.27 0 2.485.237 2.934v1.827c.111.16.333.655.333 1.347 0 .693-.222 1.154-.333 1.299.19 1.077-.08 2.18-.238 2.597h-1.283c.152-.385.412-.481.523-.481.228-1.193.063-2.293-.048-2.693-.722-.424-1.188-1.17-1.331-1.491.016.272-.029 1.029-.333 1.875-.304.847-.76 1.347-.95 1.491v1.01h-1.284c0-.615.348-.737.523-.721.222-.4.76-1.01.76-2.212 0-1.015-.713-1.492-1.236-2.405-.248-.434-.127-.978-.047-1.203z"></path></svg>
+            <span>LlamaParse</span>
+          </div>
+          <p class="comp-card-p">LlamaParse is a Vision LLM prompt parser that converts PDFs into raw Markdown text designed primarily for basic LLM search and RAG indexing. It charges per page and lacks layout guardrails, meaning it can hallucinate numbers on dense multi-column tables and lacks coordinate data for visual auditing.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. SLEEK MATRIX TABLE -->
+  <section class="table-section">
+    <div class="container">
+      <div class="sec-head">
+        <div class="sec-eyebrow">Side-by-Side Matrix</div>
+        <h2 class="sec-h2">Sensible vs. LlamaParse: Key Differences</h2>
+
+      </div>
+
+      <div class="matrix-wrap">
+        <div class="matrix-row">
+          <div class="th-empty"></div>
+          <div class="th-sensible">
+            <img src="https://cdn.prod.website-files.com/69d90e4abf8f50428ec28825/69d90e4abf8f50428ec28870_LogoWhite.svg" alt="Sensible" style="height: 24px;"/>
+          </div>
+          <div class="th-cell" style="gap: 8px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" style="fill: currentColor;"><path d="M15.855 17.122c-2.092.924-4.358.545-5.23.24 0 .21-.01.857-.048 1.78-.038.924-.332 1.507-.475 1.684.016.577.029 1.837-.047 2.26a1.93 1.93 0 01-.476.914H8.295c.114-.577.555-.946.761-1.058.114-1.193-.11-2.229-.238-2.597-.126.449-.437 1.49-.665 2.068a6.418 6.418 0 01-.713 1.299h-.951c-.048-.578.27-.77.475-.77.095-.177.323-.731.476-1.54.152-.807-.064-2.324-.19-2.981v-2.068c-1.522-.818-2.092-1.636-2.473-2.55-.304-.73-.222-1.843-.142-2.308-.096-.176-.373-.625-.476-1.25-.142-.866-.063-1.491 0-1.828-.095-.096-.285-.587-.285-1.78 0-1.192.349-1.811.523-1.972v-.529c-.666-.048-1.331-.336-1.712-.721-.38-.385-.095-.962.143-1.154.238-.193.475-.049.808-.145.333-.096.618-.192.76-.48C4.512 1.403 4.287.448 4.16 0c.57.077.935.577 1.046.818V0c.713.337 1.997 1.154 2.425 2.934.342 1.424.586 4.409.665 5.723 1.823.016 4.137-.26 6.229.193 1.901.412 2.757 1.25 3.755 1.25.999 0 1.57-.577 2.282-.096.714.481 1.094 1.828.999 2.838-.076.808-.697 1.074-.998 1.106-.38 1.27 0 2.485.237 2.934v1.827c.111.16.333.655.333 1.347 0 .693-.222 1.154-.333 1.299.19 1.077-.08 2.18-.238 2.597h-1.283c.152-.385.412-.481.523-.481.228-1.193.063-2.293-.048-2.693-.722-.424-1.188-1.17-1.331-1.491.016.272-.029 1.029-.333 1.875-.304.847-.76 1.347-.95 1.491v1.01h-1.284c0-.615.348-.737.523-.721.222-.4.76-1.01.76-2.212 0-1.015-.713-1.492-1.236-2.405-.248-.434-.127-.978-.047-1.203z"></path></svg>
+            LLAMAPARSE
+          </div>
+          <div class="th-cell">WHY IT MATTERS</div>
+        </div>
+
+        <div class="matrix-row">
+          <div class="td-cell td-feature">Extraction Architecture</div>
+          <div class="td-cell td-sensible"><span style="color: #FFF; font-weight:700;">✓</span> Hybrid (SenseML Layout Rules + LLMs)</div>
+          <div class="td-cell td-competitor"><span style="color: var(--check-green); font-weight:700;">✓</span> Vision-Language Model (VLM) Prompts</div>
+          <div class="td-cell td-why">VLMs alone struggle with deterministic structure; hybrid approaches enforce strict data constraints.</div>
+        </div>
+        
+        <div class="matrix-row">
+          <div class="td-cell td-feature">Best Use Case</div>
+          <div class="td-cell td-sensible">Automated data entry, underwriting, ERP ingestion</div>
+          <div class="td-cell td-competitor">Vector database indexing, basic RAG, chat UI</div>
+          <div class="td-cell td-why">Different pipelines require different extraction engines and output formats.</div>
+        </div>
+
+        <div class="matrix-row">
+          <div class="td-cell td-feature">Output Format</div>
+          <div class="td-cell td-sensible"><span style="color: #FFF; font-weight:700;">✓</span> Highly structured JSON matching your schema</div>
+          <div class="td-cell td-competitor"><span style="color: var(--check-green); font-weight:700;">✓</span> Raw Markdown text for chunking</div>
+          <div class="td-cell td-why">Markdown is great for semantic search, but JSON is required for software pipelines.</div>
+        </div>
+
+        <div class="matrix-row">
+          <div class="td-cell td-feature">Setup Speed</div>
+          <div class="td-cell td-sensible"><span style="color: #FFF; font-weight:700;">✓</span> 150+ pre-built industry schemas</div>
+          <div class="td-cell td-competitor"><span style="color: var(--check-green); font-weight:700;">✓</span> Fast setup via single API prompt</div>
+          <div class="td-cell td-why">Both platforms offer extremely fast time-to-value compared to legacy OCR models.</div>
+        </div>
+
+        <div class="matrix-row">
+          <div class="td-cell td-feature">Source Audit Trail</div>
+          <div class="td-cell td-sensible"><span style="color: #FFF; font-weight:700;">✓</span> Pixel-perfect bounding box (x,y,w,h) coordinates</div>
+          <div class="td-cell td-competitor"><span style="color: var(--cross-red); font-weight:700;">✕</span> Unanchored text with no coordinate mapping</div>
+          <div class="td-cell td-why">Essential for human-in-the-loop verification and compliance auditing.</div>
+        </div>
+
+        <div class="matrix-row">
+          <div class="td-cell td-feature">Complex Table Parsing</div>
+          <div class="td-cell td-sensible"><span style="color: #FFF; font-weight:700;">✓</span> Handles borderless, multi-page, & nested tables</div>
+          <div class="td-cell td-competitor"><span style="color: var(--cross-red); font-weight:700;">✕</span> Drops structure on complex borderless tables</div>
+          <div class="td-cell td-why">Financial and insurance documents rely heavily on complex tabular data.</div>
+        </div>
+
+        <div class="matrix-row">
+          <div class="td-cell td-feature">Large Document Handling</div>
+          <div class="td-cell td-sensible"><span style="color: #FFF; font-weight:700;">✓</span> Processes 1,000+ page documents efficiently</div>
+          <div class="td-cell td-competitor"><span style="color: var(--cross-red); font-weight:700;">✕</span> Hits context limits and latency spikes</div>
+          <div class="td-cell td-why">Critical for processing massive mortgage packets or insurance loss runs.</div>
+        </div>
+        
+        <div class="matrix-row">
+          <div class="td-cell td-feature">Human Exception Routing</div>
+          <div class="td-cell td-sensible"><span style="color: #FFF; font-weight:700;">✓</span> Built-in review queue API for uncertain fields</div>
+          <div class="td-cell td-competitor"><span style="color: var(--cross-red); font-weight:700;">✕</span> Requires building a custom UI microservice</div>
+          <div class="td-cell td-why">Reduces internal engineering lift for deploying human-in-the-loop workflows.</div>
+        </div>
+
+        <div class="matrix-row">
+          <div class="td-cell td-feature">Pricing Structure</div>
+          <div class="td-cell td-sensible"><span style="color: #FFF; font-weight:700;">✓</span> Predictable flat per-document pricing</div>
+          <div class="td-cell td-competitor"><span style="color: var(--cross-red); font-weight:700;">✕</span> Variable per-page pricing ($0.003+/page)</div>
+          <div class="td-cell td-why">Per-page pricing compounds quickly and makes costs unpredictable at volume.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. USEFUL DIAGRAM SECTION -->
+  <section class="diagram-section">
+    <div class="container">
+      <div class="sec-head">
+        <div class="sec-eyebrow">Technical Architecture</div>
+        <h2 class="sec-h2">How the Extraction Engines Differ</h2>
+
+      </div>
+
+      <div class="workflow-container">
+        
+        <!-- Pipeline A: LlamaParse -->
+        <div class="pipeline-wrapper">
+          <div class="pipeline-title">Pipeline A: LlamaParse (Layout-Aware Parsing)</div>
+          <div class="pipeline-row">
+            
+            <!-- Source PDF -->
+            <div class="flow-node">
+              <div class="flow-doc-icon">PDF</div>
+              <div class="flow-node-title" style="margin-top:16px;">Source PDF<br/>Documents</div>
+            </div>
+
+            <!-- Arrow -->
+            <div class="flow-arrow-container">
+              <svg class="flow-arrow-svg" viewBox="0 0 100 24" preserveAspectRatio="none">
+                <line x1="0" y1="12" x2="90" y2="12" class="flow-line"></line>
+                <polygon points="90,6 100,12 90,18" class="flow-head"></polygon>
+              </svg>
+            </div>
+
+            <!-- Engine Node -->
+            <div class="flow-node engine-node">
+              <div class="flow-icon">👁️</div>
+              <div class="flow-node-title">LlamaParse Vision Engine</div>
+              <div style="font-size:12px; color:var(--text-muted); margin-top:8px;">Vision LLM Processing</div>
+            </div>
+
+            <!-- Arrow -->
+            <div class="flow-arrow-container">
+              <svg class="flow-arrow-svg" viewBox="0 0 100 24" preserveAspectRatio="none">
+                <line x1="0" y1="12" x2="90" y2="12" class="flow-line"></line>
+                <polygon points="90,6 100,12 90,18" class="flow-head"></polygon>
+              </svg>
+            </div>
+
+            <!-- Output Node -->
+            <div class="code-node">
+              <div class="code-header">Raw Markdown Output</div>
+              <div class="code-body markdown">
+# Annual Report
+## 1. Executive Summary
+This report highlights...
+- Increased revenue
+- Expanded market share
+
+| Q1  | Q2  | Q3  | Q4  |
+|-----|-----|-----|-----|
+| 10m | 12m | <span class="dim">NaN</span> | 18m |
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Pipeline B: Sensible -->
+        <div class="pipeline-wrapper">
+          <div class="pipeline-title">Pipeline B: Sensible (Template & LLM Extraction)</div>
+          <div class="pipeline-row">
+            
+            <!-- Source PDF -->
+            <div class="flow-node">
+              <div class="flow-doc-icon magenta">PDF</div>
+              <div class="flow-node-title" style="margin-top:16px;">Source PDF<br/>Documents</div>
+            </div>
+
+            <!-- Arrow -->
+            <div class="flow-arrow-container">
+              <svg class="flow-arrow-svg" viewBox="0 0 100 24" preserveAspectRatio="none">
+                <line x1="0" y1="12" x2="90" y2="12" class="flow-line"></line>
+                <polygon points="90,6 100,12 90,18" class="flow-head"></polygon>
+              </svg>
+            </div>
+
+            <!-- Engine Node -->
+            <div class="flow-node engine-node highlight">
+              <div class="flow-icon">🧠 📐</div>
+              <div class="flow-node-title">Sensible Hybrid Engine</div>
+              <div style="font-size:12px; color:var(--text-muted); margin-top:8px;">LLMs + SenseML Rules</div>
+            </div>
+
+            <!-- Arrow -->
+            <div class="flow-arrow-container">
+              <svg class="flow-arrow-svg" viewBox="0 0 100 24" preserveAspectRatio="none">
+                <line x1="0" y1="12" x2="90" y2="12" class="flow-line"></line>
+                <polygon points="90,6 100,12 90,18" class="flow-head"></polygon>
+              </svg>
+            </div>
+
+            <!-- Output Node -->
+            <div class="code-node" style="border: 1px solid rgba(132,0,85,0.4);">
+              <div class="code-header" style="color:var(--brand-magenta-accent)">Structured JSON Output</div>
+              <div class="code-body">
+{
+  "report_title": <span class="val">"Annual Report"</span>,
+  "summary": {
+    "key_achievements": [ <span class="val">"Increased revenue"</span> ]
+  },
+  "financial_data": [
+    {"q": <span class="val">"Q1"</span>, "rev": <span class="val">"10m"</span>},
+    {"q": <span class="val">"Q2"</span>, "rev": <span class="val">"12m"</span>},
+    {"q": <span class="val">"Q3"</span>, "rev": <span class="val">"15m"</span>}
+  ]
+}
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. INTERACTIVE ACCORDION FAQS -->
+  <section class="faq-section">
+    <div class="container">
+      <div class="sec-head">
+        <div class="sec-eyebrow">Frequently Asked Questions</div>
+        <h2 class="sec-h2">Technical & Architectural Details</h2>
+      </div>
+
+      <div class="faq-container">
+        <details class="faq-accordion" open>
+          <summary class="faq-summary">
+            <span>How does Sensible eliminate numerical hallucinations on complex tables?</span>
+            <span class="faq-icon">+</span>
+          </summary>
+          <div class="faq-content">
+            Sensible combines generative LLMs with SenseML layout rules. If an extracted value fails mathematical cross-checking or regex constraints, Sensible's fallback rules correct the field before database delivery.
+          </div>
+        </details>
+
+        <details class="faq-accordion">
+          <summary class="faq-summary">
+            <span>Can I build an extraction pipeline from a single PDF sample?</span>
+            <span class="faq-icon">+</span>
+          </summary>
+          <div class="faq-content">
+            Yes. Unlike legacy IDP platforms requiring 20+ training samples, Sensible allows you to build, test, and deploy production configurations from a single sample PDF in minutes.
+          </div>
+        </details>
+
+        <details class="faq-accordion">
+          <summary class="faq-summary">
+            <span>What is the difference between per-page and per-document pricing?</span>
+            <span class="faq-icon">+</span>
+          </summary>
+          <div class="faq-content">
+            LlamaParse charges per page ($0.003/page), causing costs to compound unpredictably on long documents. Sensible charges flat rates per document, making API budgets 100% predictable.
+          </div>
+        </details>
+
+        <details class="faq-accordion">
+          <summary class="faq-summary">
+            <span>What bounding box coordinate format is returned?</span>
+            <span class="faq-icon">+</span>
+          </summary>
+          <div class="faq-content">
+            Sensible returns native 4-point bounding boxes <code>[x, y, w, h]</code> relative to the PDF page pixel dimensions, allowing you to highlight exact source text in your web browser UI.
+          </div>
+        </details>
+
+        <details class="faq-accordion">
+          <summary class="faq-summary">
+            <span>How does Sensible handle multi-page table breaks?</span>
+            <span class="faq-icon">+</span>
+          </summary>
+          <div class="faq-content">
+            Sensible automatically detects recurring headers across page breaks and merges rows into a single structured array payload without dropping borderless cell rows.
+          </div>
+        </details>
+
+        <details class="faq-accordion">
+          <summary class="faq-summary">
+            <span>Is Sensible SOC 2 Type II and HIPAA compliant?</span>
+            <span class="faq-icon">+</span>
+          </summary>
+          <div class="faq-content">
+            Yes. Sensible is SOC 2 Type II certified and HIPAA-eligible with BAAs available on Enterprise plans, including zero data retention options.
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. KEY TAKEAWAYS SECTION -->
+  <section class="takeaways-section">
+    <div class="container">
+      <div class="takeaway-single-card">
+        <div class="takeaway-eyebrow">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+          THE TAKEAWAY
+        </div>
+        <p class="takeaway-large-p">Sensible is the better choice if you need to reliably extract guaranteed, highly-structured JSON from complex financial and insurance documents with pixel-level traceability. LlamaParse is the better choice if your primary goal is converting PDFs into raw Markdown for basic vector search and LLM indexing.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. CTA BANNER & FOOTER -->
+  <section class="container">
+    <div class="cta-banner">
+      <h2 class="cta-h2">Reach out for a custom demo</h2>
+      <p class="cta-p">A Sensible solutions expert will show you how hybrid extraction handles your worst PDFs.</p>
+      <a href="https://www.sensible.so/meeting" class="btn btn-primary" style="padding: 14px 32px; font-size: 16px;">Book a Custom Demo →</a>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div>© 2026 Sensible Technologies, Inc. All rights reserved.</div>
+      <div style="display: flex; gap: 24px;">
+        <a href="https://www.sensible.so/privacy">Privacy Policy</a>
+        <a href="https://www.sensible.so/terms">Terms of Service</a>
+        <a href="https://docs.sensible.so">API Docs</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
