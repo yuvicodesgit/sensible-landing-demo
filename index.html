@@ -1118,88 +1118,102 @@
   <section class="diagram-section">
     <div class="container">
       <div class="sec-head">
-        <div class="sec-eyebrow">How It Works</div>
-        <h2 class="sec-h2">From PDF to Validated JSON, in Five Steps</h2>
-        <p class="sec-desc">Whether you build the template yourself, generate one from samples, or hand it to Sensible's team, every extraction follows the same path.</p>
+        <div class="sec-eyebrow">Technical Architecture</div>
+        <h2 class="sec-h2">The Hybrid Extraction Engine</h2>
+        <p class="sec-desc">Sensible orchestrates layout-based parsing and generative LLMs in a single pipeline via SenseML, delivering 100% precision with predictable costs.</p>
       </div>
 
-      <div class="steps-strip">
-        <div class="step-item">
-          <div class="step-num">01</div>
-          <div class="step-title">Plan the build</div>
-          <div class="step-desc">Different documents need different approaches.</div>
-        </div>
-        <div class="step-item">
-          <div class="step-num">02</div>
-          <div class="step-title">Build the template</div>
-          <div class="step-desc">Layout-based methods, AI-based methods, or both.</div>
-        </div>
-        <div class="step-item">
-          <div class="step-num">03</div>
-          <div class="step-title">Production workflow</div>
-          <div class="step-desc">The ten stages every document moves through.</div>
-        </div>
-        <div class="step-item">
-          <div class="step-num">04</div>
-          <div class="step-title">Get the data out</div>
-          <div class="step-desc">Webhook, REST, SDK, MCP, spreadsheet, database.</div>
-        </div>
-        <div class="step-item">
-          <div class="step-num">05</div>
-          <div class="step-title">Monitor</div>
-          <div class="step-desc">Validations, review queue, live dashboard.</div>
-        </div>
-      </div>
-
-      <div class="detail-panel">
-        <div class="detail-panel-header">
-          <div class="detail-panel-title">Production Pipeline</div>
-          <div class="detail-panel-status">Healthy</div>
-        </div>
-
-        <div class="detail-cols">
-          <div class="detail-col">
-            <div class="detail-icon-badge">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg>
-            </div>
-            <div class="detail-eyebrow">Validations</div>
-            <div class="detail-title">Rules check every extraction.</div>
-            <div class="detail-p">JsonLogic rules run on every document — cross-field math, date ordering, enum membership, format checks. When a rule fails, the document is flagged before it reaches your downstream systems.</div>
-            <hr class="detail-divider"/>
-            <div class="detail-sublabel">Sample Rules</div>
-            <div class="detail-row"><span>loan_amount &gt; 0</span><span class="pill pill-pass">Pass</span></div>
-            <div class="detail-row"><span>closing_date &gt;= app_date</span><span class="pill pill-pass">Pass</span></div>
-            <div class="detail-row"><span>confidence &gt;= 0.85</span><span class="pill pill-flag">Flag</span></div>
-          </div>
-
-          <div class="detail-col">
-            <div class="detail-icon-badge">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 20c0-4 3.6-6 8-6s8 2 8 6"></path></svg>
-            </div>
-            <div class="detail-eyebrow">Human Review</div>
-            <div class="detail-title">Flagged docs queue, not your customer.</div>
-            <div class="detail-p">When a confidence score or rule trips, the document goes to a review queue with one-click accept, correct, or reject. Corrections feed your reference set so the same edge case stops reaching review next time.</div>
-            <hr class="detail-divider"/>
-            <div class="detail-sublabel">Reviewer Actions</div>
-            <div class="detail-row"><span>Accept value as-is</span><span class="pill pill-pass">Ship</span></div>
-            <div class="detail-row"><span>Correct value</span><span class="pill pill-flag">Refeed</span></div>
-            <div class="detail-row"><span>Reject document</span><span class="pill pill-block">Block</span></div>
-          </div>
-
-          <div class="detail-col">
-            <div class="detail-icon-badge">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="M7 15l4-6 4 3 4-7"></path></svg>
-            </div>
-            <div class="detail-eyebrow">Monitor</div>
-            <div class="detail-title">A live dashboard tracks every extraction.</div>
-            <div class="detail-p">Browse every extraction across production and development, filterable by date range. Click into any document to inspect field-by-field results and trace each value back to its source coordinates.</div>
-            <hr class="detail-divider"/>
-            <div class="detail-sublabel">Tracked Signals</div>
-            <div class="detail-row"><span>Extraction coverage</span><span class="pill pill-neutral">All Fields</span></div>
-            <div class="detail-row"><span>Volume + config usage</span><span class="pill pill-neutral">By Date</span></div>
-            <div class="detail-row"><span>Recent extractions</span><span class="pill pill-neutral">Filterable</span></div>
+      <div class="arch-wrapper" style="margin-top:40px; padding:40px; background:#FFF; border:1px solid var(--border-stone); border-radius:24px; box-shadow:0 12px 36px rgba(0,0,0,0.04); display:flex; flex-direction:column; gap:24px;">
+        
+        <!-- ROW 1: INPUT -->
+        <div class="arch-row" style="display:flex; justify-content:center;">
+          <div class="arch-box" style="background:var(--bg-stone-subtle); border:1px solid var(--border-stone); border-radius:12px; padding:20px; width:100%; max-width:400px; text-align:center;">
+            <div style="font-weight:700; margin-bottom:4px;">Messy Document Input</div>
+            <div style="font-size:14px; color:var(--text-muted);">PDFs, images, dense tables, unstructured text</div>
           </div>
         </div>
+
+        <div style="display:flex; justify-content:center; color:var(--border-stone);">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
+        </div>
+
+        <!-- ROW 2: SENSEML ORCHESTRATOR -->
+        <div class="arch-row" style="display:flex; justify-content:center;">
+          <div class="arch-box" style="background:var(--brand-magenta-dark); color:#FFF; border-radius:12px; padding:24px; width:100%; max-width:600px; text-align:center; box-shadow:0 8px 24px rgba(132,0,85,0.2);">
+            <div style="font-weight:700; font-size:18px; margin-bottom:8px;">SenseML Orchestration Layer</div>
+            <div style="font-size:14px; color:rgba(255,255,255,0.8);">Proprietary query language routes fields to the optimal extraction engine. Handles preprocessing, metadata correction, and agentic fallback chains.</div>
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:center; gap:260px; color:var(--border-stone); margin-top: -10px; margin-bottom: -10px;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: rotate(45deg);"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: rotate(-45deg);"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
+        </div>
+
+        <!-- ROW 3: HYBRID ENGINES -->
+        <div class="arch-row" style="display:flex; flex-wrap:wrap; gap:24px; justify-content:center;">
+          <div class="arch-box" style="flex: 1 1 300px; background:#FFF; border:2px solid var(--border-stone); border-radius:12px; padding:24px;">
+            <div style="font-weight:700; font-size:16px; margin-bottom:8px; display:flex; align-items:center; gap:8px;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#00875A;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+              Deterministic Methods
+            </div>
+            <div style="font-size:14px; color:var(--text-muted); line-height:1.5; margin-bottom: 12px;">
+              Spatial anchors, regex, and exact layout rules. High performance, zero hallucinations, ultra-cheap. Perfect for structured forms (W-2s, 1040s).
+            </div>
+            <div style="font-family:var(--font-mono); font-size:12px; background:var(--bg-stone-subtle); padding:8px; border-radius:4px;">
+              type: "row", tiebreaker: "right"
+            </div>
+          </div>
+
+          <div class="arch-box" style="flex: 1 1 300px; background:#FFF; border:2px solid var(--brand-magenta); border-radius:12px; padding:24px; position:relative;">
+            <div style="position:absolute; top:-12px; right:20px; background:var(--brand-magenta); color:#FFF; font-size:10px; font-weight:700; padding:4px 8px; border-radius:4px; font-family:var(--font-mono); text-transform:uppercase;">Multimodal</div>
+            <div style="font-weight:700; font-size:16px; margin-bottom:8px; display:flex; align-items:center; gap:8px;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--brand-magenta);"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+              LLM-Based Methods
+            </div>
+            <div style="font-size:14px; color:var(--text-muted); line-height:1.5; margin-bottom: 12px;">
+              Generative models interpreting context, unstructured text, and images. Handles edge cases where fixed rules break.
+            </div>
+            <div style="font-family:var(--font-mono); font-size:12px; background:var(--bg-stone-subtle); padding:8px; border-radius:4px;">
+              prompt: "Extract the borrower name"
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:center; gap:260px; color:var(--border-stone); margin-top: -10px; margin-bottom: -10px;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: rotate(-45deg);"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: rotate(45deg);"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
+        </div>
+
+        <!-- ROW 4: VALIDATION -->
+        <div class="arch-row" style="display:flex; justify-content:center;">
+          <div class="arch-box" style="background:var(--bg-stone-subtle); border:1px solid var(--border-stone); border-radius:12px; padding:20px; width:100%; max-width:600px;">
+            <div style="font-weight:700; margin-bottom:8px; display:flex; align-items:center; gap:8px;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--text-dark);"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              JsonLogic Validation & Human Review Queue
+            </div>
+            <div style="font-size:14px; color:var(--text-muted); display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+              <div>
+                <strong>Rules check every output.</strong><br/>Cross-field math, enums, format checks.
+              </div>
+              <div>
+                <strong>Built-in audit trails.</strong><br/>Failing docs hit the review UI, not production.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:center; color:var(--check-green);">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
+        </div>
+
+        <!-- ROW 5: OUTPUT -->
+        <div class="arch-row" style="display:flex; justify-content:center;">
+          <div class="arch-box" style="background:#FFF; border:2px solid var(--check-green); border-radius:12px; padding:16px; width:100%; max-width:400px; text-align:center;">
+            <div style="font-weight:700; color:var(--check-green); font-family:var(--font-mono);">100% Validated JSON Payload</div>
+          </div>
+        </div>
+
       </div>
 
     </div>
