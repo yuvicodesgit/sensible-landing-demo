@@ -47,12 +47,19 @@
 
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
 
+    html {
+      overflow-x: hidden;
+      width: 100%;
+    }
+
     body {
       background-color: var(--bg-stone);
       color: var(--text-dark);
       font-family: var(--font-sans);
       line-height: 1.55;
       overflow-x: hidden;
+      width: 100%;
+      position: relative;
     }
 
     a { text-decoration: none; color: inherit; }
@@ -140,11 +147,11 @@
     }
     .hero-container-1fold {
       display: grid;
-      grid-template-columns: 1fr 1.1fr;
-      gap: 60px;
+      grid-template-columns: 0.9fr 1.4fr;
+      gap: 56px;
       align-items: center;
       width: 100%;
-      max-width: 1200px;
+      max-width: 1440px;
       margin: 0 auto;
     }
 
@@ -243,167 +250,64 @@
       color: var(--text-body);
     }
 
-    /* Right Column: Live Dashboard Visual */
+    /* Right Column: Hero Product Screenshot */
     .hero-img-col {
       width: 100%;
       position: relative;
     }
-    .hero-workflow {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      padding: 32px;
+    .hero-glow {
+      position: absolute;
+      top: 8%;
+      left: 10%;
+      width: 70%;
+      height: 70%;
+      background: var(--brand-magenta);
+      filter: blur(70px);
+      opacity: 0.15;
+      border-radius: 50%;
+      z-index: 0;
+    }
+    .hero-browser-frame {
+      position: relative;
+      z-index: 1;
+      width: 100%;
       background: var(--bg-white);
       border: 1px solid var(--border-stone);
-      border-radius: 16px;
-      box-shadow: 0 24px 60px rgba(20, 17, 24, 0.08);
-      position: relative;
+      border-radius: 14px;
+      box-shadow: 0 30px 70px rgba(20, 17, 24, 0.15);
+      overflow: hidden;
     }
-    .hw-top-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-    }
-    .hw-node {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background: var(--bg-stone-subtle);
-      border: 1px solid var(--border-stone);
-      border-radius: 12px;
-      padding: 16px;
-      width: 120px;
-      height: 120px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-      z-index: 2;
-    }
-    .hw-node.highlight {
-      background: rgba(132, 0, 85, 0.04);
-      border-color: rgba(132, 0, 85, 0.3);
-      animation: pulse-engine 3s infinite;
-    }
-    .hw-node-text {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--text-dark);
-      margin-top: 8px;
-      text-align: center;
-    }
-    .hw-arrow {
-      flex: 1;
-      height: 2px;
-      background: repeating-linear-gradient(90deg, var(--border-stone) 0, var(--border-stone) 6px, transparent 6px, transparent 12px);
-      position: relative;
-    }
-    .hw-arrow::after {
-      content: '';
-      position: absolute;
-      right: -2px;
-      top: -4px;
-      border-top: 5px solid transparent;
-      border-bottom: 5px solid transparent;
-      border-left: 6px solid var(--border-stone);
-    }
-    .hw-code {
-      width: 100%;
-      background: var(--bg-stone-subtle);
-      border: 1px solid var(--border-stone);
-      border-radius: 8px;
-      padding: 16px;
-      font-family: var(--font-mono);
-      font-size: 11px;
-      color: var(--text-dark);
-      margin-top: 16px;
-    }
-    .hw-code-header {
-      display: flex;
-      justify-content: space-between;
-      border-bottom: 1px solid var(--border-stone);
-      padding-bottom: 8px;
-      margin-bottom: 8px;
-      font-family: var(--font-sans);
-      font-weight: 600;
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-    .hw-code-body {
-      white-space: pre;
-      line-height: 1.5;
-    }
-    .dash-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 16px 22px;
+    .hero-browser-titlebar {
+      height: 32px;
+      background: #fdfdfd;
       border-bottom: 1px solid var(--border-light);
-      background: var(--bg-stone-subtle);
-    }
-    .dash-header-title {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--text-dark);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-    }
-    .dash-status {
       display: flex;
       align-items: center;
-      gap: 6px;
-      font-family: var(--font-mono);
-      font-size: 10px;
-      font-weight: 600;
-      color: var(--check-green);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
+      padding: 0 14px;
+      gap: 7px;
       flex-shrink: 0;
     }
-    .dash-status::before {
-      content: '';
-      width: 6px;
-      height: 6px;
+    .hero-browser-dot {
+      width: 9px;
+      height: 9px;
       border-radius: 50%;
-      background: var(--check-green);
-      box-shadow: 0 0 0 3px rgba(0, 135, 90, 0.15);
     }
-    .dash-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-    }
-    .dash-tile {
-      padding: 24px 22px;
-      border-right: 1px solid var(--border-light);
-      border-bottom: 1px solid var(--border-light);
-    }
-    .dash-tile:nth-child(2n) { border-right: none; }
-    .dash-tile:nth-child(3), .dash-tile:nth-child(4) { border-bottom: none; }
-    .dash-tile-icon {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      background: rgba(132, 0, 85, 0.08);
-      color: var(--brand-magenta);
+    .hero-browser-frame .hero-shot-wrap {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      overflow: hidden;
+      background: var(--bg-stone-subtle);
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 14px;
     }
-    .dash-tile-icon svg { width: 15px; height: 15px; }
-    .dash-tile-label {
-      font-family: var(--font-mono);
-      font-size: 10px;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      margin-bottom: 6px;
+    .hero-browser-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center center;
+      display: block;
     }
-    .dash-tile-value { font-size: 26px; font-weight: 700; color: var(--text-dark); letter-spacing: -0.01em; }
-    .dash-tile-sub { font-size: 11.5px; color: var(--text-muted); margin-top: 4px; }
-    .dash-tile-sub.up { color: var(--check-green); }
 
 
 
@@ -811,25 +715,16 @@
     .choice-card-header {
       display: flex;
       align-items: center;
+      flex-wrap: wrap;
       gap: 10px;
       font-size: 21px;
       font-weight: 700;
       color: var(--text-dark);
       margin-bottom: 22px;
     }
-    .choice-card-tag {
-      font-family: var(--font-mono);
-      font-size: 10px;
-      font-weight: 700;
-      color: #FFF;
-      background: #8A8A93;
-      border-radius: 4px;
-      padding: 4px 8px;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-    }
-    .choice-card.sensible .choice-card-tag {
-      background: var(--brand-magenta);
+    .choice-card-header svg,
+    .choice-card-header img {
+      flex-shrink: 0;
     }
     .choice-list {
       list-style: none;
@@ -962,30 +857,17 @@
           </div>
         </div>
       </div>
-      <!-- Right Column: Reimagined Sensible Dashboard Visual -->
-      <div class="hero-img-col" style="height: 540px; position: relative; pointer-events: none;">
-        
-        <!-- Ambient Glowing Shadow behind the UI -->
-        <div style="position:absolute; left: 10%; top: 15%; width: 50vw; min-width: 600px; height: 400px; background: var(--brand-magenta); filter: blur(120px); opacity: 0.15; z-index: 0; border-radius: 50%;"></div>
-
-        <!-- Fading Wrapper Mask -->
-        <div style="position:absolute; left:0; top:0; width: 65vw; min-width:700px; height: 600px; z-index: 10; -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%); mask-image: linear-gradient(to bottom, black 50%, transparent 100%); padding-left: 2px;">
-          
-          <!-- Sleek Browser Frame Presentation -->
-          <div style="width: 100%; height: 100%; background: #ffffff; border-radius: 12px; box-shadow: -12px 24px 60px rgba(0,0,0,0.1), 0 0 0 1px rgba(0,0,0,0.05); display: flex; flex-direction: column; overflow: hidden;">
-            
-            <!-- MacOS Traffic Lights Header -->
-            <div style="height: 38px; background: #fdfdfd; border-bottom: 1px solid #f0f0f0; display: flex; align-items: center; padding: 0 16px; gap: 8px; flex-shrink: 0;">
-              <div style="width: 10px; height: 10px; border-radius: 50%; background: #ff5f56; border: 1px solid #e0443e;"></div>
-              <div style="width: 10px; height: 10px; border-radius: 50%; background: #ffbd2e; border: 1px solid #dea123;"></div>
-              <div style="width: 10px; height: 10px; border-radius: 50%; background: #27c93f; border: 1px solid #1aab29;"></div>
-            </div>
-
-            <!-- The Actual Sensible Screenshot -->
-            <div style="flex-grow: 1; position: relative; background: #f9f9f9;">
-              <img src="hero_ui_screenshot.png" alt="Sensible UI Dashboard" style="width:100%; height:100%; display:block; object-fit:cover; object-position: left top;" />
-            </div>
-
+      <!-- Right Column: Hero Product Screenshot -->
+      <div class="hero-img-col">
+        <div class="hero-glow"></div>
+        <div class="hero-browser-frame">
+          <div class="hero-browser-titlebar">
+            <span class="hero-browser-dot" style="background: #ff5f56; border: 1px solid #e0443e;"></span>
+            <span class="hero-browser-dot" style="background: #ffbd2e; border: 1px solid #dea123;"></span>
+            <span class="hero-browser-dot" style="background: #27c93f; border: 1px solid #1aab29;"></span>
+          </div>
+          <div class="hero-shot-wrap">
+            <img src="hero_product_clean.jpg" alt="Sensible extraction configuration UI showing the field schema, source PDF, and validated extracted data side by side"/>
           </div>
         </div>
       </div>
@@ -1146,15 +1028,48 @@
         <p class="sec-desc" style="max-width: 600px; margin: 0 auto; font-size: 15px;">A sleek, high-performance pipeline routing structured and unstructured fields through concurrent deterministic and generative layers.</p>
       </div>
 
-      <div style="width: 100%; overflow-x: auto; padding-bottom: 40px; -webkit-overflow-scrolling: touch; cursor: grab;">
-        <div style="position: relative; width: 1000px; height: 460px; margin: 0 auto; background: #ffffff; border: 1px solid var(--border-stone); border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02), 0 10px 15px -3px rgba(0,0,0,0.03); overflow: hidden;">
+      <div class="arch-scale-outer">
+        <div class="arch-scale-inner" style="position: relative; width: 1560px; height: 460px; background: #ffffff; border: 1px solid var(--border-stone); border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02), 0 10px 15px -3px rgba(0,0,0,0.03); overflow: hidden;">
           
           <!-- Subtle Grid -->
           <div style="position: absolute; inset: 0; background-image: radial-gradient(#e5e7eb 1px, transparent 1px); background-size: 24px 24px; opacity: 0.6; z-index: 0;"></div>
 
           <style>
+            /* Scale the fixed 1560x460 canvas down to fit one fold, no horizontal scroll */
+            .arch-scale-outer {
+              width: 100%;
+              overflow: hidden;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              height: 358px;
+            }
+            .arch-scale-inner {
+              flex-shrink: 0;
+              transform-origin: center center;
+              transform: scale(0.78);
+            }
+            @media (max-width: 1259px) { .arch-scale-outer{ height: 357px; } .arch-scale-inner{ transform: scale(0.776); } }
+            @media (max-width: 1199px) { .arch-scale-outer{ height: 339px; } .arch-scale-inner{ transform: scale(0.738); } }
+            @media (max-width: 1139px) { .arch-scale-outer{ height: 322px; } .arch-scale-inner{ transform: scale(0.699); } }
+            @media (max-width: 1079px) { .arch-scale-outer{ height: 304px; } .arch-scale-inner{ transform: scale(0.661); } }
+            @media (max-width: 1019px) { .arch-scale-outer{ height: 286px; } .arch-scale-inner{ transform: scale(0.622); } }
+            @media (max-width: 959px)  { .arch-scale-outer{ height: 269px; } .arch-scale-inner{ transform: scale(0.584); } }
+            @media (max-width: 899px)  { .arch-scale-outer{ height: 251px; } .arch-scale-inner{ transform: scale(0.546); } }
+            @media (max-width: 839px)  { .arch-scale-outer{ height: 233px; } .arch-scale-inner{ transform: scale(0.507); } }
+            @media (max-width: 779px)  { .arch-scale-outer{ height: 216px; } .arch-scale-inner{ transform: scale(0.469); } }
+            @media (max-width: 719px)  { .arch-scale-outer{ height: 198px; } .arch-scale-inner{ transform: scale(0.430); } }
+            @media (max-width: 659px)  { .arch-scale-outer{ height: 180px; } .arch-scale-inner{ transform: scale(0.392); } }
+            @media (max-width: 599px)  { .arch-scale-outer{ height: 162px; } .arch-scale-inner{ transform: scale(0.353); } }
+            @media (max-width: 539px)  { .arch-scale-outer{ height: 145px; } .arch-scale-inner{ transform: scale(0.315); } }
+            @media (max-width: 479px)  { .arch-scale-outer{ height: 127px; } .arch-scale-inner{ transform: scale(0.276); } }
+            @media (max-width: 419px)  { .arch-scale-outer{ height: 109px; } .arch-scale-inner{ transform: scale(0.238); } }
+            @media (max-width: 359px)  { .arch-scale-outer{ height: 92px;  } .arch-scale-inner{ transform: scale(0.199); } }
+            @media (max-width: 320px)  { .arch-scale-outer{ height: 80px;  } .arch-scale-inner{ transform: scale(0.174); } }
+
             .pipe-path { fill: none; stroke: #e5e7eb; stroke-width: 8; stroke-linecap: round; stroke-linejoin: round; }
             .pipe-path-inner { fill: none; stroke: #f3f4f6; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 4 4; }
+            .pipe-path-branch { fill: none; stroke: #d9dbe0; stroke-width: 5; stroke-linecap: round; stroke-dasharray: 2 7; }
             
             /* Nodes */
             .pipe-node {
@@ -1202,8 +1117,11 @@
             </defs>
 
             <!-- Complete Continuous Paths -->
-            <path id="full-top" class="pipe-path" d="M 120 230 L 320 230 C 420 230, 420 110, 560 110 C 700 110, 700 230, 840 230" />
-            <path id="full-bot" class="pipe-path" d="M 120 230 L 320 230 C 420 230, 420 350, 560 350 C 700 350, 700 230, 840 230" />
+            <path id="full-top" class="pipe-path" d="M 120 230 L 320 230 C 420 230, 420 110, 560 110 C 700 110, 700 230, 780 230 L 1000 230 L 1220 230 L 1440 230" />
+            <path id="full-bot" class="pipe-path" d="M 120 230 L 320 230 C 420 230, 420 350, 560 350 C 700 350, 700 230, 780 230 L 1000 230 L 1220 230 L 1440 230" />
+
+            <!-- Conditional branch: flagged extractions route to human review -->
+            <path class="pipe-path-branch" d="M 1000 230 L 1000 350" />
 
             <!-- Animated Glowing Particles (One by one, perfectly staggered) -->
             <!-- Top particle: Travels the full path in 3.5s -->
@@ -1222,7 +1140,7 @@
           </svg>
 
           <!-- PIPELINE NODES (Centered at specific coordinates) -->
-          
+
           <div class="pipe-node" style="left: 120px; top: 230px;">
             <div class="pn-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
@@ -1263,13 +1181,53 @@
             </div>
           </div>
 
-          <div class="pipe-node" style="left: 840px; top: 230px;">
+          <div class="pipe-node" style="left: 780px; top: 230px;">
+            <div class="pn-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 4H6v2l6 6-6 6v2h12v-2l-6-6 6-6V4z"></path></svg>
+            </div>
+            <div class="pn-text">
+              <div class="pn-title">Compute</div>
+              <div class="pn-sub">Type coercion &amp; derived fields</div>
+            </div>
+          </div>
+
+          <div class="pipe-node" style="left: 1000px; top: 230px; border-color: rgba(132,0,85,0.3); box-shadow: 0 4px 12px rgba(132,0,85,0.06);">
+            <div class="pn-icon" style="background: var(--brand-magenta); color: #fff;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 3v6c0 5-3.5 8.5-8 11-4.5-2.5-8-6-8-11V5l8-3z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>
+            </div>
+            <div class="pn-text">
+              <div class="pn-title">Validate</div>
+              <div class="pn-sub">JsonLogic rule checks</div>
+            </div>
+          </div>
+
+          <div class="pipe-node" style="left: 1000px; top: 350px; width: 170px;">
+            <div class="pn-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"></circle><path d="M4 20c0-4 3.6-6 8-6s8 2 8 6"></path></svg>
+            </div>
+            <div class="pn-text">
+              <div class="pn-title">Human Review</div>
+              <div class="pn-sub">Flagged docs, one-click fix</div>
+            </div>
+          </div>
+
+          <div class="pipe-node" style="left: 1220px; top: 230px;">
+            <div class="pn-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"></path><path d="M7 15l4-6 4 3 4-7"></path></svg>
+            </div>
+            <div class="pn-text">
+              <div class="pn-title">Score</div>
+              <div class="pn-sub">Per-field confidence</div>
+            </div>
+          </div>
+
+          <div class="pipe-node" style="left: 1440px; top: 230px;">
             <div class="pn-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
             </div>
             <div class="pn-text">
-              <div class="pn-title">JsonLogic Output</div>
-              <div class="pn-sub">Validated JSON Payload</div>
+              <div class="pn-title">Structured Output</div>
+              <div class="pn-sub">Typed JSON + bounding boxes</div>
             </div>
           </div>
 
@@ -1360,8 +1318,7 @@
 
       <div class="choices-grid">
         <div class="choice-card">
-          <div class="choice-card-header" style="gap: 6px;">
-            <span class="choice-card-tag" style="margin-right:4px;">CHOOSE</span> 
+          <div class="choice-card-header" style="gap: 8px;">
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" style="fill: currentColor; margin-top:-2px;"><path d="M15.855 17.122c-2.092.924-4.358.545-5.23.24 0 .21-.01.857-.048 1.78-.038.924-.332 1.507-.475 1.684.016.577.029 1.837-.047 2.26a1.93 1.93 0 01-.476.914H8.295c.114-.577.555-.946.761-1.058.114-1.193-.11-2.229-.238-2.597-.126.449-.437 1.49-.665 2.068a6.418 6.418 0 01-.713 1.299h-.951c-.048-.578.27-.77.475-.77.095-.177.323-.731.476-1.54.152-.807-.064-2.324-.19-2.981v-2.068c-1.522-.818-2.092-1.636-2.473-2.55-.304-.73-.222-1.843-.142-2.308-.096-.176-.373-.625-.476-1.25-.142-.866-.063-1.491 0-1.828-.095-.096-.285-.587-.285-1.78 0-1.192.349-1.811.523-1.972v-.529c-.666-.048-1.331-.336-1.712-.721-.38-.385-.095-.962.143-1.154.238-.193.475-.049.808-.145.333-.096.618-.192.76-.48C4.512 1.403 4.287.448 4.16 0c.57.077.935.577 1.046.818V0c.713.337 1.997 1.154 2.425 2.934.342 1.424.586 4.409.665 5.723 1.823.016 4.137-.26 6.229.193 1.901.412 2.757 1.25 3.755 1.25.999 0 1.57-.577 2.282-.096.714.481 1.094 1.828.999 2.838-.076.808-.697 1.074-.998 1.106-.38 1.27 0 2.485.237 2.934v1.827c.111.16.333.655.333 1.347 0 .693-.222 1.154-.333 1.299.19 1.077-.08 2.18-.238 2.597h-1.283c.152-.385.412-.481.523-.481.228-1.193.063-2.293-.048-2.693-.722-.424-1.188-1.17-1.331-1.491.016.272-.029 1.029-.333 1.875-.304.847-.76 1.347-.95 1.491v1.01h-1.284c0-.615.348-.737.523-.721.222-.4.76-1.01.76-2.212 0-1.015-.713-1.492-1.236-2.405-.248-.434-.127-.978-.047-1.203z"></path></svg>
             LlamaParse if...
           </div>
@@ -1374,10 +1331,9 @@
         </div>
 
         <div class="choice-card sensible">
-          <div class="choice-card-header" style="gap: 6px;">
-            <span class="choice-card-tag" style="margin-right:4px;">CHOOSE</span> 
-            <img src="https://cdn.prod.website-files.com/69d90e4abf8f50428ec28825/69d90e4abf8f50428ec2888c_LogoDefault.svg" style="height:22px; margin-top:-2px;" alt="Sensible" />
-             if...
+          <div class="choice-card-header" style="gap: 8px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 85 85" style="fill: var(--brand-magenta); flex-shrink: 0;"><path d="M0 63.78V42.52C11.2701 42.52 22.0791 46.9943 30.052 54.9597C38.0249 62.9251 42.5094 73.7299 42.52 85H21.26L0 63.78ZM21.26 42.52H42.52C42.52 31.243 38.0402 20.4279 30.0662 12.4538C22.0921 4.47977 11.277 0 0 0V21.26L21.26 42.52ZM63.78 0H42.52C42.52 11.2701 46.9943 22.0791 54.9597 30.052C62.9251 38.0249 73.7299 42.5094 85 42.52V21.26L63.78 0ZM63.78 42.52H42.52C42.5306 53.7831 47.0096 64.5819 54.9738 72.5462C62.9381 80.5104 73.7369 84.9894 85 85V63.78L63.78 42.52Z"></path></svg>
+            Sensible if...
           </div>
           <ul class="choice-list">
             <li><span class="bullet-icon">✓</span> You need guaranteed, schema-validated JSON for production systems.</li>
