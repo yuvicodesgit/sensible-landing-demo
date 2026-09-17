@@ -1116,180 +1116,198 @@
   </section>
 
   <!-- 4. HOW IT WORKS SECTION -->
-  <!-- 4. COMPLEX ANIMATED ARCHITECTURE FLOW -->
-  <section class="complex-arch-section" style="padding: 50px 0; background: var(--bg-stone-subtle); border-top: 1px solid var(--border-stone); border-bottom: 1px solid var(--border-stone); overflow: hidden;">
+  <!-- 4. NEXT-LEVEL PIPELINE ARCHITECTURE FLOW -->
+  <section class="complex-arch-section" style="padding: 60px 0; background: #fafafa; border-top: 1px solid var(--border-stone); border-bottom: 1px solid var(--border-stone); overflow: hidden;">
     <div class="container">
-      <div class="sec-head" style="margin-bottom: 40px; text-align: center;">
+      <div class="sec-head" style="margin-bottom: 50px; text-align: center;">
         <div class="sec-eyebrow">Technical Architecture</div>
-        <h2 class="sec-h2">The Hybrid Extraction Flow</h2>
-        <p class="sec-desc" style="max-width: 650px; margin: 0 auto; font-size: 14px;">A deep dive into how SenseML intelligently routes unstructured and structured fields through deterministic and generative layers simultaneously.</p>
+        <h2 class="sec-h2">The Hybrid Extraction Pipeline</h2>
+        <p class="sec-desc" style="max-width: 600px; margin: 0 auto; font-size: 15px;">A sleek, high-performance pipeline routing structured and unstructured fields through concurrent deterministic and generative layers.</p>
       </div>
 
-      <!-- The Canvas Wrapper for scrolling on small screens -->
-      <div style="width: 100%; overflow-x: auto; padding-bottom: 20px; -webkit-overflow-scrolling: touch; cursor: grab;">
-        
-        <!-- The Canvas (Scaled down for 1-fold) -->
-        <div style="position: relative; width: 1000px; height: 420px; margin: 0 auto; background: #fafafa; border: 1px solid var(--border-stone); border-radius: 20px; box-shadow: inset 0 2px 10px rgba(0,0,0,0.02), 0 24px 60px rgba(0,0,0,0.06); overflow: hidden;">
+      <div style="width: 100%; overflow-x: auto; padding-bottom: 40px; -webkit-overflow-scrolling: touch; cursor: grab;">
+        <div style="position: relative; width: 1000px; height: 460px; margin: 0 auto; background: #ffffff; border: 1px solid var(--border-stone); border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02), 0 10px 15px -3px rgba(0,0,0,0.03); overflow: hidden;">
           
-          <!-- Animated Background Grid -->
-          <div style="position: absolute; inset: 0; background-image: radial-gradient(var(--border-stone) 1px, transparent 1px); background-size: 28px 28px; animation: pan-bg 40s linear infinite; z-index: 0; opacity: 0.7;"></div>
+          <!-- Subtle Grid -->
+          <div style="position: absolute; inset: 0; background-image: radial-gradient(#e5e7eb 1px, transparent 1px); background-size: 24px 24px; opacity: 0.6; z-index: 0;"></div>
 
           <style>
-            @keyframes pan-bg { 100% { background-position: 56px 56px; } }
+            .pipe-path { fill: none; stroke: #e5e7eb; stroke-width: 8; stroke-linecap: round; stroke-linejoin: round; }
+            .pipe-path-inner { fill: none; stroke: #f3f4f6; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 4 4; }
             
-            .arch-path {
-              fill: none;
-              stroke-width: 2.5;
-              stroke-linecap: round;
-              stroke-linejoin: round;
-            }
-            .arch-path-bg { stroke: rgba(0,0,0,0.06); }
-            
-            /* Animated Data Flow Lines */
-            .arch-path-anim {
-              stroke-width: 2.5;
-              stroke-dasharray: 6 12;
-              animation: data-flow 1.2s linear infinite;
-              filter: drop-shadow(0 0 5px currentColor);
-            }
-            .anim-magenta { stroke: var(--brand-magenta); }
-            .anim-green { stroke: #00875A; }
-            .anim-blue { stroke: #0052CC; }
-
-            @keyframes data-flow { to { stroke-dashoffset: -18; } }
-
             /* Nodes */
-            .a-node {
+            .pipe-node {
               position: absolute;
-              background: rgba(255, 255, 255, 0.96);
-              backdrop-filter: blur(8px);
-              -webkit-backdrop-filter: blur(8px);
-              border: 1px solid rgba(0,0,0,0.08);
-              border-radius: 14px;
-              width: 190px;
-              padding: 16px;
-              z-index: 10;
-              box-shadow: 0 8px 20px rgba(0,0,0,0.03), 0 2px 6px rgba(0,0,0,0.02);
-              transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            }
-            .a-node:hover {
-              transform: translateY(-4px);
-              box-shadow: 0 20px 40px rgba(0,0,0,0.06), 0 6px 12px rgba(0,0,0,0.04);
-            }
-            
-            .a-node.highlight-node:hover {
-              border-color: var(--brand-magenta);
-              box-shadow: 0 20px 40px rgba(132,0,85,0.08), 0 6px 12px rgba(132,0,85,0.04);
-            }
-            .a-node.green-node:hover {
-              border-color: #00875A;
-              box-shadow: 0 20px 40px rgba(0,135,90,0.08), 0 6px 12px rgba(0,135,90,0.04);
-            }
-            .a-node.blue-node:hover {
-              border-color: #0052CC;
-              box-shadow: 0 20px 40px rgba(0,82,204,0.08), 0 6px 12px rgba(0,82,204,0.04);
-            }
-
-            .a-icon {
-              width: 36px; height: 36px;
+              transform: translate(-50%, -50%);
+              background: #ffffff;
+              border: 1px solid #e5e7eb;
               border-radius: 10px;
-              display: flex; align-items: center; justify-content: center;
-              margin-bottom: 12px;
+              box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -2px rgba(0,0,0,0.02);
+              display: flex;
+              align-items: center;
+              gap: 12px;
+              padding: 10px 14px;
+              z-index: 10;
+              width: 190px;
+              transition: all 0.3s ease;
             }
-            .a-icon svg { width: 18px; height: 18px; }
-            .a-title { font-weight: 700; font-size: 14px; margin-bottom: 6px; color: var(--text-dark); font-family: var(--font-sans); letter-spacing: -0.01em;}
-            .a-desc { font-size: 11px; color: var(--text-muted); line-height: 1.5; }
-            .a-code { font-family: var(--font-mono); font-size: 10px; background: #f8f9fa; padding: 6px 8px; border-radius: 4px; margin-top: 10px; color: var(--text-dark); border: 1px solid rgba(0,0,0,0.04); line-height: 1.4;}
+            .pipe-node:hover {
+              transform: translate(-50%, -52%);
+              box-shadow: 0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -4px rgba(0,0,0,0.04);
+              border-color: var(--brand-magenta);
+            }
+            .pipe-node.node-green:hover { border-color: #00875A; }
+            .pipe-node.node-blue:hover { border-color: #0052CC; }
+
+            .pn-icon {
+              width: 28px; height: 28px;
+              border-radius: 6px;
+              display: flex; align-items: center; justify-content: center;
+              flex-shrink: 0;
+            }
+            .pn-icon svg { width: 14px; height: 14px; }
+            
+            .pn-text { display: flex; flex-direction: column; gap: 2px; }
+            .pn-title { font-family: var(--font-sans); font-size: 13px; font-weight: 600; color: #111827; line-height: 1.1; }
+            .pn-sub { font-size: 10px; color: #6b7280; line-height: 1.2; }
+
+            /* Detail Cards */
+            .detail-card {
+              position: absolute;
+              width: 240px;
+              text-align: center;
+              z-index: 5;
+            }
+            .dc-top { transform: translate(-50%, -100%); padding-bottom: 30px; }
+            .dc-bottom { transform: translate(-50%, 0); padding-top: 30px; }
+            .dc-title { font-size: 12px; font-weight: 700; color: #374151; margin-bottom: 6px; font-family: var(--font-sans); text-transform: uppercase; letter-spacing: 0.05em; }
+            .dc-desc { font-size: 12px; color: #6b7280; line-height: 1.5; }
+            .dc-magenta { color: var(--brand-magenta); }
+            .dc-green { color: #00875A; }
+            .dc-blue { color: #0052CC; }
           </style>
 
-          <!-- SVG Connection Lines (Scaled down) -->
           <svg style="position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1;" xmlns="http://www.w3.org/2000/svg">
-            
-            <!-- 1 to 2 -->
-            <path class="arch-path arch-path-bg" d="M 214 200 L 264 200" />
-            <path class="arch-path arch-path-anim anim-magenta" d="M 214 200 L 264 200" />
+            <defs>
+              <filter id="glow-magenta" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="3" result="blur" />
+                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+              <filter id="glow-green" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="3" result="blur" />
+                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+              <filter id="glow-blue" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="3" result="blur" />
+                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+            </defs>
 
-            <!-- 2 to 3 -->
-            <path class="arch-path arch-path-bg" d="M 454 200 C 494 200, 494 100, 524 100" />
-            <path class="arch-path arch-path-anim anim-green" d="M 454 200 C 494 200, 494 100, 524 100" />
+            <!-- Background thick paths -->
+            <path id="path1" class="pipe-path" d="M 120 230 L 320 230" />
+            <path id="path2" class="pipe-path" d="M 320 230 C 420 230, 420 110, 560 110" />
+            <path id="path3" class="pipe-path" d="M 320 230 C 420 230, 420 350, 560 350" />
+            <path id="path4" class="pipe-path" d="M 560 110 C 700 110, 700 230, 840 230" />
+            <path id="path5" class="pipe-path" d="M 560 350 C 700 350, 700 230, 840 230" />
 
-            <!-- 2 to 4 -->
-            <path class="arch-path arch-path-bg" d="M 454 200 C 494 200, 494 320, 524 320" />
-            <path class="arch-path arch-path-anim anim-blue" d="M 454 200 C 494 200, 494 320, 524 320" />
+            <!-- Inner dashed paths -->
+            <path class="pipe-path-inner" d="M 120 230 L 320 230" />
+            <path class="pipe-path-inner" d="M 320 230 C 420 230, 420 110, 560 110" />
+            <path class="pipe-path-inner" d="M 320 230 C 420 230, 420 350, 560 350" />
+            <path class="pipe-path-inner" d="M 560 110 C 700 110, 700 230, 840 230" />
+            <path class="pipe-path-inner" d="M 560 350 C 700 350, 700 230, 840 230" />
 
-            <!-- 3 to 5 -->
-            <path class="arch-path arch-path-bg" d="M 714 100 C 754 100, 754 200, 784 200" />
-            <path class="arch-path arch-path-anim anim-green" d="M 714 100 C 754 100, 754 200, 784 200" />
+            <!-- Animated Glowing Particles -->
+            <!-- Path 1: Ingestion to Router -->
+            <circle r="4" fill="var(--brand-magenta)" filter="url(#glow-magenta)"><animateMotion dur="2s" repeatCount="indefinite"><mpath href="#path1"/></animateMotion></circle>
+            <circle r="4" fill="var(--brand-magenta)" filter="url(#glow-magenta)"><animateMotion dur="2s" begin="1s" repeatCount="indefinite"><mpath href="#path1"/></animateMotion></circle>
 
-            <!-- 4 to 5 -->
-            <path class="arch-path arch-path-bg" d="M 714 320 C 754 320, 754 200, 784 200" />
-            <path class="arch-path arch-path-anim anim-blue" d="M 714 320 C 754 320, 754 200, 784 200" />
+            <!-- Path 2: Router to Deterministic (Green) -->
+            <circle r="4" fill="#00875A" filter="url(#glow-green)"><animateMotion dur="2s" begin="0.5s" repeatCount="indefinite"><mpath href="#path2"/></animateMotion></circle>
+            <circle r="4" fill="#00875A" filter="url(#glow-green)"><animateMotion dur="2s" begin="1.5s" repeatCount="indefinite"><mpath href="#path2"/></animateMotion></circle>
 
-            <!-- Vertical Sync Line -->
-            <path stroke="rgba(0,0,0,0.15)" stroke-width="1.5" stroke-dasharray="4 4" d="M 619 190 L 619 230" />
-            <text x="626" y="213" font-size="9" fill="var(--text-muted)" font-family="var(--font-mono)" opacity="0.8">PARALLEL SYNC</text>
+            <!-- Path 3: Router to LLM (Blue) -->
+            <circle r="4" fill="#0052CC" filter="url(#glow-blue)"><animateMotion dur="2s" begin="0.2s" repeatCount="indefinite"><mpath href="#path3"/></animateMotion></circle>
+            <circle r="4" fill="#0052CC" filter="url(#glow-blue)"><animateMotion dur="2s" begin="1.2s" repeatCount="indefinite"><mpath href="#path3"/></animateMotion></circle>
+
+            <!-- Path 4: Deterministic to Output -->
+            <circle r="4" fill="#00875A" filter="url(#glow-green)"><animateMotion dur="2s" begin="0.8s" repeatCount="indefinite"><mpath href="#path4"/></animateMotion></circle>
+
+            <!-- Path 5: LLM to Output -->
+            <circle r="4" fill="#0052CC" filter="url(#glow-blue)"><animateMotion dur="2s" begin="1.1s" repeatCount="indefinite"><mpath href="#path5"/></animateMotion></circle>
 
           </svg>
 
-          <!-- NODES (Scaled Down) -->
-          <!-- 1. Document Ingestion -->
-          <div class="a-node" style="left: 24px; top: 140px;">
-            <div class="a-icon" style="background: rgba(132,0,85,0.06); color: var(--brand-magenta);">
+          <!-- PIPELINE NODES (Centered at specific coordinates) -->
+          
+          <div class="pipe-node" style="left: 120px; top: 230px;">
+            <div class="pn-icon" style="background: rgba(132,0,85,0.06); color: var(--brand-magenta);">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
             </div>
-            <div class="a-title">Document Ingestion</div>
-            <div class="a-desc">Accepts raw PDFs, images, and unstructured text.</div>
+            <div class="pn-text">
+              <div class="pn-title">Document Ingestion</div>
+              <div class="pn-sub">PDFs, Images, Text</div>
+            </div>
           </div>
 
-          <!-- 2. SenseML Orchestrator -->
-          <div class="a-node highlight-node" style="left: 264px; top: 120px;">
-            <div class="a-icon" style="background: linear-gradient(135deg, var(--brand-magenta-dark), var(--brand-magenta)); color: #fff; box-shadow: 0 4px 10px rgba(132,0,85,0.3);">
+          <div class="pipe-node" style="left: 320px; top: 230px; border-color: rgba(132,0,85,0.3); box-shadow: 0 4px 12px rgba(132,0,85,0.08);">
+            <div class="pn-icon" style="background: var(--brand-magenta); color: #fff;">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
             </div>
-            <div class="a-title">SenseML Router</div>
-            <div class="a-desc">The core routing layer. SenseML dictates which fields go to which engine based on structure.</div>
-            <div class="a-code">"method": { "id": "row" } <br/>"method": { "id": "queryGroup" }</div>
+            <div class="pn-text">
+              <div class="pn-title">SenseML Router</div>
+              <div class="pn-sub">Rule-based orchestrator</div>
+            </div>
           </div>
 
-          <!-- 3. Deterministic Engine -->
-          <div class="a-node green-node" style="left: 524px; top: 20px;">
-            <div class="a-icon" style="background: rgba(0,135,90,0.08); color: #00875A;">
+          <div class="pipe-node node-green" style="left: 560px; top: 110px;">
+            <div class="pn-icon" style="background: rgba(0,135,90,0.08); color: #00875A;">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
             </div>
-            <div class="a-title">Deterministic Engine</div>
-            <div class="a-desc">Executes layout extraction via spatial anchors.</div>
-            <ul style="font-size: 10px; color: var(--text-muted); margin-top: 8px; padding-left: 14px; margin-bottom:0; line-height: 1.5;">
-              <li>Zero hallucination risk</li>
-              <li>Millisecond latency</li>
-            </ul>
+            <div class="pn-text">
+              <div class="pn-title">Deterministic Engine</div>
+              <div class="pn-sub">Spatial Anchors &amp; Regex</div>
+            </div>
           </div>
 
-          <!-- 4. LLM Engine -->
-          <div class="a-node blue-node" style="left: 524px; top: 240px;">
-            <div class="a-icon" style="background: rgba(0,82,204,0.08); color: #0052CC;">
+          <div class="pipe-node node-blue" style="left: 560px; top: 350px;">
+            <div class="pn-icon" style="background: rgba(0,82,204,0.08); color: #0052CC;">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
             </div>
-            <div class="a-title">Generative LLM Engine</div>
-            <div class="a-desc">Executes multimodal queries for unstructured text and reasoning.</div>
-            <ul style="font-size: 10px; color: var(--text-muted); margin-top: 8px; padding-left: 14px; margin-bottom:0; line-height: 1.5;">
-              <li>Interprets dense clauses</li>
-              <li>Built-in fallback chaining</li>
-            </ul>
+            <div class="pn-text">
+              <div class="pn-title">Multimodal LLM Engine</div>
+              <div class="pn-sub">Generative Interpretation</div>
+            </div>
           </div>
 
-          <!-- 5. JsonLogic Validation -->
-          <div class="a-node" style="left: 784px; top: 140px;">
-            <div class="a-icon" style="background: rgba(0,0,0,0.04); color: var(--text-dark);">
+          <div class="pipe-node" style="left: 840px; top: 230px;">
+            <div class="pn-icon" style="background: #f3f4f6; color: #374151;">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
             </div>
-            <div class="a-title">JsonLogic Validation</div>
-            <div class="a-desc">Cross-references outputs. Flagged docs hit Human Review.</div>
-            <div class="a-code">{"<": [{"var": "date"}, "2024"]}</div>
+            <div class="pn-text">
+              <div class="pn-title">JsonLogic Output</div>
+              <div class="pn-sub">Validated JSON Payload</div>
+            </div>
+          </div>
+
+          <!-- DETAILED EXPLANATION CARDS -->
+          <div class="detail-card dc-bottom" style="left: 320px; top: 230px;">
+            <div class="dc-title dc-magenta">Dynamic Routing</div>
+            <div class="dc-desc">SenseML routes highly predictable fields to Layout rules, and dense fields to LLM queries simultaneously.</div>
+          </div>
+
+          <div class="detail-card dc-top" style="left: 560px; top: 110px;">
+            <div class="dc-title dc-green">0% Hallucinations</div>
+            <div class="dc-desc">Deterministic layout extraction provides mathematically perfect accuracy and zero latency for strict forms.</div>
+          </div>
+
+          <div class="detail-card dc-bottom" style="left: 560px; top: 350px;">
+            <div class="dc-title dc-blue">Unstructured Mastery</div>
+            <div class="dc-desc">Generative LLMs dynamically read and reason through dense paragraphs, tables, and varying schemas.</div>
           </div>
 
         </div>
       </div>
-
     </div>
   </section>
 
