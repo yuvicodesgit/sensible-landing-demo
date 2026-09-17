@@ -1117,29 +1117,29 @@
 
   <!-- 4. HOW IT WORKS SECTION -->
   <!-- 4. COMPLEX ANIMATED ARCHITECTURE FLOW -->
-  <section class="complex-arch-section" style="padding: 100px 0; background: var(--bg-stone-subtle); border-top: 1px solid var(--border-stone); border-bottom: 1px solid var(--border-stone); overflow: hidden;">
+  <section class="complex-arch-section" style="padding: 50px 0; background: var(--bg-stone-subtle); border-top: 1px solid var(--border-stone); border-bottom: 1px solid var(--border-stone); overflow: hidden;">
     <div class="container">
-      <div class="sec-head" style="margin-bottom: 60px; text-align: center;">
+      <div class="sec-head" style="margin-bottom: 40px; text-align: center;">
         <div class="sec-eyebrow">Technical Architecture</div>
         <h2 class="sec-h2">The Hybrid Extraction Flow</h2>
-        <p class="sec-desc" style="max-width: 650px; margin: 0 auto;">A deep dive into how SenseML intelligently routes unstructured and structured fields through deterministic and generative layers simultaneously.</p>
+        <p class="sec-desc" style="max-width: 650px; margin: 0 auto; font-size: 14px;">A deep dive into how SenseML intelligently routes unstructured and structured fields through deterministic and generative layers simultaneously.</p>
       </div>
 
       <!-- The Canvas Wrapper for scrolling on small screens -->
-      <div style="width: 100%; overflow-x: auto; padding: 20px 0; -webkit-overflow-scrolling: touch; cursor: grab;">
+      <div style="width: 100%; overflow-x: auto; padding-bottom: 20px; -webkit-overflow-scrolling: touch; cursor: grab;">
         
-        <!-- The Canvas (Fixed size to maintain perfect SVG alignment) -->
-        <div style="position: relative; width: 1100px; height: 560px; margin: 0 auto; background: #fafafa; border: 1px solid var(--border-stone); border-radius: 24px; box-shadow: inset 0 2px 10px rgba(0,0,0,0.02), 0 32px 80px rgba(0,0,0,0.06); overflow: hidden;">
+        <!-- The Canvas (Scaled down for 1-fold) -->
+        <div style="position: relative; width: 1000px; height: 420px; margin: 0 auto; background: #fafafa; border: 1px solid var(--border-stone); border-radius: 20px; box-shadow: inset 0 2px 10px rgba(0,0,0,0.02), 0 24px 60px rgba(0,0,0,0.06); overflow: hidden;">
           
-          <!-- Animated Background Grid (Dotted for premium feel) -->
-          <div style="position: absolute; inset: 0; background-image: radial-gradient(var(--border-stone) 1px, transparent 1px); background-size: 32px 32px; animation: pan-bg 40s linear infinite; z-index: 0; opacity: 0.7;"></div>
+          <!-- Animated Background Grid -->
+          <div style="position: absolute; inset: 0; background-image: radial-gradient(var(--border-stone) 1px, transparent 1px); background-size: 28px 28px; animation: pan-bg 40s linear infinite; z-index: 0; opacity: 0.7;"></div>
 
           <style>
-            @keyframes pan-bg { 100% { background-position: 64px 64px; } }
+            @keyframes pan-bg { 100% { background-position: 56px 56px; } }
             
             .arch-path {
               fill: none;
-              stroke-width: 3;
+              stroke-width: 2.5;
               stroke-linecap: round;
               stroke-linejoin: round;
             }
@@ -1147,145 +1147,143 @@
             
             /* Animated Data Flow Lines */
             .arch-path-anim {
-              stroke-width: 3;
-              stroke-dasharray: 8 16;
+              stroke-width: 2.5;
+              stroke-dasharray: 6 12;
               animation: data-flow 1.2s linear infinite;
-              filter: drop-shadow(0 0 6px currentColor);
+              filter: drop-shadow(0 0 5px currentColor);
             }
             .anim-magenta { stroke: var(--brand-magenta); }
             .anim-green { stroke: #00875A; }
             .anim-blue { stroke: #0052CC; }
 
-            @keyframes data-flow { to { stroke-dashoffset: -24; } }
+            @keyframes data-flow { to { stroke-dashoffset: -18; } }
 
             /* Nodes */
             .a-node {
               position: absolute;
-              background: rgba(255, 255, 255, 0.95);
-              backdrop-filter: blur(12px);
-              -webkit-backdrop-filter: blur(12px);
+              background: rgba(255, 255, 255, 0.96);
+              backdrop-filter: blur(8px);
+              -webkit-backdrop-filter: blur(8px);
               border: 1px solid rgba(0,0,0,0.08);
-              border-radius: 16px;
-              width: 220px;
-              padding: 24px;
+              border-radius: 14px;
+              width: 190px;
+              padding: 16px;
               z-index: 10;
-              box-shadow: 0 12px 30px rgba(0,0,0,0.03), 0 4px 8px rgba(0,0,0,0.02);
-              transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+              box-shadow: 0 8px 20px rgba(0,0,0,0.03), 0 2px 6px rgba(0,0,0,0.02);
+              transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             }
             .a-node:hover {
-              transform: translateY(-6px);
-              box-shadow: 0 32px 60px rgba(0,0,0,0.06), 0 8px 16px rgba(0,0,0,0.04);
+              transform: translateY(-4px);
+              box-shadow: 0 20px 40px rgba(0,0,0,0.06), 0 6px 12px rgba(0,0,0,0.04);
             }
             
             .a-node.highlight-node:hover {
               border-color: var(--brand-magenta);
-              box-shadow: 0 32px 60px rgba(132,0,85,0.08), 0 8px 16px rgba(132,0,85,0.04);
+              box-shadow: 0 20px 40px rgba(132,0,85,0.08), 0 6px 12px rgba(132,0,85,0.04);
             }
             .a-node.green-node:hover {
               border-color: #00875A;
-              box-shadow: 0 32px 60px rgba(0,135,90,0.08), 0 8px 16px rgba(0,135,90,0.04);
+              box-shadow: 0 20px 40px rgba(0,135,90,0.08), 0 6px 12px rgba(0,135,90,0.04);
             }
             .a-node.blue-node:hover {
               border-color: #0052CC;
-              box-shadow: 0 32px 60px rgba(0,82,204,0.08), 0 8px 16px rgba(0,82,204,0.04);
+              box-shadow: 0 20px 40px rgba(0,82,204,0.08), 0 6px 12px rgba(0,82,204,0.04);
             }
 
             .a-icon {
-              width: 48px; height: 48px;
-              border-radius: 12px;
+              width: 36px; height: 36px;
+              border-radius: 10px;
               display: flex; align-items: center; justify-content: center;
-              margin-bottom: 20px;
+              margin-bottom: 12px;
             }
-            .a-title { font-weight: 700; font-size: 16px; margin-bottom: 10px; color: var(--text-dark); font-family: var(--font-sans); letter-spacing: -0.01em;}
-            .a-desc { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
-            .a-code { font-family: var(--font-mono); font-size: 11px; background: #f8f9fa; padding: 8px 10px; border-radius: 6px; margin-top: 16px; color: var(--text-dark); border: 1px solid rgba(0,0,0,0.04); }
+            .a-icon svg { width: 18px; height: 18px; }
+            .a-title { font-weight: 700; font-size: 14px; margin-bottom: 6px; color: var(--text-dark); font-family: var(--font-sans); letter-spacing: -0.01em;}
+            .a-desc { font-size: 11px; color: var(--text-muted); line-height: 1.5; }
+            .a-code { font-family: var(--font-mono); font-size: 10px; background: #f8f9fa; padding: 6px 8px; border-radius: 4px; margin-top: 10px; color: var(--text-dark); border: 1px solid rgba(0,0,0,0.04); line-height: 1.4;}
           </style>
 
-          <!-- SVG Connection Lines -->
+          <!-- SVG Connection Lines (Scaled down) -->
           <svg style="position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1;" xmlns="http://www.w3.org/2000/svg">
             
-            <!-- 1 to 2 (Ingestion to SenseML) -->
-            <path class="arch-path arch-path-bg" d="M 230 280 L 320 280" />
-            <path class="arch-path arch-path-anim anim-magenta" d="M 230 280 L 320 280" />
+            <!-- 1 to 2 -->
+            <path class="arch-path arch-path-bg" d="M 214 200 L 264 200" />
+            <path class="arch-path arch-path-anim anim-magenta" d="M 214 200 L 264 200" />
 
-            <!-- 2 to 3 (SenseML to Deterministic) -->
-            <path class="arch-path arch-path-bg" d="M 540 280 C 580 280, 580 140, 620 140" />
-            <path class="arch-path arch-path-anim anim-green" d="M 540 280 C 580 280, 580 140, 620 140" />
+            <!-- 2 to 3 -->
+            <path class="arch-path arch-path-bg" d="M 454 200 C 494 200, 494 100, 524 100" />
+            <path class="arch-path arch-path-anim anim-green" d="M 454 200 C 494 200, 494 100, 524 100" />
 
-            <!-- 2 to 4 (SenseML to LLM) -->
-            <path class="arch-path arch-path-bg" d="M 540 280 C 580 280, 580 420, 620 420" />
-            <path class="arch-path arch-path-anim anim-blue" d="M 540 280 C 580 280, 580 420, 620 420" />
+            <!-- 2 to 4 -->
+            <path class="arch-path arch-path-bg" d="M 454 200 C 494 200, 494 320, 524 320" />
+            <path class="arch-path arch-path-anim anim-blue" d="M 454 200 C 494 200, 494 320, 524 320" />
 
-            <!-- 3 to 5 (Deterministic to Validation) -->
-            <path class="arch-path arch-path-bg" d="M 840 140 C 880 140, 880 280, 920 280" />
-            <path class="arch-path arch-path-anim anim-green" d="M 840 140 C 880 140, 880 280, 920 280" />
+            <!-- 3 to 5 -->
+            <path class="arch-path arch-path-bg" d="M 714 100 C 754 100, 754 200, 784 200" />
+            <path class="arch-path arch-path-anim anim-green" d="M 714 100 C 754 100, 754 200, 784 200" />
 
-            <!-- 4 to 5 (LLM to Validation) -->
-            <path class="arch-path arch-path-bg" d="M 840 420 C 880 420, 880 280, 920 280" />
-            <path class="arch-path arch-path-anim anim-blue" d="M 840 420 C 880 420, 880 280, 920 280" />
+            <!-- 4 to 5 -->
+            <path class="arch-path arch-path-bg" d="M 714 320 C 754 320, 754 200, 784 200" />
+            <path class="arch-path arch-path-anim anim-blue" d="M 714 320 C 754 320, 754 200, 784 200" />
 
-            <!-- Vertical Sync Line between Engines to show they run in parallel -->
-            <path stroke="rgba(0,0,0,0.15)" stroke-width="1.5" stroke-dasharray="4 4" d="M 730 220 L 730 340" />
-            <text x="735" y="284" font-size="10" fill="var(--text-muted)" font-family="var(--font-mono)" opacity="0.8">PARALLEL EXECUTION</text>
+            <!-- Vertical Sync Line -->
+            <path stroke="rgba(0,0,0,0.15)" stroke-width="1.5" stroke-dasharray="4 4" d="M 619 190 L 619 230" />
+            <text x="626" y="213" font-size="9" fill="var(--text-muted)" font-family="var(--font-mono)" opacity="0.8">PARALLEL SYNC</text>
 
           </svg>
 
-          <!-- NODES -->
-
+          <!-- NODES (Scaled Down) -->
           <!-- 1. Document Ingestion -->
-          <div class="a-node" style="left: 40px; top: 180px;">
+          <div class="a-node" style="left: 24px; top: 140px;">
             <div class="a-icon" style="background: rgba(132,0,85,0.06); color: var(--brand-magenta);">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
             </div>
             <div class="a-title">Document Ingestion</div>
-            <div class="a-desc">Accepts raw PDFs, images, and unstructured text via REST API or async Webhook pipelines.</div>
+            <div class="a-desc">Accepts raw PDFs, images, and unstructured text.</div>
           </div>
 
           <!-- 2. SenseML Orchestrator -->
-          <div class="a-node highlight-node" style="left: 320px; top: 160px;">
-            <div class="a-icon" style="background: linear-gradient(135deg, var(--brand-magenta-dark), var(--brand-magenta)); color: #fff; box-shadow: 0 4px 12px rgba(132,0,85,0.3);">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+          <div class="a-node highlight-node" style="left: 264px; top: 120px;">
+            <div class="a-icon" style="background: linear-gradient(135deg, var(--brand-magenta-dark), var(--brand-magenta)); color: #fff; box-shadow: 0 4px 10px rgba(132,0,85,0.3);">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
             </div>
-            <div class="a-title">SenseML Orchestrator</div>
-            <div class="a-desc">The core routing layer. SenseML configurations dictate which fields go to which engine based on structure predictability.</div>
-            <div class="a-code">"method": { "id": "row" } <br/> "method": { "id": "queryGroup" }</div>
+            <div class="a-title">SenseML Router</div>
+            <div class="a-desc">The core routing layer. SenseML dictates which fields go to which engine based on structure.</div>
+            <div class="a-code">"method": { "id": "row" } <br/>"method": { "id": "queryGroup" }</div>
           </div>
 
           <!-- 3. Deterministic Engine -->
-          <div class="a-node green-node" style="left: 620px; top: 40px;">
+          <div class="a-node green-node" style="left: 524px; top: 20px;">
             <div class="a-icon" style="background: rgba(0,135,90,0.08); color: #00875A;">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
             </div>
             <div class="a-title">Deterministic Engine</div>
-            <div class="a-desc">Executes layout-based extraction using spatial anchors (Row, Column) and precise Regex matching.</div>
-            <ul style="font-size: 11px; color: var(--text-muted); margin-top: 12px; padding-left: 16px; margin-bottom:0; line-height: 1.6;">
+            <div class="a-desc">Executes layout extraction via spatial anchors.</div>
+            <ul style="font-size: 10px; color: var(--text-muted); margin-top: 8px; padding-left: 14px; margin-bottom:0; line-height: 1.5;">
               <li>Zero hallucination risk</li>
               <li>Millisecond latency</li>
-              <li>Ideal for strict forms</li>
             </ul>
           </div>
 
           <!-- 4. LLM Engine -->
-          <div class="a-node blue-node" style="left: 620px; top: 320px;">
+          <div class="a-node blue-node" style="left: 524px; top: 240px;">
             <div class="a-icon" style="background: rgba(0,82,204,0.08); color: #0052CC;">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
             </div>
             <div class="a-title">Generative LLM Engine</div>
-            <div class="a-desc">Executes multimodal queries for unstructured text, generative reasoning, and complex vision tasks.</div>
-            <ul style="font-size: 11px; color: var(--text-muted); margin-top: 12px; padding-left: 16px; margin-bottom:0; line-height: 1.6;">
+            <div class="a-desc">Executes multimodal queries for unstructured text and reasoning.</div>
+            <ul style="font-size: 10px; color: var(--text-muted); margin-top: 8px; padding-left: 14px; margin-bottom:0; line-height: 1.5;">
               <li>Interprets dense clauses</li>
-              <li>Handles varying layouts</li>
               <li>Built-in fallback chaining</li>
             </ul>
           </div>
 
           <!-- 5. JsonLogic Validation -->
-          <div class="a-node" style="left: 920px; top: 180px;">
+          <div class="a-node" style="left: 784px; top: 140px;">
             <div class="a-icon" style="background: rgba(0,0,0,0.04); color: var(--text-dark);">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
             </div>
             <div class="a-title">JsonLogic Validation</div>
-            <div class="a-desc">Cross-references outputs from both engines. Flagged documents are routed to a Human Review Queue.</div>
+            <div class="a-desc">Cross-references outputs. Flagged docs hit Human Review.</div>
             <div class="a-code">{"<": [{"var": "date"}, "2024"]}</div>
           </div>
 
