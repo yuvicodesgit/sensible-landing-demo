@@ -157,24 +157,30 @@
     .hero-badge-top {
       display: inline-flex;
       align-items: center;
-      padding: 6px 16px;
-      border-radius: 100px;
-      background: transparent;
-      border: 1px solid rgba(120, 0, 58, 0.4);
-      font-family: var(--font-sans);
-      font-size: 11px;
-      font-weight: 600;
+      gap: 14px;
+      padding: 0;
+      border: none;
+      background: none;
+      font-family: var(--font-mono);
+      font-size: 17px;
+      font-weight: 700;
       color: var(--brand-magenta-dark);
       text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 32px;
+      letter-spacing: 0.1em;
+      margin-bottom: 28px;
+    }
+    .hero-badge-top::before,
+    .hero-badge-top::after {
+      content: '▪';
+      font-size: 10px;
+      color: var(--text-muted);
     }
 
     .hero-h1 {
-      font-size: 56px;
+      font-size: 66px;
       font-weight: 700;
-      line-height: 1.12;
-      letter-spacing: -0.03em;
+      line-height: 1.05;
+      letter-spacing: -0.035em;
       margin-bottom: 24px;
       color: var(--text-dark);
       text-wrap: balance;
@@ -236,23 +242,167 @@
       color: var(--text-body);
     }
 
-    /* Right Column Image */
+    /* Right Column: Live Dashboard Visual */
     .hero-img-col {
       width: 100%;
       position: relative;
     }
-    .hero-img-frame {
-      width: 100%;
+    .hero-workflow {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding: 32px;
+      background: var(--bg-white);
+      border: 1px solid var(--border-stone);
+      border-radius: 16px;
+      box-shadow: 0 24px 60px rgba(20, 17, 24, 0.08);
+      position: relative;
+    }
+    .hw-top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .hw-node {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-stone-subtle);
+      border: 1px solid var(--border-stone);
       border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+      padding: 16px;
+      width: 120px;
+      height: 120px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+      z-index: 2;
     }
-    .hero-img-frame img {
+    .hw-node.highlight {
+      background: rgba(132, 0, 85, 0.04);
+      border-color: rgba(132, 0, 85, 0.3);
+      animation: pulse-engine 3s infinite;
+    }
+    .hw-node-text {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-top: 8px;
+      text-align: center;
+    }
+    .hw-arrow {
+      flex: 1;
+      height: 2px;
+      background: repeating-linear-gradient(90deg, var(--border-stone) 0, var(--border-stone) 6px, transparent 6px, transparent 12px);
+      position: relative;
+    }
+    .hw-arrow::after {
+      content: '';
+      position: absolute;
+      right: -2px;
+      top: -4px;
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+      border-left: 6px solid var(--border-stone);
+    }
+    .hw-code {
       width: 100%;
-      height: auto;
-      display: block;
-      transform: scale(1.05); /* Slight crop to mimic edge bleeding */
+      background: var(--bg-stone-subtle);
+      border: 1px solid var(--border-stone);
+      border-radius: 8px;
+      padding: 16px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-dark);
+      margin-top: 16px;
     }
+    .hw-code-header {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-stone);
+      padding-bottom: 8px;
+      margin-bottom: 8px;
+      font-family: var(--font-sans);
+      font-weight: 600;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .hw-code-body {
+      white-space: pre;
+      line-height: 1.5;
+    }
+    .dash-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px 22px;
+      border-bottom: 1px solid var(--border-light);
+      background: var(--bg-stone-subtle);
+    }
+    .dash-header-title {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-dark);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .dash-status {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--check-green);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      flex-shrink: 0;
+    }
+    .dash-status::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--check-green);
+      box-shadow: 0 0 0 3px rgba(0, 135, 90, 0.15);
+    }
+    .dash-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    .dash-tile {
+      padding: 24px 22px;
+      border-right: 1px solid var(--border-light);
+      border-bottom: 1px solid var(--border-light);
+    }
+    .dash-tile:nth-child(2n) { border-right: none; }
+    .dash-tile:nth-child(3), .dash-tile:nth-child(4) { border-bottom: none; }
+    .dash-tile-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: rgba(132, 0, 85, 0.08);
+      color: var(--brand-magenta);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 14px;
+    }
+    .dash-tile-icon svg { width: 15px; height: 15px; }
+    .dash-tile-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 6px;
+    }
+    .dash-tile-value { font-size: 26px; font-weight: 700; color: var(--text-dark); letter-spacing: -0.01em; }
+    .dash-tile-sub { font-size: 11.5px; color: var(--text-muted); margin-top: 4px; }
+    .dash-tile-sub.up { color: var(--check-green); }
 
 
 
@@ -309,17 +459,23 @@
     .sec-eyebrow {
       display: inline-flex;
       align-items: center;
-      padding: 6px 16px;
-      border-radius: 100px;
-      background: rgba(132, 0, 85, 0.06);
-      border: 1px solid rgba(132, 0, 85, 0.18);
+      gap: 10px;
+      padding: 0;
+      border: none;
+      background: none;
       font-family: var(--font-mono);
       font-size: 12px;
       font-weight: 600;
       color: var(--brand-magenta);
       text-transform: uppercase;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.14em;
       margin-bottom: 16px;
+    }
+    .sec-eyebrow::before,
+    .sec-eyebrow::after {
+      content: '▪';
+      font-size: 8px;
+      color: var(--text-muted);
     }
     .sec-h2 {
       font-size: 36px;
@@ -444,186 +600,139 @@
     .matrix-row:nth-child(even) .td-sensible { background: var(--brand-magenta); }
 
     .td-competitor { color: var(--text-body); background: var(--bg-stone-subtle); }
-    .td-why { color: var(--text-body); background: var(--bg-white); font-style: italic; }
+    .td-why { color: var(--text-body); background: var(--bg-white); }
 
-    /* 4. DIAGRAM SECTION */
+    /* 4. HOW IT WORKS SECTION */
     .diagram-section {
-      min-height: calc(100vh - 72px);
-      display: flex;
-      align-items: center;
-      padding: 24px 0;
+      padding: 90px 0;
       background: var(--bg-stone-subtle);
       border-bottom: 1px solid var(--border-stone);
     }
-    .diagram-container-1fold {
-      display: flex;
-      flex-direction: column;
-      width: 100%;
-      height: 100%;
-      justify-content: center;
-    }
-    .workflow-container {
+
+    /* 5-step overview strip */
+    .steps-strip {
+      max-width: 1160px;
+      margin: 0 auto 32px;
       background: var(--bg-white);
       border: 1px solid var(--border-stone);
-      border-radius: 14px;
-      padding: 24px;
+      border-radius: 20px;
       box-shadow: var(--shadow-float);
-      max-width: 1040px;
+      display: flex;
+      overflow: hidden;
+    }
+    .step-item { flex: 1; padding: 30px 26px; }
+    .step-item + .step-item { border-left: 1px solid var(--border-light); }
+    .step-num { font-family: var(--font-mono); font-size: 12px; font-weight: 700; color: var(--brand-magenta); margin-bottom: 16px; }
+    .step-title { font-size: 16px; font-weight: 700; color: var(--text-dark); margin-bottom: 8px; letter-spacing: -0.01em; }
+    .step-desc { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+
+    /* Production pipeline detail panel */
+    .detail-panel {
+      max-width: 1160px;
       margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-      width: 100%;
-    }
-
-    .pipeline-wrapper {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .pipeline-title {
-      font-size: 14px;
-      font-weight: 700;
-      color: #121214;
-      text-align: center;
-    }
-    .pipeline-row {
-      display: grid;
-      grid-template-columns: 120px 1fr 240px 1fr 300px;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .flow-node {
-      background: var(--bg-stone-subtle);
-      border: 1px solid var(--border-stone);
-      border-radius: 12px;
-      padding: 12px;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      min-height: 100px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-    }
-    .flow-node.highlight {
-      background: rgba(132, 0, 85, 0.04);
-      border-color: rgba(132, 0, 85, 0.3);
-    }
-    .flow-node-title {
-      font-size: 13px;
-      font-weight: 700;
-      color: #121214;
-      margin-bottom: 4px;
-    }
-    
-    .flow-icon {
-      font-size: 28px;
-      margin-bottom: 4px;
-    }
-    .flow-doc-icon {
-      width: 40px;
-      height: 52px;
-      background: var(--text-body);
-      border-radius: 4px 10px 4px 4px;
-      color: #FFF;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 12px;
-      position: relative;
-    }
-    .flow-doc-icon.magenta {
-      background: var(--brand-magenta);
-    }
-    .flow-doc-icon::before {
-      content: '';
-      position: absolute;
-      top: 0; right: 0;
-      width: 12px; height: 12px;
-      background: var(--bg-white);
-      border-bottom-left-radius: 4px;
-    }
-
-    /* Animated Flow Arrows */
-    .flow-arrow-container {
-      width: 100%;
-      display: flex;
-      align-items: center;
-    }
-    .flow-arrow-svg {
-      width: 100%;
-      height: 20px;
-    }
-    @keyframes flow-dash {
-      from { stroke-dashoffset: 24; }
-      to { stroke-dashoffset: 0; }
-    }
-    .flow-line {
-      stroke: var(--brand-magenta);
-      stroke-width: 2;
-      stroke-dasharray: 6 6;
-      animation: flow-dash 1s linear infinite;
-    }
-    .flow-head {
-      fill: var(--brand-magenta);
-    }
-
-    /* Code Block Output Nodes (Light Theme) */
-    .code-node {
       background: var(--bg-white);
       border: 1px solid var(--border-stone);
-      border-radius: 8px;
-      padding: 12px 16px;
+      border-radius: 20px;
+      box-shadow: var(--shadow-float);
+      overflow: hidden;
+    }
+    .detail-panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 32px;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .detail-panel-title {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
       color: var(--text-dark);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    .detail-panel-status {
+      display: flex;
+      align-items: center;
+      gap: 6px;
       font-family: var(--font-mono);
       font-size: 10px;
-      text-align: left;
-      min-height: 120px;
-      display: flex;
-      flex-direction: column;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.04);
-    }
-    .code-header {
-      font-size: 10px;
-      color: var(--text-muted);
-      border-bottom: 1px solid var(--border-stone);
-      padding-bottom: 6px;
-      margin-bottom: 8px;
+      font-weight: 600;
+      color: var(--check-green);
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      font-family: var(--font-sans);
+    }
+    .detail-panel-status::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--check-green);
+      box-shadow: 0 0 0 3px rgba(0, 135, 90, 0.15);
+    }
+    .detail-cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+    .detail-col { padding: 32px; }
+    .detail-col + .detail-col { border-left: 1px solid var(--border-light); }
+    .detail-icon-badge {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(132, 0, 85, 0.08);
+      color: var(--brand-magenta);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 18px;
+    }
+    .detail-icon-badge svg { width: 17px; height: 17px; }
+    .detail-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--brand-magenta);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 12px;
+    }
+    .detail-title { font-size: 19px; font-weight: 700; color: var(--text-dark); line-height: 1.35; margin-bottom: 12px; }
+    .detail-p { font-size: 13.5px; color: var(--text-body); line-height: 1.65; }
+    .detail-divider { border: none; border-top: 1px dashed var(--border-stone); margin: 22px 0 16px; }
+    .detail-sublabel {
+      font-family: var(--font-mono);
+      font-size: 10px;
       font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 12px;
     }
-    .code-body {
+    .detail-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 8px 0;
+      font-family: var(--font-mono);
+      font-size: 12px;
       color: var(--text-body);
-      white-space: pre;
-      line-height: 1.3;
     }
-    .code-body span.val { color: var(--brand-magenta); font-weight: 500; }
-    
-    .code-body.markdown {
-      color: var(--text-body);
+    .pill {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 5px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      white-space: nowrap;
     }
-    .code-body.markdown span.dim { color: var(--text-muted); font-style: italic; }
-
-    /* Subtle pulsing animation for engine nodes */
-    @keyframes pulse-engine {
-      0% { transform: scale(1); box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
-      50% { transform: scale(1.03); box-shadow: 0 12px 24px rgba(132,0,85,0.08); }
-      100% { transform: scale(1); box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
-    }
-    .flow-node.engine-node {
-      animation: pulse-engine 3s ease-in-out infinite;
-      border: 1px solid var(--border-stone);
-    }
-    .flow-node.engine-node.highlight {
-      border: 1px solid rgba(132, 0, 85, 0.3);
-      background: rgba(132, 0, 85, 0.02);
-    }
+    .pill-pass { background: rgba(0, 135, 90, 0.1); color: var(--check-green); }
+    .pill-flag { background: rgba(132, 0, 85, 0.08); color: var(--brand-magenta); }
+    .pill-block { background: rgba(224, 62, 46, 0.1); color: var(--cross-red); }
+    .pill-neutral { background: var(--bg-stone-subtle); color: var(--text-muted); border: 1px solid var(--border-stone); }
 
     /* 5. INTERACTIVE ACCORDION FAQS */
     .faq-section {
@@ -680,32 +789,64 @@
       padding: 120px 0;
       background: var(--bg-stone-subtle);
     }
-    .takeaway-single-card {
-      max-width: 900px;
+    .choices-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      max-width: 1040px;
       margin: 0 auto;
+    }
+    .choice-card {
       background: var(--bg-white);
       border: 1px solid var(--border-stone);
       border-radius: 24px;
-      padding: 64px 72px;
+      padding: 44px 40px;
       box-shadow: 0 4px 24px rgba(0, 0, 0, 0.02);
     }
-    .takeaway-eyebrow {
+    .choice-card.sensible {
+      border-color: rgba(132, 0, 85, 0.3);
+      background: linear-gradient(135deg, rgba(132,0,85,0.04), rgba(132,0,85,0.01));
+    }
+    .choice-card-header {
       display: flex;
       align-items: center;
       gap: 10px;
-      color: var(--brand-magenta);
-      font-size: 13px;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      margin-bottom: 24px;
-    }
-    .takeaway-large-p {
-      font-size: 26px;
+      font-size: 21px;
+      font-weight: 700;
       color: var(--text-dark);
-      line-height: 1.6;
-      font-weight: 400;
+      margin-bottom: 22px;
     }
+    .choice-card-tag {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      color: #FFF;
+      background: var(--text-muted);
+      border-radius: 4px;
+      padding: 3px 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .choice-card.sensible .choice-card-tag { background: var(--brand-magenta); }
+    .choice-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .choice-list li {
+      display: flex;
+      gap: 10px;
+      font-size: 15px;
+      color: var(--text-body);
+      line-height: 1.5;
+    }
+    .choice-list .bullet-icon {
+      flex-shrink: 0;
+      margin-top: 3px;
+      color: var(--text-muted);
+    }
+    .choice-card.sensible .choice-list .bullet-icon { color: var(--brand-magenta); }
 
     /* 7. CTA BANNER & FOOTER */
     .cta-banner {
@@ -735,11 +876,25 @@
 
     @media (max-width: 991px) {
       .hero-horizontal-split { grid-template-columns: 1fr; }
+      .hero-container-1fold { grid-template-columns: 1fr; }
       .hero-section { min-height: auto; }
+      .hero-workflow { padding: 16px; }
+      .hw-top-row { flex-wrap: wrap; justify-content: center; }
+      .hw-node { width: 100px; height: 100px; padding: 8px; }
+      .hw-arrow { display: none; }
+      
       .details-grid { grid-template-columns: repeat(2, 1fr); }
       .matrix-row { grid-template-columns: 1fr 1fr; }
       .td-why, .td-feature { display: none; }
       .takeaways-grid { grid-template-columns: 1fr; }
+      .dash-grid { grid-template-columns: 1fr; }
+      .dash-tile { border-right: none !important; border-bottom: 1px solid var(--border-light) !important; }
+      .dash-tile:last-child { border-bottom: none !important; }
+      .steps-strip { flex-direction: column; }
+      .step-item + .step-item { border-left: none; border-top: 1px solid var(--border-light); }
+      .detail-cols { grid-template-columns: 1fr; }
+      .detail-col + .detail-col { border-left: none; border-top: 1px solid var(--border-light); }
+      .choices-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -808,10 +963,48 @@
         </div>
       </div>
 
-      <!-- Right Column: Image -->
+      <!-- Right Column: Live Dashboard Visual -->
       <div class="hero-img-col">
-        <div class="hero-img-frame">
-          <img src="sensible_document_to_json_hero_1789568914704.jpg" alt="Sensible Document to JSON Extraction Engine"/>
+        <div class="hero-workflow">
+          <div class="hw-top-row">
+            <!-- Source Node -->
+            <div class="hw-node">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text-body); margin-bottom:8px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+              <div class="hw-node-text">Messy PDF</div>
+            </div>
+
+            <div class="hw-arrow"></div>
+
+            <!-- Sensible Engine Node -->
+            <div class="hw-node highlight">
+              <img src="https://cdn.prod.website-files.com/69d90e4abf8f50428ec28825/69d90e4abf8f50428ec2888c_LogoDefault.svg" alt="Sensible" style="width: 80px; height: auto;" />
+            </div>
+
+            <div class="hw-arrow"></div>
+
+            <!-- Target Node -->
+            <div class="hw-node">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--brand-magenta); margin-bottom:8px;"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+              <div class="hw-node-text">Clean JSON</div>
+            </div>
+          </div>
+
+          <div class="hw-code">
+            <div class="hw-code-header">
+              <span style="color:var(--text-muted);">output.json</span>
+              <span style="color:#00875A;">● 100% Validated</span>
+            </div>
+            <div class="hw-code-body">
+{
+  "report_type": <span style="color:var(--brand-magenta);">"Annual Summary"</span>,
+  "confidence_score": <span style="color:var(--brand-magenta);">99.8</span>,
+  "data_points": [
+    { "field": <span style="color:var(--brand-magenta);">"Revenue"</span>, "value": <span style="color:var(--brand-magenta);">"12.4M"</span> },
+    { "field": <span style="color:var(--brand-magenta);">"Growth"</span>, "value": <span style="color:var(--brand-magenta);">"+8.4%"</span> }
+  ]
+}
+            </div>
+          </div>
         </div>
       </div>
 
@@ -884,12 +1077,12 @@
 
       <div class="matrix-wrap">
         <div class="matrix-row">
-          <div class="th-empty"></div>
+          <div class="th-cell" style="background:var(--bg-stone-subtle); color:var(--text-body);">FEATURES</div>
           <div class="th-sensible">
             <img src="https://cdn.prod.website-files.com/69d90e4abf8f50428ec28825/69d90e4abf8f50428ec28870_LogoWhite.svg" alt="Sensible" style="height: 24px;"/>
           </div>
           <div class="th-cell" style="gap: 8px;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" style="fill: currentColor;"><path d="M15.855 17.122c-2.092.924-4.358.545-5.23.24 0 .21-.01.857-.048 1.78-.038.924-.332 1.507-.475 1.684.016.577.029 1.837-.047 2.26a1.93 1.93 0 01-.476.914H8.295c.114-.577.555-.946.761-1.058.114-1.193-.11-2.229-.238-2.597-.126.449-.437 1.49-.665 2.068a6.418 6.418 0 01-.713 1.299h-.951c-.048-.578.27-.77.475-.77.095-.177.323-.731.476-1.54.152-.807-.064-2.324-.19-2.981v-2.068c-1.522-.818-2.092-1.636-2.473-2.55-.304-.73-.222-1.843-.142-2.308-.096-.176-.373-.625-.476-1.25-.142-.866-.063-1.491 0-1.828-.095-.096-.285-.587-.285-1.78 0-1.192.349-1.811.523-1.972v-.529c-.666-.048-1.331-.336-1.712-.721-.38-.385-.095-.962.143-1.154.238-.193.475-.049.808-.145.333-.096.618-.192.76-.48C4.512 1.403 4.287.448 4.16 0c.57.077.935.577 1.046.818V0c.713.337 1.997 1.154 2.425 2.934.342 1.424.586 4.409.665 5.723 1.823.016 4.137-.26 6.229.193 1.901.412 2.757 1.25 3.755 1.25.999 0 1.57-.577 2.282-.096.714.481 1.094 1.828.999 2.838-.076.808-.697 1.074-.998 1.106-.38 1.27 0 2.485.237 2.934v1.827c.111.16.333.655.333 1.347 0 .693-.222 1.154-.333 1.299.19 1.077-.08 2.18-.238 2.597h-1.283c.152-.385.412-.481.523-.481.228-1.193.063-2.293-.048-2.693-.722-.424-1.188-1.17-1.331-1.491.016.272-.029 1.029-.333 1.875-.304.847-.76 1.347-.95 1.491v1.01h-1.284c0-.615.348-.737.523-.721.222-.4.76-1.01.76-2.212 0-1.015-.713-1.492-1.236-2.405-.248-.434-.127-.978-.047-1.203z"></path></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: currentColor;"><path d="M15.855 17.122c-2.092.924-4.358.545-5.23.24 0 .21-.01.857-.048 1.78-.038.924-.332 1.507-.475 1.684.016.577.029 1.837-.047 2.26a1.93 1.93 0 01-.476.914H8.295c.114-.577.555-.946.761-1.058.114-1.193-.11-2.229-.238-2.597-.126.449-.437 1.49-.665 2.068a6.418 6.418 0 01-.713 1.299h-.951c-.048-.578.27-.77.475-.77.095-.177.323-.731.476-1.54.152-.807-.064-2.324-.19-2.981v-2.068c-1.522-.818-2.092-1.636-2.473-2.55-.304-.73-.222-1.843-.142-2.308-.096-.176-.373-.625-.476-1.25-.142-.866-.063-1.491 0-1.828-.095-.096-.285-.587-.285-1.78 0-1.192.349-1.811.523-1.972v-.529c-.666-.048-1.331-.336-1.712-.721-.38-.385-.095-.962.143-1.154.238-.193.475-.049.808-.145.333-.096.618-.192.76-.48C4.512 1.403 4.287.448 4.16 0c.57.077.935.577 1.046.818V0c.713.337 1.997 1.154 2.425 2.934.342 1.424.586 4.409.665 5.723 1.823.016 4.137-.26 6.229.193 1.901.412 2.757 1.25 3.755 1.25.999 0 1.57-.577 2.282-.096.714.481 1.094 1.828.999 2.838-.076.808-.697 1.074-.998 1.106-.38 1.27 0 2.485.237 2.934v1.827c.111.16.333.655.333 1.347 0 .693-.222 1.154-.333 1.299.19 1.077-.08 2.18-.238 2.597h-1.283c.152-.385.412-.481.523-.481.228-1.193.063-2.293-.048-2.693-.722-.424-1.188-1.17-1.331-1.491.016.272-.029 1.029-.333 1.875-.304.847-.76 1.347-.95 1.491v1.01h-1.284c0-.615.348-.737.523-.721.222-.4.76-1.01.76-2.212 0-1.015-.713-1.492-1.236-2.405-.248-.434-.127-.978-.047-1.203z"></path></svg>
             LLAMAPARSE
           </div>
           <div class="th-cell">WHY IT MATTERS</div>
@@ -961,126 +1154,94 @@
     </div>
   </section>
 
-  <!-- 4. USEFUL DIAGRAM SECTION -->
+  <!-- 4. HOW IT WORKS SECTION -->
   <section class="diagram-section">
     <div class="container">
       <div class="sec-head">
-        <div class="sec-eyebrow">Technical Architecture</div>
-        <h2 class="sec-h2">How the Extraction Engines Differ</h2>
-
+        <div class="sec-eyebrow">How It Works</div>
+        <h2 class="sec-h2">From PDF to Validated JSON, in Five Steps</h2>
+        <p class="sec-desc">Whether you build the template yourself, generate one from samples, or hand it to Sensible's team, every extraction follows the same path.</p>
       </div>
 
-      <div class="workflow-container">
-        
-        <!-- Pipeline A: LlamaParse -->
-        <div class="pipeline-wrapper">
-          <div class="pipeline-title">Pipeline A: LlamaParse (Layout-Aware Parsing)</div>
-          <div class="pipeline-row">
-            
-            <!-- Source PDF -->
-            <div class="flow-node">
-              <div class="flow-doc-icon">PDF</div>
-              <div class="flow-node-title" style="margin-top:16px;">Source PDF<br/>Documents</div>
-            </div>
-
-            <!-- Arrow -->
-            <div class="flow-arrow-container">
-              <svg class="flow-arrow-svg" viewBox="0 0 100 24" preserveAspectRatio="none">
-                <line x1="0" y1="12" x2="90" y2="12" class="flow-line"></line>
-                <polygon points="90,6 100,12 90,18" class="flow-head"></polygon>
-              </svg>
-            </div>
-
-            <!-- Engine Node -->
-            <div class="flow-node engine-node">
-              <div class="flow-icon">👁️</div>
-              <div class="flow-node-title">LlamaParse Vision Engine</div>
-              <div style="font-size:12px; color:var(--text-muted); margin-top:8px;">Vision LLM Processing</div>
-            </div>
-
-            <!-- Arrow -->
-            <div class="flow-arrow-container">
-              <svg class="flow-arrow-svg" viewBox="0 0 100 24" preserveAspectRatio="none">
-                <line x1="0" y1="12" x2="90" y2="12" class="flow-line"></line>
-                <polygon points="90,6 100,12 90,18" class="flow-head"></polygon>
-              </svg>
-            </div>
-
-            <!-- Output Node -->
-            <div class="code-node">
-              <div class="code-header">Raw Markdown Output</div>
-              <div class="code-body markdown">
-# Annual Report
-## 1. Executive Summary
-This report highlights...
-- Increased revenue
-- Expanded market share
-
-| Q1  | Q2  | Q3  | Q4  |
-|-----|-----|-----|-----|
-| 10m | 12m | <span class="dim">NaN</span> | 18m |
-              </div>
-            </div>
-
-          </div>
+      <div class="steps-strip">
+        <div class="step-item">
+          <div class="step-num">01</div>
+          <div class="step-title">Plan the build</div>
+          <div class="step-desc">Different documents need different approaches.</div>
         </div>
-
-        <!-- Pipeline B: Sensible -->
-        <div class="pipeline-wrapper">
-          <div class="pipeline-title">Pipeline B: Sensible (Template & LLM Extraction)</div>
-          <div class="pipeline-row">
-            
-            <!-- Source PDF -->
-            <div class="flow-node">
-              <div class="flow-doc-icon magenta">PDF</div>
-              <div class="flow-node-title" style="margin-top:16px;">Source PDF<br/>Documents</div>
-            </div>
-
-            <!-- Arrow -->
-            <div class="flow-arrow-container">
-              <svg class="flow-arrow-svg" viewBox="0 0 100 24" preserveAspectRatio="none">
-                <line x1="0" y1="12" x2="90" y2="12" class="flow-line"></line>
-                <polygon points="90,6 100,12 90,18" class="flow-head"></polygon>
-              </svg>
-            </div>
-
-            <!-- Engine Node -->
-            <div class="flow-node engine-node highlight">
-              <div class="flow-icon">🧠 📐</div>
-              <div class="flow-node-title">Sensible Hybrid Engine</div>
-              <div style="font-size:12px; color:var(--text-muted); margin-top:8px;">LLMs + SenseML Rules</div>
-            </div>
-
-            <!-- Arrow -->
-            <div class="flow-arrow-container">
-              <svg class="flow-arrow-svg" viewBox="0 0 100 24" preserveAspectRatio="none">
-                <line x1="0" y1="12" x2="90" y2="12" class="flow-line"></line>
-                <polygon points="90,6 100,12 90,18" class="flow-head"></polygon>
-              </svg>
-            </div>
-
-            <!-- Output Node -->
-            <div class="code-node" style="border: 1px solid rgba(132,0,85,0.4);">
-              <div class="code-header" style="color:var(--brand-magenta-accent)">Structured JSON Output</div>
-              <div class="code-body">
-{
-  "report_title": <span class="val">"Annual Report"</span>,
-  "summary": {
-    "key_achievements": [ <span class="val">"Increased revenue"</span> ]
-  },
-  "financial_data": [
-    {"q": <span class="val">"Q1"</span>, "rev": <span class="val">"10m"</span>},
-    {"q": <span class="val">"Q2"</span>, "rev": <span class="val">"12m"</span>},
-    {"q": <span class="val">"Q3"</span>, "rev": <span class="val">"15m"</span>}
-  ]
-}
-              </div>
-            </div>
-
-          </div>
+        <div class="step-item">
+          <div class="step-num">02</div>
+          <div class="step-title">Build the template</div>
+          <div class="step-desc">Layout-based methods, AI-based methods, or both.</div>
         </div>
-
+        <div class="step-item">
+          <div class="step-num">03</div>
+          <div class="step-title">Production workflow</div>
+          <div class="step-desc">The ten stages every document moves through.</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">04</div>
+          <div class="step-title">Get the data out</div>
+          <div class="step-desc">Webhook, REST, SDK, MCP, spreadsheet, database.</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">05</div>
+          <div class="step-title">Monitor</div>
+          <div class="step-desc">Validations, review queue, live dashboard.</div>
+        </div>
       </div>
+
+      <div class="detail-panel">
+        <div class="detail-panel-header">
+          <div class="detail-panel-title">Production Pipeline</div>
+          <div class="detail-panel-status">Healthy</div>
+        </div>
+
+        <div class="detail-cols">
+          <div class="detail-col">
+            <div class="detail-icon-badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg>
+            </div>
+            <div class="detail-eyebrow">Validations</div>
+            <div class="detail-title">Rules check every extraction.</div>
+            <div class="detail-p">JsonLogic rules run on every document — cross-field math, date ordering, enum membership, format checks. When a rule fails, the document is flagged before it reaches your downstream systems.</div>
+            <hr class="detail-divider"/>
+            <div class="detail-sublabel">Sample Rules</div>
+            <div class="detail-row"><span>loan_amount &gt; 0</span><span class="pill pill-pass">Pass</span></div>
+            <div class="detail-row"><span>closing_date &gt;= app_date</span><span class="pill pill-pass">Pass</span></div>
+            <div class="detail-row"><span>confidence &gt;= 0.85</span><span class="pill pill-flag">Flag</span></div>
+          </div>
+
+          <div class="detail-col">
+            <div class="detail-icon-badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 20c0-4 3.6-6 8-6s8 2 8 6"></path></svg>
+            </div>
+            <div class="detail-eyebrow">Human Review</div>
+            <div class="detail-title">Flagged docs queue, not your customer.</div>
+            <div class="detail-p">When a confidence score or rule trips, the document goes to a review queue with one-click accept, correct, or reject. Corrections feed your reference set so the same edge case stops reaching review next time.</div>
+            <hr class="detail-divider"/>
+            <div class="detail-sublabel">Reviewer Actions</div>
+            <div class="detail-row"><span>Accept value as-is</span><span class="pill pill-pass">Ship</span></div>
+            <div class="detail-row"><span>Correct value</span><span class="pill pill-flag">Refeed</span></div>
+            <div class="detail-row"><span>Reject document</span><span class="pill pill-block">Block</span></div>
+          </div>
+
+          <div class="detail-col">
+            <div class="detail-icon-badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="M7 15l4-6 4 3 4-7"></path></svg>
+            </div>
+            <div class="detail-eyebrow">Monitor</div>
+            <div class="detail-title">A live dashboard tracks every extraction.</div>
+            <div class="detail-p">Browse every extraction across production and development, filterable by date range. Click into any document to inspect field-by-field results and trace each value back to its source coordinates.</div>
+            <hr class="detail-divider"/>
+            <div class="detail-sublabel">Tracked Signals</div>
+            <div class="detail-row"><span>Extraction coverage</span><span class="pill pill-neutral">All Fields</span></div>
+            <div class="detail-row"><span>Volume + config usage</span><span class="pill pill-neutral">By Date</span></div>
+            <div class="detail-row"><span>Recent extractions</span><span class="pill pill-neutral">Filterable</span></div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </section>
 
@@ -1159,15 +1320,32 @@ This report highlights...
   <!-- 6. KEY TAKEAWAYS SECTION -->
   <section class="takeaways-section">
     <div class="container">
-      <div class="takeaway-single-card">
-        <div class="takeaway-eyebrow">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-            <polyline points="22 4 12 14.01 9 11.01"></polyline>
-          </svg>
-          THE TAKEAWAY
+      <div class="sec-head">
+        <div class="sec-eyebrow">The Takeaway</div>
+        <h2 class="sec-h2">Which One Should You Use?</h2>
+      </div>
+
+      <div class="choices-grid">
+        <div class="choice-card">
+          <div class="choice-card-header"><span class="choice-card-tag">Choose</span> LlamaParse if...</div>
+          <ul class="choice-list">
+            <li><span class="bullet-icon">→</span> You need fast, cheap PDF-to-text for RAG or semantic search.</li>
+            <li><span class="bullet-icon">→</span> Your documents are simple, mostly text, and low-stakes.</li>
+            <li><span class="bullet-icon">→</span> A Markdown dump for an LLM to read is all you need.</li>
+            <li><span class="bullet-icon">→</span> Per-page pricing works fine at your current volume.</li>
+          </ul>
         </div>
-        <p class="takeaway-large-p">Sensible is the better choice if you need to reliably extract guaranteed, highly-structured JSON from complex financial and insurance documents with pixel-level traceability. LlamaParse is the better choice if your primary goal is converting PDFs into raw Markdown for basic vector search and LLM indexing.</p>
+
+        <div class="choice-card sensible">
+          <div class="choice-card-header"><span class="choice-card-tag">Choose</span> Sensible if...</div>
+          <ul class="choice-list">
+            <li><span class="bullet-icon">✓</span> You need guaranteed, schema-validated JSON for production systems.</li>
+            <li><span class="bullet-icon">✓</span> Your documents are complex — dense tables, multi-page, borderless.</li>
+            <li><span class="bullet-icon">✓</span> You need pixel-perfect bounding-box audit trails for compliance.</li>
+            <li><span class="bullet-icon">✓</span> You want predictable flat per-document pricing at scale.</li>
+            <li><span class="bullet-icon">✓</span> You need a built-in human review queue for edge cases.</li>
+          </ul>
+        </div>
       </div>
     </div>
   </section>
