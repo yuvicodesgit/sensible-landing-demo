@@ -821,13 +821,15 @@
       font-size: 10px;
       font-weight: 700;
       color: #FFF;
-      background: var(--text-muted);
+      background: #8A8A93;
       border-radius: 4px;
-      padding: 3px 8px;
+      padding: 4px 8px;
       text-transform: uppercase;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.1em;
     }
-    .choice-card.sensible .choice-card-tag { background: var(--brand-magenta); }
+    .choice-card.sensible .choice-card-tag {
+      background: var(--brand-magenta);
+    }
     .choice-list {
       list-style: none;
       display: flex;
@@ -965,46 +967,13 @@
 
       <!-- Right Column: Live Dashboard Visual -->
       <div class="hero-img-col">
-        <div class="hero-workflow">
-          <div class="hw-top-row">
-            <!-- Source Node -->
-            <div class="hw-node">
-              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text-body); margin-bottom:8px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-              <div class="hw-node-text">Messy PDF</div>
-            </div>
-
-            <div class="hw-arrow"></div>
-
-            <!-- Sensible Engine Node -->
-            <div class="hw-node highlight">
-              <img src="https://cdn.prod.website-files.com/69d90e4abf8f50428ec28825/69d90e4abf8f50428ec2888c_LogoDefault.svg" alt="Sensible" style="width: 80px; height: auto;" />
-            </div>
-
-            <div class="hw-arrow"></div>
-
-            <!-- Target Node -->
-            <div class="hw-node">
-              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--brand-magenta); margin-bottom:8px;"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
-              <div class="hw-node-text">Clean JSON</div>
-            </div>
+        <div style="position:relative; width:100%; border-radius:12px; overflow:hidden; box-shadow:0 24px 60px rgba(0,0,0,0.1); border:1px solid var(--border-stone);">
+          <div style="background:var(--bg-stone-subtle); height:40px; display:flex; align-items:center; padding:0 16px; border-bottom:1px solid var(--border-stone); gap:8px;">
+            <div style="width:12px; height:12px; border-radius:50%; background:#FF5F56;"></div>
+            <div style="width:12px; height:12px; border-radius:50%; background:#FFBD2E;"></div>
+            <div style="width:12px; height:12px; border-radius:50%; background:#27C93F;"></div>
           </div>
-
-          <div class="hw-code">
-            <div class="hw-code-header">
-              <span style="color:var(--text-muted);">output.json</span>
-              <span style="color:#00875A;">● 100% Validated</span>
-            </div>
-            <div class="hw-code-body">
-{
-  "report_type": <span style="color:var(--brand-magenta);">"Annual Summary"</span>,
-  "confidence_score": <span style="color:var(--brand-magenta);">99.8</span>,
-  "data_points": [
-    { "field": <span style="color:var(--brand-magenta);">"Revenue"</span>, "value": <span style="color:var(--brand-magenta);">"12.4M"</span> },
-    { "field": <span style="color:var(--brand-magenta);">"Growth"</span>, "value": <span style="color:var(--brand-magenta);">"+8.4%"</span> }
-  ]
-}
-            </div>
-          </div>
+          <img src="hero_ui_screenshot.png" alt="Sensible UI" style="width:100%; display:block; object-fit:cover;" />
         </div>
       </div>
 
@@ -1327,7 +1296,11 @@
 
       <div class="choices-grid">
         <div class="choice-card">
-          <div class="choice-card-header"><span class="choice-card-tag">Choose</span> LlamaParse if...</div>
+          <div class="choice-card-header" style="gap: 6px;">
+            <span class="choice-card-tag" style="margin-right:4px;">CHOOSE</span> 
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" style="fill: currentColor; margin-top:-2px;"><path d="M15.855 17.122c-2.092.924-4.358.545-5.23.24 0 .21-.01.857-.048 1.78-.038.924-.332 1.507-.475 1.684.016.577.029 1.837-.047 2.26a1.93 1.93 0 01-.476.914H8.295c.114-.577.555-.946.761-1.058.114-1.193-.11-2.229-.238-2.597-.126.449-.437 1.49-.665 2.068a6.418 6.418 0 01-.713 1.299h-.951c-.048-.578.27-.77.475-.77.095-.177.323-.731.476-1.54.152-.807-.064-2.324-.19-2.981v-2.068c-1.522-.818-2.092-1.636-2.473-2.55-.304-.73-.222-1.843-.142-2.308-.096-.176-.373-.625-.476-1.25-.142-.866-.063-1.491 0-1.828-.095-.096-.285-.587-.285-1.78 0-1.192.349-1.811.523-1.972v-.529c-.666-.048-1.331-.336-1.712-.721-.38-.385-.095-.962.143-1.154.238-.193.475-.049.808-.145.333-.096.618-.192.76-.48C4.512 1.403 4.287.448 4.16 0c.57.077.935.577 1.046.818V0c.713.337 1.997 1.154 2.425 2.934.342 1.424.586 4.409.665 5.723 1.823.016 4.137-.26 6.229.193 1.901.412 2.757 1.25 3.755 1.25.999 0 1.57-.577 2.282-.096.714.481 1.094 1.828.999 2.838-.076.808-.697 1.074-.998 1.106-.38 1.27 0 2.485.237 2.934v1.827c.111.16.333.655.333 1.347 0 .693-.222 1.154-.333 1.299.19 1.077-.08 2.18-.238 2.597h-1.283c.152-.385.412-.481.523-.481.228-1.193.063-2.293-.048-2.693-.722-.424-1.188-1.17-1.331-1.491.016.272-.029 1.029-.333 1.875-.304.847-.76 1.347-.95 1.491v1.01h-1.284c0-.615.348-.737.523-.721.222-.4.76-1.01.76-2.212 0-1.015-.713-1.492-1.236-2.405-.248-.434-.127-.978-.047-1.203z"></path></svg>
+            LlamaParse if...
+          </div>
           <ul class="choice-list">
             <li><span class="bullet-icon">→</span> You need fast, cheap PDF-to-text for RAG or semantic search.</li>
             <li><span class="bullet-icon">→</span> Your documents are simple, mostly text, and low-stakes.</li>
@@ -1337,7 +1310,11 @@
         </div>
 
         <div class="choice-card sensible">
-          <div class="choice-card-header"><span class="choice-card-tag">Choose</span> Sensible if...</div>
+          <div class="choice-card-header" style="gap: 6px;">
+            <span class="choice-card-tag" style="margin-right:4px;">CHOOSE</span> 
+            <img src="https://cdn.prod.website-files.com/69d90e4abf8f50428ec28825/69d90e4abf8f50428ec2888c_LogoDefault.svg" style="height:22px; margin-top:-2px;" alt="Sensible" />
+             if...
+          </div>
           <ul class="choice-list">
             <li><span class="bullet-icon">✓</span> You need guaranteed, schema-validated JSON for production systems.</li>
             <li><span class="bullet-icon">✓</span> Your documents are complex — dense tables, multi-page, borderless.</li>
