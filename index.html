@@ -878,6 +878,7 @@
     }
 
     @media (max-width: 991px) {
+      .arch-grid { grid-template-columns: 1fr !important; }
       .hero-horizontal-split { grid-template-columns: 1fr; }
       .hero-container-1fold { grid-template-columns: 1fr; }
       .hero-section { min-height: auto; }
@@ -1115,107 +1116,138 @@
   </section>
 
   <!-- 4. HOW IT WORKS SECTION -->
-  <section class="diagram-section">
+  <!-- 4. HYBRID ENGINE SHOWCASE -->
+  <section class="hybrid-arch-section" style="padding: 96px 0; background: var(--bg-stone-subtle); border-top: 1px solid var(--border-stone); border-bottom: 1px solid var(--border-stone);">
     <div class="container">
-      <div class="sec-head">
-        <div class="sec-eyebrow">Technical Architecture</div>
-        <h2 class="sec-h2">The Hybrid Extraction Engine</h2>
-        <p class="sec-desc">Sensible orchestrates layout-based parsing and generative LLMs in a single pipeline via SenseML, delivering 100% precision with predictable costs.</p>
+      <div class="sec-head" style="margin-bottom: 64px;">
+        <div class="sec-eyebrow">The SenseML Architecture</div>
+        <h2 class="sec-h2">One language. Every extraction engine.</h2>
+        <p class="sec-desc">Stop maintaining separate pipelines for forms and free-text. SenseML routes fields to the optimal engine—deterministic or generative—at the field level.</p>
       </div>
 
-      <div class="arch-wrapper" style="margin-top:40px; padding:40px; background:#FFF; border:1px solid var(--border-stone); border-radius:24px; box-shadow:0 12px 36px rgba(0,0,0,0.04); display:flex; flex-direction:column; gap:24px;">
+      <div class="arch-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: stretch;">
         
-        <!-- ROW 1: INPUT -->
-        <div class="arch-row" style="display:flex; justify-content:center;">
-          <div class="arch-box" style="background:var(--bg-stone-subtle); border:1px solid var(--border-stone); border-radius:12px; padding:20px; width:100%; max-width:400px; text-align:center;">
-            <div style="font-weight:700; margin-bottom:4px;">Messy Document Input</div>
-            <div style="font-size:14px; color:var(--text-muted);">PDFs, images, dense tables, unstructured text</div>
+        <!-- Left: SenseML Code -->
+        <div class="arch-code-panel" style="background: #fff; border: 1px solid var(--border-stone); border-radius: 16px; box-shadow: 0 24px 60px rgba(0,0,0,0.05); overflow: hidden; display: flex; flex-direction: column;">
+          <div style="background: var(--bg-stone-subtle); border-bottom: 1px solid var(--border-stone); padding: 12px 20px; font-family: var(--font-mono); font-size: 13px; color: var(--text-muted); display: flex; justify-content: space-between;">
+            <span>config.senseml.json</span>
+            <span>Hybrid Pipeline</span>
+          </div>
+          <div style="padding: 24px; font-family: var(--font-mono); font-size: 14px; line-height: 1.6; color: var(--text-dark); overflow-x: auto;">
+<pre style="margin:0;">
+<span style="color: #840055; font-weight:700;">"fields"</span>: [
+  <span style="color: var(--text-muted);">// 1. Deterministic Layout Engine</span>
+  {
+    <span style="color: #840055;">"id"</span>: "account_number",
+    <span style="color: #840055;">"method"</span>: {
+      <span style="color: #00875A; font-weight:700;">"id"</span>: "row",
+      <span style="color: #00875A;">"position"</span>: "right",
+      <span style="color: #00875A;">"tiebreaker"</span>: "closest"
+    }
+  },
+  
+  <span style="color: var(--text-muted);">// 2. Generative LLM Engine</span>
+  {
+    <span style="color: #840055;">"id"</span>: "contract_terms",
+    <span style="color: #840055;">"method"</span>: {
+      <span style="color: #0052CC; font-weight:700;">"id"</span>: "queryGroup",
+      <span style="color: #0052CC;">"searchBySummarization"</span>: "page",
+      <span style="color: #0052CC;">"queries"</span>: [
+        {
+          <span style="color: #840055;">"id"</span>: "termination_clause",
+          <span style="color: #0052CC;">"description"</span>: "Under what conditions can..."
+        }
+      ]
+    }
+  }
+]
+</pre>
           </div>
         </div>
 
-        <div style="display:flex; justify-content:center; color:var(--border-stone);">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
-        </div>
-
-        <!-- ROW 2: SENSEML ORCHESTRATOR -->
-        <div class="arch-row" style="display:flex; justify-content:center;">
-          <div class="arch-box" style="background:var(--brand-magenta-dark); color:#FFF; border-radius:12px; padding:24px; width:100%; max-width:600px; text-align:center; box-shadow:0 8px 24px rgba(132,0,85,0.2);">
-            <div style="font-weight:700; font-size:18px; margin-bottom:8px;">SenseML Orchestration Layer</div>
-            <div style="font-size:14px; color:rgba(255,255,255,0.8);">Proprietary query language routes fields to the optimal extraction engine. Handles preprocessing, metadata correction, and agentic fallback chains.</div>
-          </div>
-        </div>
-
-        <div style="display:flex; justify-content:center; gap:260px; color:var(--border-stone); margin-top: -10px; margin-bottom: -10px;">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: rotate(45deg);"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: rotate(-45deg);"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
-        </div>
-
-        <!-- ROW 3: HYBRID ENGINES -->
-        <div class="arch-row" style="display:flex; flex-wrap:wrap; gap:24px; justify-content:center;">
-          <div class="arch-box" style="flex: 1 1 300px; background:#FFF; border:2px solid var(--border-stone); border-radius:12px; padding:24px;">
-            <div style="font-weight:700; font-size:16px; margin-bottom:8px; display:flex; align-items:center; gap:8px;">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#00875A;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-              Deterministic Methods
+        <!-- Right: Pipeline Visualizer -->
+        <div class="arch-visual-panel" style="position: relative; display: flex; flex-direction: column; justify-content: space-between; gap: 20px;">
+          
+          <!-- Document Input -->
+          <div class="pl-node" style="background: #fff; border: 1px solid var(--border-stone); border-radius: 12px; padding: 16px 24px; display: flex; align-items: center; gap: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.02); position: relative; z-index: 2;">
+            <div style="width: 40px; height: 40px; background: var(--bg-stone-subtle); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--text-dark);">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
             </div>
-            <div style="font-size:14px; color:var(--text-muted); line-height:1.5; margin-bottom: 12px;">
-              Spatial anchors, regex, and exact layout rules. High performance, zero hallucinations, ultra-cheap. Perfect for structured forms (W-2s, 1040s).
-            </div>
-            <div style="font-family:var(--font-mono); font-size:12px; background:var(--bg-stone-subtle); padding:8px; border-radius:4px;">
-              type: "row", tiebreaker: "right"
+            <div>
+              <div style="font-weight: 700; font-size: 15px;">Document Ingestion</div>
+              <div style="font-size: 13px; color: var(--text-muted);">PDFs, images, native text</div>
             </div>
           </div>
 
-          <div class="arch-box" style="flex: 1 1 300px; background:#FFF; border:2px solid var(--brand-magenta); border-radius:12px; padding:24px; position:relative;">
-            <div style="position:absolute; top:-12px; right:20px; background:var(--brand-magenta); color:#FFF; font-size:10px; font-weight:700; padding:4px 8px; border-radius:4px; font-family:var(--font-mono); text-transform:uppercase;">Multimodal</div>
-            <div style="font-weight:700; font-size:16px; margin-bottom:8px; display:flex; align-items:center; gap:8px;">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--brand-magenta);"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-              LLM-Based Methods
-            </div>
-            <div style="font-size:14px; color:var(--text-muted); line-height:1.5; margin-bottom: 12px;">
-              Generative models interpreting context, unstructured text, and images. Handles edge cases where fixed rules break.
-            </div>
-            <div style="font-family:var(--font-mono); font-size:12px; background:var(--bg-stone-subtle); padding:8px; border-radius:4px;">
-              prompt: "Extract the borrower name"
-            </div>
-          </div>
-        </div>
-
-        <div style="display:flex; justify-content:center; gap:260px; color:var(--border-stone); margin-top: -10px; margin-bottom: -10px;">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: rotate(-45deg);"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: rotate(45deg);"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
-        </div>
-
-        <!-- ROW 4: VALIDATION -->
-        <div class="arch-row" style="display:flex; justify-content:center;">
-          <div class="arch-box" style="background:var(--bg-stone-subtle); border:1px solid var(--border-stone); border-radius:12px; padding:20px; width:100%; max-width:600px;">
-            <div style="font-weight:700; margin-bottom:8px; display:flex; align-items:center; gap:8px;">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--text-dark);"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              JsonLogic Validation & Human Review Queue
-            </div>
-            <div style="font-size:14px; color:var(--text-muted); display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
-              <div>
-                <strong>Rules check every output.</strong><br/>Cross-field math, enums, format checks.
+          <!-- Split router -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; position: relative;">
+            
+            <!-- Deterministic Node -->
+            <div class="pl-node" style="background: #fff; border: 2px solid #00875A; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 8px; position: relative; z-index: 2;">
+              <div style="font-weight: 700; font-size: 14px; color: #00875A; display: flex; align-items: center; gap: 6px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                Deterministic Engine
               </div>
-              <div>
-                <strong>Built-in audit trails.</strong><br/>Failing docs hit the review UI, not production.
+              <div style="font-size: 12px; color: var(--text-muted); line-height: 1.4;">
+                Layout & regex. 0% hallucination. Millisecond latency.
               </div>
             </div>
+
+            <!-- LLM Node -->
+            <div class="pl-node" style="background: #fff; border: 2px solid #0052CC; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 8px; position: relative; z-index: 2;">
+              <div style="font-weight: 700; font-size: 14px; color: #0052CC; display: flex; align-items: center; gap: 6px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                Generative Engine
+              </div>
+              <div style="font-size: 12px; color: var(--text-muted); line-height: 1.4;">
+                Multi-modal LLMs for free-form context and reasoning.
+              </div>
+            </div>
           </div>
-        </div>
 
-        <div style="display:flex; justify-content:center; color:var(--check-green);">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
-        </div>
-
-        <!-- ROW 5: OUTPUT -->
-        <div class="arch-row" style="display:flex; justify-content:center;">
-          <div class="arch-box" style="background:#FFF; border:2px solid var(--check-green); border-radius:12px; padding:16px; width:100%; max-width:400px; text-align:center;">
-            <div style="font-weight:700; color:var(--check-green); font-family:var(--font-mono);">100% Validated JSON Payload</div>
+          <!-- JsonLogic Validation -->
+          <div class="pl-node" style="background: #fff; border: 1px solid var(--border-stone); border-radius: 12px; padding: 16px 24px; display: flex; align-items: center; gap: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.02); position: relative; z-index: 2;">
+            <div style="width: 40px; height: 40px; background: var(--bg-stone-subtle); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--text-dark);">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </div>
+            <div>
+              <div style="font-weight: 700; font-size: 15px;">JsonLogic Validation</div>
+              <div style="font-size: 13px; color: var(--text-muted);">Cross-field checks & audit flagging</div>
+            </div>
           </div>
-        </div>
 
+          <!-- Output -->
+          <div class="pl-node" style="background: var(--brand-magenta-dark); color: #fff; border-radius: 12px; padding: 16px 24px; display: flex; align-items: center; justify-content: center; gap: 12px; box-shadow: 0 8px 24px rgba(132,0,85,0.2); position: relative; z-index: 2;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            <div style="font-weight: 700; font-size: 15px;">100% Validated JSON Payload</div>
+          </div>
+
+          <!-- Connecting Lines -->
+          <svg style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none;" xmlns="http://www.w3.org/2000/svg">
+            <!-- Vertical from Doc Input to center -->
+            <line x1="50%" y1="74" x2="50%" y2="94" stroke="var(--border-stone)" stroke-width="2" />
+            <!-- Horizontal split -->
+            <line x1="25%" y1="94" x2="75%" y2="94" stroke="var(--border-stone)" stroke-width="2" />
+            <!-- Down to Deterministic -->
+            <line x1="25%" y1="94" x2="25%" y2="114" stroke="var(--border-stone)" stroke-width="2" />
+            <!-- Down to LLM -->
+            <line x1="75%" y1="94" x2="75%" y2="114" stroke="var(--border-stone)" stroke-width="2" />
+            
+            <!-- Down from Deterministic -->
+            <line x1="25%" y1="216" x2="25%" y2="236" stroke="var(--border-stone)" stroke-width="2" />
+            <!-- Down from LLM -->
+            <line x1="75%" y1="216" x2="75%" y2="236" stroke="var(--border-stone)" stroke-width="2" />
+            <!-- Horizontal merge -->
+            <line x1="25%" y1="236" x2="75%" y2="236" stroke="var(--border-stone)" stroke-width="2" />
+            <!-- Down to Validation -->
+            <line x1="50%" y1="236" x2="50%" y2="256" stroke="var(--border-stone)" stroke-width="2" />
+
+            <!-- Down to Output -->
+            <line x1="50%" y1="330" x2="50%" y2="350" stroke="var(--border-stone)" stroke-width="2" />
+          </svg>
+
+        </div>
       </div>
-
     </div>
   </section>
 
