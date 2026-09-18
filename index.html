@@ -9,7 +9,7 @@
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"/>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Serif:wght@300;400&display=swap" rel="stylesheet"/>
 
   <style>
     /* Sensible Editorial Tokens */
@@ -40,6 +40,9 @@
 
       --font-sans: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       --font-mono: 'IBM Plex Mono', monospace;
+      --font-serif: 'IBM Plex Serif', serif;
+
+      --bg-darkest: #1A1520;
 
       --check-green: #00875A;
       --cross-red: #E03E2E;
@@ -72,15 +75,16 @@
 
     /* Navbar */
     .navbar {
-      background: rgba(255, 255, 255, 0.95);
+      background: rgba(254, 253, 251, 0.92);
       backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--border-stone);
       position: sticky;
       top: 0;
       z-index: 1000;
     }
     .navbar-inner {
-      height: 72px;
+      height: 68px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -92,16 +96,32 @@
       font-weight: 700;
       font-size: 20px;
       color: var(--text-dark);
+      flex-shrink: 0;
     }
     .nav-links {
       display: flex;
-      gap: 32px;
+      gap: 4px;
       list-style: none;
       font-size: 14px;
       font-weight: 500;
-      color: var(--text-body);
+      color: #4A4540;
+      align-items: center;
+    }
+    .nav-links a {
+      padding: 8px 12px;
+      border-radius: 4px;
+      transition: color 0.2s;
     }
     .nav-links a:hover { color: var(--brand-magenta); }
+
+    .nav-signin {
+      color: #4A4540;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-signin:hover { color: var(--text-dark); }
 
     .btn {
       display: inline-flex;
@@ -748,28 +768,110 @@
 
     /* 7. CTA BANNER & FOOTER */
     .cta-banner {
-      background: var(--bg-dark-accent);
-      border-radius: 16px;
-      padding: 72px 40px;
+      background-color: var(--bg-darkest);
+      background-image: radial-gradient(circle at 30% 20%, rgba(132,0,85,0.32) 0%, transparent 55%), radial-gradient(circle at 80% 100%, rgba(248,156,42,0.1) 0%, transparent 50%);
+      padding: clamp(72px, 10vw, 128px) 40px;
       text-align: center;
-      color: #FFF;
-      margin: 80px 0 100px;
-      box-shadow: var(--shadow-float);
+      color: #FEFDFB;
+      position: relative;
+      overflow: hidden;
     }
-    .cta-h2 { font-size: 38px; font-weight: 700; margin-bottom: 16px; letter-spacing: -0.02em; }
-    .cta-p { font-size: 17px; color: #A69EAD; max-width: 620px; margin: 0 auto 32px; }
+    .cta-inner { position: relative; z-index: 1; max-width: 620px; margin: 0 auto; }
+    .cta-h2 {
+      font-family: var(--font-serif);
+      font-weight: 400;
+      font-size: clamp(1.875rem, 4vw, 2.875rem);
+      line-height: 1.12;
+      letter-spacing: -0.015em;
+      margin-bottom: 16px;
+      color: #FEFDFB;
+    }
+    .cta-p { font-size: 17px; color: #E5E0D8; max-width: 440px; margin: 0 auto 32px; }
+    .cta-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .cta-btn-primary {
+      background: #F89C2A;
+      color: #1A1520;
+      border-radius: 6px;
+      padding: 12px 24px;
+      font-size: 0.9063rem;
+      font-weight: 600;
+      display: inline-block;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .cta-btn-primary:hover { background: #e08d1f; }
+    .cta-btn-secondary {
+      color: #E5E0D8;
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 6px;
+      padding: 12px 24px;
+      font-size: 0.9063rem;
+      font-weight: 500;
+      display: inline-block;
+      text-decoration: none;
+      transition: border-color 0.2s;
+    }
+    .cta-btn-secondary:hover { border-color: rgba(255,255,255,0.5); }
+    .cta-note {
+      color: #8B857B;
+      letter-spacing: 0.16em;
+      margin-top: 22px;
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      text-transform: uppercase;
+    }
 
     .footer {
-      border-top: 1px solid var(--border-stone);
-      padding: 36px 0;
-      font-size: 13px;
-      color: var(--text-muted);
-      background: var(--bg-white);
+      background-color: var(--bg-darkest);
+      color: #E5E0D8;
+      padding: 96px 0 48px;
+      font-size: 14px;
     }
-    .footer-inner {
+    .footer-logo-img { filter: brightness(0) invert(1); max-height: 33px; }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr 1fr 1fr 1fr;
+      gap: 40px;
+      padding-bottom: 64px;
+    }
+    .footer-col-label {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #8B857B;
+      margin-bottom: 16px;
+    }
+    .footer-col a {
+      display: block;
+      color: #C9C2B6;
+      font-size: 14px;
+      margin-bottom: 12px;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-col a:hover { color: #FEFDFB; }
+    .footer-brand-blurb { color: #A69EAD; font-size: 14px; margin: 16px 0 20px; }
+    .footer-social { display: flex; gap: 14px; }
+    .footer-social a { color: #A69EAD; transition: color 0.2s; }
+    .footer-social a:hover { color: #FEFDFB; }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding-top: 24px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-size: 13px;
+      color: #8B857B;
+    }
+    .footer-bottom-links { display: flex; gap: 24px; }
+    .footer-bottom-links a { color: #8B857B; text-decoration: none; transition: color 0.2s; }
+    .footer-bottom-links a:hover { color: #FEFDFB; }
+    @media (max-width: 768px) {
+      .footer-grid { grid-template-columns: 1fr 1fr; }
     }
 
     @media (max-width: 991px) {
@@ -807,15 +909,16 @@
       </a>
 
       <ul class="nav-links">
-        <li><a href="https://www.sensible.so/how-it-works">How it works</a></li>
+        <li><a href="https://www.sensible.so/how-it-works">Product</a></li>
         <li><a href="https://www.sensible.so/solutions">Solutions</a></li>
         <li><a href="https://www.sensible.so/pricing">Pricing</a></li>
-        <li><a href="https://docs.sensible.so">Docs ↗</a></li>
+        <li><a href="https://www.sensible.so/customers">Customers</a></li>
+        <li><a href="https://docs.sensible.so" target="_blank" rel="noopener">Docs ↗</a></li>
       </ul>
 
       <div style="display: flex; gap: 16px; align-items: center;">
-        <a href="https://app.sensible.so/signin/" class="btn btn-secondary">Sign in</a>
-        <a href="https://www.sensible.so/meeting" class="btn btn-primary">Book a Demo</a>
+        <a href="https://app.sensible.so/signin/" class="nav-signin">Sign in</a>
+        <a href="https://www.sensible.so/meeting" class="btn btn-primary" style="padding: 8px 16px; font-size: 0.8125rem;">Book a Demo</a>
       </div>
     </div>
   </nav>
@@ -1329,21 +1432,66 @@
   </section>
 
   <!-- 7. CTA BANNER & FOOTER -->
-  <section class="container">
-    <div class="cta-banner">
-      <h2 class="cta-h2">Reach out for a custom demo</h2>
-      <p class="cta-p">A Sensible solutions expert will show you how hybrid extraction handles your worst PDFs.</p>
-      <a href="https://www.sensible.so/meeting" class="btn btn-primary" style="padding: 14px 32px; font-size: 16px;">Book a Custom Demo →</a>
+  <section class="cta-banner">
+    <div class="cta-inner">
+      <h2 class="cta-h2">Try Sensible on your documents.</h2>
+      <p class="cta-p">Bring the document your team dreads. If it works on that one, you'll know.</p>
+      <div class="cta-btns">
+        <a href="https://app.sensible.so/register/" class="cta-btn-primary">Start Free</a>
+        <a href="https://www.sensible.so/meeting" class="cta-btn-secondary">Book a Demo</a>
+      </div>
+      <p class="cta-note">14-day free trial on the Growth Plan · No credit card</p>
     </div>
   </section>
 
   <footer class="footer">
-    <div class="container footer-inner">
-      <div>© 2026 Sensible Technologies, Inc. All rights reserved.</div>
-      <div style="display: flex; gap: 24px;">
-        <a href="https://www.sensible.so/privacy">Privacy Policy</a>
-        <a href="https://www.sensible.so/terms">Terms of Service</a>
-        <a href="https://docs.sensible.so">API Docs</a>
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <a href="https://www.sensible.so" style="display: inline-flex;">
+            <img src="https://cdn.prod.website-files.com/69d90e4abf8f50428ec28825/69d90e4abf8f50428ec2888c_LogoDefault.svg" alt="Sensible" class="footer-logo-img"/>
+          </a>
+          <p class="footer-brand-blurb">Document extraction you can trust.</p>
+          <div class="footer-social">
+            <a href="https://github.com/sensible-hq/" aria-label="GitHub">GitHub</a>
+            <a href="https://twitter.com/sensiblehq" aria-label="Twitter">Twitter</a>
+            <a href="https://www.linkedin.com/company/usesensible/" aria-label="LinkedIn">LinkedIn</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-label">Product</div>
+          <a href="https://docs.sensible.so/docs/getting-started">SenseML</a>
+          <a href="https://www.sensible.so/managed-services">Managed Services</a>
+          <a href="https://www.sensible.so/how-it-works">How it Works</a>
+          <a href="https://www.sensible.so/pricing">Pricing</a>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-label">Developers</div>
+          <a href="https://docs.sensible.so/">Documentation</a>
+          <a href="https://docs.sensible.so/reference">API Reference</a>
+          <a href="https://docs.sensible.so/changelog">Changelog</a>
+          <a href="https://sensible.statuspage.io/">API Status</a>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-label">Company</div>
+          <a href="https://www.sensible.so/about">About</a>
+          <a href="https://www.sensible.so/contact-us">Talk to our team</a>
+          <a href="https://www.sensible.so/blog">Blog</a>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-label">Compare</div>
+          <a href="https://www.sensible.so/sensible-vs-docsumo">vs Docsumo</a>
+          <a href="https://www.sensible.so/sensible-vs-nanonets">vs Nanonets</a>
+          <a href="https://www.sensible.so/sensible-vs-reducto">vs Reducto</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div>© Sensible 2026</div>
+        <div class="footer-bottom-links">
+          <a href="https://www.sensible.so/terms">Terms</a>
+          <a href="https://www.sensible.so/privacy">Privacy Policy</a>
+          <a href="https://www.sensible.so/security-overview">Security</a>
+        </div>
       </div>
     </div>
   </footer>
