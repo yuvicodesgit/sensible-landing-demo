@@ -583,7 +583,8 @@
 
     .compare-2card-section {
       padding: 90px 0 120px;
-      background: var(--bg-white);
+      /* Soft vertical blend from white to subtle stone */
+      background: linear-gradient(180deg, var(--bg-white) 0%, var(--bg-stone-subtle) 20%, var(--bg-stone-subtle) 100%);
     }
     .compare-2card-grid {
       display: grid;
@@ -1376,7 +1377,8 @@
         .split-blocks {
           display: grid;
           grid-template-columns: 1fr 1fr;
-          background: var(--bg-white);
+          /* Smooth horizontal gradient blend instead of abrupt line */
+          background: linear-gradient(90deg, var(--brand-magenta-glow) 30%, var(--bg-white) 70%);
           border: 1px solid var(--border-stone);
           border-radius: 16px;
           overflow: hidden;
@@ -1386,10 +1388,10 @@
           padding: 48px;
         }
         .split-block:first-child {
-          
+           
         }
         .split-block.sensible-side {
-          background: var(--brand-magenta-glow);
+          background: transparent;
         }
         .sb-logo {
           margin-bottom: 24px;
@@ -1505,7 +1507,7 @@
 
   <!-- 4. HOW IT WORKS SECTION -->
   <!-- 4. NEXT-LEVEL PIPELINE ARCHITECTURE FLOW -->
-  <section class="complex-arch-section" style="padding: 24px 0 90px 0; background: var(--bg-white); overflow: hidden;">
+  <section class="complex-arch-section" style="padding: 24px 0 90px 0; background: linear-gradient(180deg, var(--bg-stone-subtle) 0%, var(--bg-stone-subtle) 70%, var(--bg-white) 100%); overflow: hidden;">
     <div class="container" style="max-width: 1520px;">
       <div class="sec-head" style="margin-bottom: 28px; text-align: center;">
         <div class="sec-eyebrow">Technical Architecture</div>
@@ -1829,7 +1831,8 @@
         .split-blocks-takeaway {
           display: grid;
           grid-template-columns: 1fr 1fr;
-          background: var(--bg-white);
+          /* Smooth horizontal gradient blend */
+          background: linear-gradient(90deg, var(--bg-white) 30%, var(--brand-magenta-glow) 70%);
           border: 1px solid var(--border-stone);
           border-radius: 16px;
           overflow: hidden;
@@ -1842,7 +1845,7 @@
           
         }
         .split-block-takeaway.sensible-side {
-          background: var(--brand-magenta-glow);
+          background: transparent;
         }
         .sbt-header {
           font-size: 24px;
