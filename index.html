@@ -904,32 +904,145 @@
     .footer-bottom-links { display: flex; gap: 24px; }
     .footer-bottom-links a { color: #8B857B; text-decoration: none; transition: color 0.2s; }
     .footer-bottom-links a:hover { color: #FEFDFB; }
-    @media (max-width: 768px) {
-      .footer-grid { grid-template-columns: 1fr 1fr; }
+    /* Mobile fallback list for the architecture diagram — hidden until the diagram
+       breakpoint below, where it replaces the fixed-width scaled canvas entirely
+       (the cqw-scale trick doesn't degrade gracefully on real small-screen browsers). */
+    .arch-mobile-list { display: none; flex-direction: column; gap: 12px; }
+    .arch-mobile-item, .arch-mobile-branch > .arch-mobile-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 16px;
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
     }
+    .arch-mobile-item.accent { border-color: rgba(132,0,85,0.3); box-shadow: 0 4px 12px rgba(132,0,85,0.06); }
+    .arch-mobile-item.conditional { border-style: dashed; border-color: #d9dbe0; background: #fafafa; }
+    .arch-mobile-branch {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 10px 0 10px 20px;
+      margin-left: 10px;
+      border-left: 2px dashed #e5e7eb;
+    }
+    .arch-mobile-branch-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-left: 4px;
+    }
+    .arch-mobile-tag {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      background: var(--bg-stone-subtle);
+      border: 1px solid var(--border-stone);
+      border-radius: 4px;
+      padding: 2px 6px;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+    .pn-icon.accent { background: var(--brand-gradient); color: #fff; }
+
+    /* ============ RESPONSIVE ============ */
 
     @media (max-width: 991px) {
-      .arch-grid { grid-template-columns: 1fr !important; }
-      .hero-horizontal-split { grid-template-columns: 1fr; }
       .hero-container-1fold { grid-template-columns: 1fr; }
-      .hero-section { min-height: auto; }
-      .hero-workflow { padding: 16px; }
-      .hw-top-row { flex-wrap: wrap; justify-content: center; }
-      .hw-node { width: 100px; height: 100px; padding: 8px; }
-      .hw-arrow { display: none; }
-      
-      .details-grid { grid-template-columns: repeat(2, 1fr); }
-      .matrix-row { grid-template-columns: 1fr 1fr; }
-      .td-why, .td-feature { display: none; }
-      .takeaways-grid { grid-template-columns: 1fr; }
-      .dash-grid { grid-template-columns: 1fr; }
-      .dash-tile { border-right: none !important; border-bottom: 1px solid var(--border-light) !important; }
-      .dash-tile:last-child { border-bottom: none !important; }
-      .steps-strip { flex-direction: column; }
-      .step-item + .step-item { border-left: none; border-top: 1px solid var(--border-light); }
-      .detail-cols { grid-template-columns: 1fr; }
-      .detail-col + .detail-col { border-left: none; border-top: 1px solid var(--border-light); }
+      .hero-section { min-height: auto; padding: 48px 0; }
+      .hero-img-col { order: -1; }
+      .hero-h1 { font-size: 48px; }
+      .hero-intro { max-width: 100%; }
+
+      .compare-2card-grid { grid-template-columns: 1fr; }
+      .comp-card { padding: 40px 32px; }
+
       .choices-grid { grid-template-columns: 1fr; }
+
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px 24px; }
+    }
+
+    @media (max-width: 860px) {
+      .navbar-inner { height: 60px; }
+      .nav-links { display: none; }
+      .nav-signin { display: none; }
+    }
+
+    @media (max-width: 900px) {
+      /* Matrix table: collapse the 4-column grid into stacked labeled cards a bit
+         earlier than the general 767px breakpoint — 4 narrow columns don't fit a tablet either. */
+      .matrix-wrap { border: none; background: none; }
+      .matrix-row {
+        grid-template-columns: 1fr;
+        display: block;
+        border: 1px solid var(--border-stone);
+        border-radius: 12px;
+        margin-bottom: 16px;
+        overflow: hidden;
+      }
+      .matrix-row:first-child { display: none; }
+      .matrix-row:last-child { margin-bottom: 0; }
+      .td-cell { padding: 16px 20px; border-bottom: 1px solid var(--border-light); }
+      .td-cell:last-child { border-bottom: none; }
+      .td-feature { font-size: 15px; }
+      .td-sensible::before, .td-competitor::before, .td-why::before {
+        display: block;
+        font-family: var(--font-mono);
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        opacity: 0.7;
+        margin-bottom: 8px;
+      }
+      .td-sensible::before { content: 'Sensible'; color: rgba(255,255,255,0.75); }
+      .td-competitor::before { content: 'LlamaParse'; color: var(--text-muted); }
+      .td-why::before { content: 'Why it matters'; color: var(--text-muted); }
+    }
+
+    @media (max-width: 767px) {
+      .container { padding: 0 20px; }
+
+      .sec-h2 { font-size: 28px; }
+      .sec-desc { font-size: 16px; }
+
+      .hero-h1 { font-size: 36px; letter-spacing: -0.02em; }
+      .hero-badge-top { font-size: 13px; gap: 10px; margin-bottom: 20px; }
+      .hero-intro { font-size: 16px; margin-bottom: 28px; }
+      .hero-actions-left { flex-direction: column; gap: 12px; margin-bottom: 32px; }
+      .hero-actions-left .btn { width: 100%; }
+      .hero-stats-row { flex-wrap: wrap; gap: 20px 28px; }
+
+      .compare-2card-section, .table-section, .faq-section, .takeaways-section { padding: 56px 0; }
+      .comp-card { padding: 32px 24px; }
+      .comp-card-logo { font-size: 20px; }
+
+      /* Architecture diagram: swap the scaled canvas for the stacked mobile list */
+      .complex-arch-section { padding: 40px 0 !important; }
+      .arch-scale-outer { display: none; }
+      .arch-mobile-list { display: flex; }
+
+      .faq-summary { padding: 20px 22px; font-size: 16px; }
+      .faq-content { padding: 0 22px 22px; font-size: 15px; }
+
+      .cta-h2 { font-size: 28px; }
+      .cta-banner { padding: 56px 24px; }
+
+      .footer { padding: 64px 0 40px; }
+      .footer-grid { grid-template-columns: 1fr; gap: 40px; padding-bottom: 40px; }
+      .footer-bottom { flex-direction: column; align-items: flex-start; }
+    }
+
+    @media (max-width: 480px) {
+      .hero-h1 { font-size: 30px; }
+      .hero-stats-row { gap: 16px 24px; }
+      .stat-val { font-size: 20px; }
+      .nav-logo img { height: 22px !important; }
+      .btn { padding: 10px 20px; font-size: 14px; }
     }
   </style>
 </head>
@@ -1355,6 +1468,49 @@
             </div>
           </div>
 
+        </div>
+      </div>
+
+      <!-- Mobile fallback: vertical stacked flow (the scaled canvas above is desktop/tablet only) -->
+      <div class="arch-mobile-list">
+        <div class="arch-mobile-item">
+          <div class="pn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></div>
+          <div class="pn-text"><div class="pn-title">Document Ingestion</div><div class="pn-sub">PDFs, Images, Text</div></div>
+        </div>
+        <div class="arch-mobile-item accent">
+          <div class="pn-icon accent"><svg viewBox="0 0 85 85" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 63.78V42.52C11.2701 42.52 22.0791 46.9943 30.052 54.9597C38.0249 62.9251 42.5094 73.7299 42.52 85H21.26L0 63.78ZM21.26 42.52H42.52C42.52 31.243 38.0402 20.4279 30.0662 12.4538C22.0921 4.47977 11.277 0 0 0V21.26L21.26 42.52ZM63.78 0H42.52C42.52 11.2701 46.9943 22.0791 54.9597 30.052C62.9251 38.0249 73.7299 42.5094 85 42.52V21.26L63.78 0ZM63.78 42.52H42.52C42.5306 53.7831 47.0096 64.5819 54.9738 72.5462C62.9381 80.5104 73.7369 84.9894 85 85V63.78L63.78 42.52Z" fill="currentColor"/></svg></div>
+          <div class="pn-text"><div class="pn-title">SenseML Router</div><div class="pn-sub">Rule-based orchestrator</div></div>
+        </div>
+        <div class="arch-mobile-branch">
+          <div class="arch-mobile-item">
+            <div class="pn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7V5a2 2 0 0 1 2-2h2"></path><path d="M17 3h2a2 2 0 0 1 2 2v2"></path><path d="M21 17v2a2 2 0 0 1-2 2h-2"></path><path d="M7 21H5a2 2 0 0 1-2-2v-2"></path><line x1="7" y1="12" x2="17" y2="12"></line></svg></div>
+            <div class="pn-text"><div class="pn-title">Deterministic Engine</div><div class="pn-sub">Spatial Anchors &amp; Regex</div></div>
+          </div>
+          <div class="arch-mobile-branch-label">+</div>
+          <div class="arch-mobile-item">
+            <div class="pn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .962 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path></svg></div>
+            <div class="pn-text"><div class="pn-title">Multimodal LLM Engine</div><div class="pn-sub">Generative Interpretation</div></div>
+          </div>
+        </div>
+        <div class="arch-mobile-item">
+          <div class="pn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"></rect><rect x="9" y="9" width="6" height="6"></rect><path d="M15 2v2"></path><path d="M15 20v2"></path><path d="M2 15h2"></path><path d="M2 9h2"></path><path d="M20 15h2"></path><path d="M20 9h2"></path><path d="M9 2v2"></path><path d="M9 20v2"></path></svg></div>
+          <div class="pn-text"><div class="pn-title">Compute</div><div class="pn-sub">Type coercion &amp; derived fields</div></div>
+        </div>
+        <div class="arch-mobile-item accent">
+          <div class="pn-icon accent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 3v6c0 5-3.5 8.5-8 11-4.5-2.5-8-6-8-11V5l8-3z"></path><polyline points="9 12 11 14 15 10"></polyline></svg></div>
+          <div class="pn-text"><div class="pn-title">Validate</div><div class="pn-sub">JsonLogic rule checks</div></div>
+        </div>
+        <div class="arch-mobile-item conditional">
+          <div class="pn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><polyline points="16 11 18 13 22 9"></polyline></svg></div>
+          <div class="pn-text"><div class="pn-title">Human Review <span class="arch-mobile-tag">if flagged</span></div><div class="pn-sub">Flagged docs, one-click fix</div></div>
+        </div>
+        <div class="arch-mobile-item">
+          <div class="pn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"></path><path d="M18 17V9"></path><path d="M13 17V5"></path><path d="M8 17v-3"></path></svg></div>
+          <div class="pn-text"><div class="pn-title">Score</div><div class="pn-sub">Per-field confidence</div></div>
+        </div>
+        <div class="arch-mobile-item">
+          <div class="pn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22h14a2 2 0 0 0 2-2V7.5L14.5 2H6a2 2 0 0 0-2 2v4"></path><polyline points="14 2 14 8 20 8"></polyline><path d="m3 15 2 2 4-4"></path></svg></div>
+          <div class="pn-text"><div class="pn-title">Structured Output</div><div class="pn-sub">Typed JSON + bounding boxes</div></div>
         </div>
       </div>
     </div>
