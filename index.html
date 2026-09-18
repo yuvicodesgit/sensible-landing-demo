@@ -1375,16 +1375,18 @@
 
   <!-- 4. HOW IT WORKS SECTION -->
   <!-- 4. NEXT-LEVEL PIPELINE ARCHITECTURE FLOW -->
-  <section class="complex-arch-section" style="padding: 40px 0 30px 0; background: #fafafa; border-top: 1px solid var(--border-stone); border-bottom: 1px solid var(--border-stone); overflow: hidden;">
+  <!-- 4. HOW IT WORKS SECTION -->
+  <!-- 4. NEXT-LEVEL PIPELINE ARCHITECTURE FLOW -->
+  <section class="complex-arch-section" style="padding: 48px 0 36px 0; background: #fafafa; border-top: 1px solid var(--border-stone); border-bottom: 1px solid var(--border-stone); overflow: hidden;">
     <div class="container" style="max-width: 1520px;">
-      <div class="sec-head" style="margin-bottom: 24px; text-align: center;">
+      <div class="sec-head" style="margin-bottom: 28px; text-align: center;">
         <div class="sec-eyebrow">Technical Architecture</div>
         <h2 class="sec-h2">The Hybrid Extraction Pipeline</h2>
         <p class="sec-desc" style="max-width: 600px; margin: 0 auto; font-size: 14.5px;">A sleek, high-performance pipeline routing structured and unstructured fields through concurrent deterministic and generative layers.</p>
       </div>
 
       <div class="arch-scale-outer">
-        <div class="arch-scale-inner" style="position: absolute; top: 0; left: 0; width: 1600px; height: 420px; background: #ffffff; border: 1px solid var(--border-stone); border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02), 0 10px 15px -3px rgba(0,0,0,0.03); overflow: hidden;">
+        <div class="arch-scale-inner" style="position: absolute; top: 0; left: 0; width: 1600px; height: 500px; background: #ffffff; border: 1px solid var(--border-stone); border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02), 0 10px 15px -3px rgba(0,0,0,0.03); overflow: hidden;">
 
           <!-- Subtle Grid -->
           <div style="position: absolute; inset: 0; background-image: radial-gradient(#e5e7eb 1px, transparent 1px); background-size: 24px 24px; opacity: 0.6; z-index: 0;"></div>
@@ -1396,7 +1398,7 @@
               width: 100%;
               container-type: inline-size;
               position: relative;
-              aspect-ratio: 1600 / 420;
+              aspect-ratio: 1600 / 500;
             }
             .arch-scale-inner {
               transform-origin: top left;
@@ -1418,7 +1420,7 @@
               display: flex;
               align-items: center;
               gap: 12px;
-              padding: 12px 16px;
+              padding: 13px 16px;
               z-index: 10;
               width: 200px;
               transition: all 0.3s ease;
@@ -1453,11 +1455,11 @@
             </defs>
 
             <!-- Complete Continuous Paths -->
-            <path id="full-top" class="pipe-path" d="M 130 210 L 360 210 C 470 210, 470 110, 580 110 C 690 110, 690 210, 800 210 L 1020 210 L 1240 210 L 1460 210" />
-            <path id="full-bot" class="pipe-path" d="M 130 210 L 360 210 C 470 210, 470 310, 580 310 C 690 310, 690 210, 800 210 L 1020 210 L 1240 210 L 1460 210" />
+            <path id="full-top" class="pipe-path" d="M 130 250 L 360 250 C 470 250, 470 110, 580 110 C 690 110, 690 250, 800 250 L 1020 250 L 1240 250 L 1460 250" />
+            <path id="full-bot" class="pipe-path" d="M 130 250 L 360 250 C 470 250, 470 390, 580 390 C 690 390, 690 250, 800 250 L 1020 250 L 1240 250 L 1460 250" />
 
             <!-- Conditional branch: flagged extractions route to human review -->
-            <path class="pipe-path-branch" d="M 1020 210 L 1020 310" />
+            <path class="pipe-path-branch" d="M 1020 250 L 1020 390" />
 
             <!-- Animated Glowing Particles (One by one, perfectly staggered) -->
             <!-- Top particle: Travels the full path in 3.5s -->
@@ -1477,7 +1479,7 @@
 
           <!-- PIPELINE NODES (Centered at specific coordinates) -->
 
-          <div class="pipe-node" style="left: 130px; top: 210px;">
+          <div class="pipe-node" style="left: 130px; top: 250px;">
             <div class="pn-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
             </div>
@@ -1487,7 +1489,7 @@
             </div>
           </div>
 
-          <div class="pipe-node" style="left: 360px; top: 210px; border-color: rgba(132,0,85,0.3); box-shadow: 0 4px 12px rgba(132,0,85,0.06);">
+          <div class="pipe-node" style="left: 360px; top: 250px; border-color: rgba(132,0,85,0.3); box-shadow: 0 4px 12px rgba(132,0,85,0.06);">
             <div class="pn-icon" style="background: var(--brand-gradient); color: #fff;">
               <svg viewBox="0 0 85 85" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 63.78V42.52C11.2701 42.52 22.0791 46.9943 30.052 54.9597C38.0249 62.9251 42.5094 73.7299 42.52 85H21.26L0 63.78ZM21.26 42.52H42.52C42.52 31.243 38.0402 20.4279 30.0662 12.4538C22.0921 4.47977 11.277 0 0 0V21.26L21.26 42.52ZM63.78 0H42.52C42.52 11.2701 46.9943 22.0791 54.9597 30.052C62.9251 38.0249 73.7299 42.5094 85 42.52V21.26L63.78 0ZM63.78 42.52H42.52C42.5306 53.7831 47.0096 64.5819 54.9738 72.5462C62.9381 80.5104 73.7369 84.9894 85 85V63.78L63.78 42.52Z" fill="currentColor"/></svg>
             </div>
@@ -1507,7 +1509,7 @@
             </div>
           </div>
 
-          <div class="pipe-node" style="left: 580px; top: 310px;">
+          <div class="pipe-node" style="left: 580px; top: 390px;">
             <div class="pn-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .962 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path></svg>
             </div>
@@ -1517,7 +1519,7 @@
             </div>
           </div>
 
-          <div class="pipe-node" style="left: 800px; top: 210px;">
+          <div class="pipe-node" style="left: 800px; top: 250px;">
             <div class="pn-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"></rect><rect x="9" y="9" width="6" height="6"></rect><path d="M15 2v2"></path><path d="M15 20v2"></path><path d="M2 15h2"></path><path d="M2 9h2"></path><path d="M20 15h2"></path><path d="M20 9h2"></path><path d="M9 2v2"></path><path d="M9 20v2"></path></svg>
             </div>
@@ -1527,7 +1529,7 @@
             </div>
           </div>
 
-          <div class="pipe-node" style="left: 1020px; top: 210px; border-color: rgba(132,0,85,0.3); box-shadow: 0 4px 12px rgba(132,0,85,0.06);">
+          <div class="pipe-node" style="left: 1020px; top: 250px; border-color: rgba(132,0,85,0.3); box-shadow: 0 4px 12px rgba(132,0,85,0.06);">
             <div class="pn-icon" style="background: var(--brand-gradient); color: #fff;">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 3v6c0 5-3.5 8.5-8 11-4.5-2.5-8-6-8-11V5l8-3z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>
             </div>
@@ -1537,7 +1539,7 @@
             </div>
           </div>
 
-          <div class="pipe-node" style="left: 1020px; top: 310px; width: 190px;">
+          <div class="pipe-node" style="left: 1020px; top: 390px; width: 190px;">
             <div class="pn-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><polyline points="16 11 18 13 22 9"></polyline></svg>
             </div>
@@ -1547,7 +1549,7 @@
             </div>
           </div>
 
-          <div class="pipe-node" style="left: 1240px; top: 210px;">
+          <div class="pipe-node" style="left: 1240px; top: 250px;">
             <div class="pn-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"></path><path d="M18 17V9"></path><path d="M13 17V5"></path><path d="M8 17v-3"></path></svg>
             </div>
@@ -1557,7 +1559,7 @@
             </div>
           </div>
 
-          <div class="pipe-node" style="left: 1460px; top: 210px;">
+          <div class="pipe-node" style="left: 1460px; top: 250px;">
             <div class="pn-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22h14a2 2 0 0 0 2-2V7.5L14.5 2H6a2 2 0 0 0-2 2v4"></path><polyline points="14 2 14 8 20 8"></polyline><path d="m3 15 2 2 4-4"></path></svg>
             </div>
