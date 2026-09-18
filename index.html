@@ -14,6 +14,7 @@
   <style>
     @import url('https://fonts.cdnfonts.com/css/overused-grotesk');
     .llama-font { font-family: 'Overused Grotesk', sans-serif; font-weight: inherit; }
+    .sensible-font { font-family: 'Matter SQ', var(--font-sans); font-weight: inherit; }
 
     /* Sensible's own brand webfont, pulled from their live site */
     @font-face {
@@ -494,7 +495,12 @@
     /* ANIMATED LOGO MARQUEE SCROLLER */
     .marquee-section {
       padding: 36px 0;
-      background: var(--bg-white);
+      /* Light, short blend from the hero/ribbon's stone bg into white — a fixed thin band, not a % of section height */
+      background-color: var(--bg-white);
+      background-image: linear-gradient(180deg, var(--bg-stone-subtle), var(--bg-white));
+      background-size: 100% 40px;
+      background-position: top;
+      background-repeat: no-repeat;
       overflow: hidden;
     }
     .marquee-eyebrow {
@@ -653,8 +659,15 @@
     /* 3. SLEEK MATRIX TABLE */
     .table-section {
       padding: 90px 0;
-      background: var(--bg-white);
-      background-image: linear-gradient(90deg, transparent, var(--border-stone) 15%, var(--border-stone) 85%, transparent); background-size: 100% 1px; background-position: bottom; background-repeat: no-repeat; border-bottom: none;
+      background-color: var(--bg-white);
+      /* Layer 1: light, short blend from the comparison section's stone bg into white. Layer 2: existing bottom hairline divider. */
+      background-image:
+        linear-gradient(180deg, var(--bg-stone-subtle), var(--bg-white)),
+        linear-gradient(90deg, transparent, var(--border-stone) 15%, var(--border-stone) 85%, transparent);
+      background-size: 100% 40px, 100% 1px;
+      background-position: top, bottom;
+      background-repeat: no-repeat, no-repeat;
+      border-bottom: none;
     }
     .matrix-wrap {
       border: 1px solid var(--border-stone);
@@ -913,7 +926,12 @@
     /* 6. KEY TAKEAWAYS SECTION */
     .takeaways-section {
       padding: 120px 0;
-      background: var(--bg-stone-subtle);
+      /* Light, short blend from the FAQ section's white bg into stone */
+      background-color: var(--bg-stone-subtle);
+      background-image: linear-gradient(180deg, var(--bg-white), var(--bg-stone-subtle));
+      background-size: 100% 40px;
+      background-position: top;
+      background-repeat: no-repeat;
     }
     .choices-grid {
       display: grid;
@@ -979,7 +997,11 @@
     /* 7. CTA BANNER & FOOTER */
     .cta-banner {
       background-color: var(--bg-darkest);
-      background-image: radial-gradient(circle at 30% 20%, rgba(132,0,85,0.32) 0%, transparent 55%), radial-gradient(circle at 80% 100%, rgba(248,156,42,0.1) 0%, transparent 50%);
+      /* Light, short blend from the takeaways section's stone bg down into the dark banner (solid-to-solid, not faded-to-transparent, so it doesn't muddy against the dark bg), layered above the brand glows */
+      background-image: linear-gradient(180deg, var(--bg-stone-subtle), var(--bg-darkest)), radial-gradient(circle at 30% 20%, rgba(132,0,85,0.32) 0%, transparent 55%), radial-gradient(circle at 80% 100%, rgba(248,156,42,0.1) 0%, transparent 50%);
+      background-size: 100% 56px, 100% 100%, 100% 100%;
+      background-position: top, center, center;
+      background-repeat: no-repeat, no-repeat, no-repeat;
       padding: clamp(72px, 10vw, 128px) 40px;
       text-align: center;
       color: #FEFDFB;
@@ -1186,7 +1208,7 @@
         opacity: 0.7;
         margin-bottom: 8px;
       }
-      .td-sensible::before { content: 'Sensible'; color: rgba(255,255,255,0.75); }
+      .td-sensible::before { content: 'Sensible'; font-family: 'Matter SQ', var(--font-sans); color: rgba(255,255,255,0.75); }
       .td-competitor::before { content: 'LlamaParse'; font-family: 'Overused Grotesk', sans-serif; color: var(--text-muted); }
       .td-why::before { content: 'Why it matters'; color: var(--text-muted); }
     }
@@ -1278,11 +1300,11 @@
       
       <!-- Left Column: Text & Stats -->
       <div class="hero-text-col">
-        <div class="hero-badge-top">Sensible vs <span class="llama-font">LlamaParse</span></div>
-        
+        <div class="hero-badge-top"><span class="sensible-font">Sensible</span> vs <span class="llama-font">LlamaParse</span></div>
+
         <h1 class="hero-h1">
           LLMs summarize documents.<br/>
-          <span>Sensible extracts production data.</span>
+          <span><span class="sensible-font">Sensible</span> extracts production data.</span>
         </h1>
         
         <p class="hero-intro">
@@ -1376,7 +1398,7 @@
     <div class="container">
       <div class="sec-head">
         <div class="sec-eyebrow">Technical Comparison</div>
-        <h2 class="sec-h2">Sensible vs <span class="llama-font">LlamaParse</span></h2>
+        <h2 class="sec-h2"><span class="sensible-font">Sensible</span> vs <span class="llama-font">LlamaParse</span></h2>
 
       </div>
 
@@ -1420,7 +1442,7 @@
           <div class="sb-logo" style="display: flex; align-items: center; height: 32px; margin-bottom: 24px;">
             <img src="https://cdn.prod.website-files.com/6033da353ede9143c0c56ff8/603523db465026cb1e88e905_LogoDefault.svg" alt="Sensible" style="height: 32px;"/>
           </div>
-          <p class="sb-p">Sensible is a production-grade extraction engine that combines LLM flexibility with SenseML layout rules to enforce deterministic, schema-validated accuracy on complex documents. It provides pixel-perfect bounding box traceability for every field and predictable flat per-document pricing, making it ideal for scalable pipelines and automated workflows.</p>
+          <p class="sb-p"><span class="sensible-font">Sensible</span> is a production-grade extraction engine that combines LLM flexibility with SenseML layout rules to enforce deterministic, schema-validated accuracy on complex documents. It provides pixel-perfect bounding box traceability for every field and predictable flat per-document pricing, making it ideal for scalable pipelines and automated workflows.</p>
         </div>
 
         <!-- BLOCK 2: LLAMAPARSE -->
@@ -1765,11 +1787,11 @@
       <div class="faq-container">
         <details class="faq-accordion" open>
           <summary class="faq-summary">
-            <span>How does Sensible eliminate numerical hallucinations on complex tables?</span>
+            <span>How does <span class="sensible-font">Sensible</span> eliminate numerical hallucinations on complex tables?</span>
             <span class="faq-icon">+</span>
           </summary>
           <div class="faq-content">
-            Sensible combines generative LLMs with SenseML layout rules. If an extracted value fails mathematical cross-checking or regex constraints, Sensible's fallback rules correct the field before database delivery.
+            <span class="sensible-font">Sensible</span> combines generative LLMs with SenseML layout rules. If an extracted value fails mathematical cross-checking or regex constraints, <span class="sensible-font">Sensible</span>'s fallback rules correct the field before database delivery.
           </div>
         </details>
 
@@ -1779,7 +1801,7 @@
             <span class="faq-icon">+</span>
           </summary>
           <div class="faq-content">
-            Yes. Unlike legacy IDP platforms requiring 20+ training samples, Sensible allows you to build, test, and deploy production configurations from a single sample PDF in minutes.
+            Yes. Unlike legacy IDP platforms requiring 20+ training samples, <span class="sensible-font">Sensible</span> allows you to build, test, and deploy production configurations from a single sample PDF in minutes.
           </div>
         </details>
 
@@ -1789,7 +1811,7 @@
             <span class="faq-icon">+</span>
           </summary>
           <div class="faq-content">
-            <span class="llama-font">LlamaParse</span> charges per page ($0.003/page), causing costs to compound unpredictably on long documents. Sensible charges flat rates per document, making API budgets 100% predictable.
+            <span class="llama-font">LlamaParse</span> charges per page ($0.003/page), causing costs to compound unpredictably on long documents. <span class="sensible-font">Sensible</span> charges flat rates per document, making API budgets 100% predictable.
           </div>
         </details>
 
@@ -1799,27 +1821,27 @@
             <span class="faq-icon">+</span>
           </summary>
           <div class="faq-content">
-            Sensible returns native 4-point bounding boxes <code>[x, y, w, h]</code> relative to the PDF page pixel dimensions, allowing you to highlight exact source text in your web browser UI.
+            <span class="sensible-font">Sensible</span> returns native 4-point bounding boxes <code>[x, y, w, h]</code> relative to the PDF page pixel dimensions, allowing you to highlight exact source text in your web browser UI.
           </div>
         </details>
 
         <details class="faq-accordion">
           <summary class="faq-summary">
-            <span>How does Sensible handle multi-page table breaks?</span>
+            <span>How does <span class="sensible-font">Sensible</span> handle multi-page table breaks?</span>
             <span class="faq-icon">+</span>
           </summary>
           <div class="faq-content">
-            Sensible automatically detects recurring headers across page breaks and merges rows into a single structured array payload without dropping borderless cell rows.
+            <span class="sensible-font">Sensible</span> automatically detects recurring headers across page breaks and merges rows into a single structured array payload without dropping borderless cell rows.
           </div>
         </details>
 
         <details class="faq-accordion">
           <summary class="faq-summary">
-            <span>Is Sensible SOC 2 Type II and HIPAA compliant?</span>
+            <span>Is <span class="sensible-font">Sensible</span> SOC 2 Type II and HIPAA compliant?</span>
             <span class="faq-icon">+</span>
           </summary>
           <div class="faq-content">
-            Yes. Sensible is SOC 2 Type II certified and HIPAA-eligible with BAAs available on Enterprise plans, including zero data retention options.
+            Yes. <span class="sensible-font">Sensible</span> is SOC 2 Type II certified and HIPAA-eligible with BAAs available on Enterprise plans, including zero data retention options.
           </div>
         </details>
       </div>
@@ -1936,7 +1958,7 @@
   <!-- 7. CTA BANNER & FOOTER -->
   <section class="cta-banner">
     <div class="cta-inner">
-      <h2 class="cta-h2">Try Sensible on your documents.</h2>
+      <h2 class="cta-h2">Try <span class="sensible-font">Sensible</span> on your documents.</h2>
       <p class="cta-p">Bring the document your team dreads. If it works on that one, you'll know.</p>
       <div class="cta-btns">
         <a href="https://app.sensible.so/register/" class="cta-btn-primary">Start Free</a>
@@ -1990,7 +2012,7 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <div class="footer-copyright">© Sensible 2026</div>
+        <div class="footer-copyright">© <span class="sensible-font">Sensible</span> 2026</div>
         <div class="footer-bottom-links">
           <a href="https://www.sensible.so/terms">Terms</a>
           <a href="https://www.sensible.so/privacy">Privacy Policy</a>
