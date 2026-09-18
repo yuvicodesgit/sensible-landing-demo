@@ -442,6 +442,48 @@
 
 
 
+    /* PROOF RIBBON BAR (Sensible Homepage Component) */
+    .d12-ribbon {
+      background-color: var(--bg-stone-subtle);
+      border-top: 1px solid var(--border-stone);
+      border-bottom: 1px solid var(--border-stone);
+    }
+    .d12-proof {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      max-width: 1240px;
+      margin: 0 auto;
+    }
+    .d12-proof-cell {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      row-gap: 4px;
+      padding: 20px 22px 18px;
+      border-left: 1px solid var(--border-stone);
+    }
+    .d12-proof-cell:first-child {
+      border-left: none;
+    }
+    .d12-proof-v {
+      color: var(--text-dark);
+      margin: 0;
+      font-family: var(--font-serif);
+      font-size: 1.375rem;
+      font-weight: 500;
+      line-height: 1.1;
+    }
+    .d12-proof-l {
+      color: var(--text-muted);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin: 0;
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      font-weight: 500;
+    }
+
     /* ANIMATED LOGO MARQUEE SCROLLER */
     .marquee-section {
       padding: 36px 0;
@@ -1126,6 +1168,10 @@
       .hero-actions-left .btn { width: 100%; }
       .hero-caption-row { font-size: 12.5px; }
 
+      .d12-proof { grid-template-columns: 1fr 1fr; }
+      .d12-proof-cell:nth-child(2n+1) { border-left: none; }
+      .d12-proof-cell:nth-child(n+3) { border-top: 1px solid var(--border-stone); }
+
       .compare-2card-section, .table-section, .faq-section, .takeaways-section { padding: 56px 0; }
       .comp-card { padding: 32px 24px; }
       .comp-card-logo { font-size: 20px; }
@@ -1238,6 +1284,30 @@
         </div>
       </div>
 
+    </div>
+  </section>
+
+  <!-- PROOF RIBBON SECTION (Exact Sensible Homepage Component) -->
+  <section class="d12-ribbon">
+    <div class="container">
+      <div class="d12-proof">
+        <div class="d12-proof-cell">
+          <p class="d12-proof-v">75M+</p>
+          <p class="d12-proof-l">documents processed</p>
+        </div>
+        <div class="d12-proof-cell">
+          <p class="d12-proof-v">150+</p>
+          <p class="d12-proof-l">library configurations</p>
+        </div>
+        <div class="d12-proof-cell">
+          <p class="d12-proof-v">SOC 2 + HIPAA</p>
+          <p class="d12-proof-l">independently audited</p>
+        </div>
+        <div class="d12-proof-cell">
+          <p class="d12-proof-v">No credit card</p>
+          <p class="d12-proof-l">14-day free trial</p>
+        </div>
+      </div>
     </div>
   </section>
 
