@@ -315,47 +315,70 @@
 
     .hero-actions-left {
       display: flex;
-      gap: 16px;
-      margin-bottom: 48px;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+    .hero-actions-left .btn {
+      cursor: pointer;
+      border-style: none;
+      border-radius: 6px;
+      padding: 12px 24px;
+      font-family: var(--font-sans);
+      font-size: 0.9063rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: transform .25s cubic-bezier(.4, 0, .2, 1), box-shadow .25s cubic-bezier(.4, 0, .2, 1), color .25s cubic-bezier(.4, 0, .2, 1), border-color .25s cubic-bezier(.4, 0, .2, 1);
+      display: inline-block;
     }
     .hero-actions-left .btn-primary {
-      padding: 14px 28px;
-      font-size: 15px;
-      background: var(--brand-magenta-dark);
-      border-radius: 8px;
+      color: #fff;
+      background-color: var(--brand-magenta);
+      background-image: none;
+      box-shadow: 0 1px 3px rgba(132, 0, 85, 0.2);
+    }
+    .hero-actions-left .btn-primary:hover {
+      background-image: none;
+      transform: none;
+      box-shadow: 0 0 0 3px rgba(132, 0, 85, 0.2), 0 4px 12px rgba(132, 0, 85, 0.4);
     }
     .hero-actions-left .btn-secondary {
-      padding: 14px 28px;
-      font-size: 15px;
-      background: transparent;
+      color: var(--text-dark);
+      background-color: transparent;
       border: 1px solid var(--border-stone);
-      border-radius: 8px;
-      color: #121214;
+    }
+    .hero-actions-left .btn-secondary:hover {
+      border-color: var(--brand-magenta);
+      color: var(--brand-magenta);
     }
 
-    /* Stats Row */
-    .hero-stats-row {
-      display: flex;
+    .hero-caption-row {
+      color: var(--text-muted);
+      flex-wrap: wrap;
       align-items: center;
-      justify-content: space-between;
-      width: 100%;
-      padding-top: 24px;
-      border-top: 1px solid var(--border-stone);
-    }
-    .stat-item {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-    .stat-val {
-      font-size: 24px;
-      font-weight: 700;
-      color: #121214;
-      line-height: 1;
-    }
-    .stat-label {
+      gap: 8px;
+      margin-top: 0;
       font-size: 13px;
-      color: var(--text-body);
+      display: flex;
+      font-family: var(--font-sans);
+    }
+    .hero-g2-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin-top: 14px;
+      text-decoration: none;
+      font-family: var(--font-sans);
+    }
+    .hero-g2-stars {
+      color: #e8a33d;
+      letter-spacing: 1px;
+      font-size: 13px;
+    }
+    .hero-g2-label {
+      color: var(--text-dark);
+      font-size: 13px;
+      font-weight: 600;
     }
 
     /* Right Column: Hero Product Screenshot */
@@ -1099,9 +1122,9 @@
       .hero-h1 { font-size: 36px; letter-spacing: -0.02em; }
       .hero-badge-top { font-size: 13px; gap: 10px; margin-bottom: 20px; }
       .hero-intro { font-size: 16px; margin-bottom: 28px; }
-      .hero-actions-left { flex-direction: column; gap: 12px; margin-bottom: 32px; }
+      .hero-actions-left { flex-direction: column; gap: 12px; margin-bottom: 20px; }
       .hero-actions-left .btn { width: 100%; }
-      .hero-stats-row { flex-wrap: wrap; gap: 20px 28px; }
+      .hero-caption-row { font-size: 12.5px; }
 
       .compare-2card-section, .table-section, .faq-section, .takeaways-section { padding: 56px 0; }
       .comp-card { padding: 32px 24px; }
@@ -1125,8 +1148,6 @@
 
     @media (max-width: 480px) {
       .hero-h1 { font-size: 30px; }
-      .hero-stats-row { gap: 16px 24px; }
-      .stat-val { font-size: 20px; }
       .nav-logo img { height: 22px !important; }
       .btn { padding: 10px 20px; font-size: 14px; }
     }
@@ -1187,24 +1208,20 @@
         </p>
 
         <div class="hero-actions-left">
-          <a href="https://app.sensible.so/signup" class="btn btn-primary">Start Free</a>
+          <a href="https://app.sensible.so/register/" class="btn btn-primary">Start Free</a>
           <a href="https://www.sensible.so/meeting" class="btn btn-secondary">Book a Demo</a>
         </div>
 
-        <div class="hero-stats-row">
-          <div class="stat-item">
-            <span class="stat-val">75M+</span>
-            <span class="stat-label">Documents Processed</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-val">150+</span>
-            <span class="stat-label">Library Configurations</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-val">SOC 2</span>
-            <span class="stat-label">+ HIPAA</span>
-          </div>
+        <div class="hero-caption-row">
+          <span>No credit card</span>
+          <span>·</span>
+          <span>Sample documents loaded</span>
         </div>
+
+        <a rel="noopener noreferrer" target="_blank" href="https://www.g2.com/products/sensible/reviews" class="hero-g2-badge">
+          <span class="hero-g2-stars">★★★★★</span>
+          <span class="hero-g2-label">4.9 on G2</span>
+        </a>
       </div>
       <!-- Right Column: Hero Product Screenshot -->
       <div class="hero-img-col">
