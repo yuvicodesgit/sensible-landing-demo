@@ -61,9 +61,10 @@
       --shadow-medium: 0 12px 36px rgba(0, 0, 0, 0.06);
       --shadow-float: 0 24px 60px rgba(20, 17, 24, 0.08);
 
-      --font-sans: 'Matter SQ', 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-sans: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       --font-mono: 'IBM Plex Mono', monospace;
       --font-serif: 'IBM Plex Serif', serif;
+      --font-body: 'Matter SQ', 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
 
       --bg-darkest: #1A1520;
 
@@ -81,11 +82,18 @@
     body {
       background-color: var(--bg-stone);
       color: var(--text-dark);
-      font-family: var(--font-sans);
+      font-family: var(--font-body);
       line-height: 1.55;
       overflow-x: hidden;
       width: 100%;
       position: relative;
+    }
+
+    /* Nav, buttons, and footer links stay on IBM Plex Sans — confirmed against the real
+       site's Webflow styles (.c2-nav-link-1, .c2-nav-cta-1, .c2-nav-signin-1, .c2-mobile-link,
+       .footer-link-3 all explicitly override the Matter SQ body default with IBM Plex Sans). */
+    .navbar, .btn, .mobile-toggle, .mobile-panel {
+      font-family: var(--font-sans);
     }
 
     a { text-decoration: none; color: inherit; }
@@ -910,6 +918,7 @@
       color: #E5E0D8;
       padding: 96px 0 48px;
       font-size: 14px;
+      font-family: var(--font-sans);
     }
     .footer-logo-img { filter: brightness(0) invert(1); max-height: 33px; }
     .footer-grid {
