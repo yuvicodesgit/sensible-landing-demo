@@ -49,22 +49,22 @@
       --brand-magenta-glow: rgba(132, 0, 85, 0.15);
       --brand-gradient: linear-gradient(135deg, #840055 0%, #9A1066 100%);
       
-      --text-dark: #141118;
-      --text-body: #4A454F;
-      --text-muted: #8C8691;
+      --text-dark: #1A1520;
+      --text-body: #4A4540;
+      --text-muted: #8B857B;
       --text-light: #FFFFFF;
-      
-      --border-stone: #E6E2DA;
-      --border-light: #F0EDE6;
-      
+
+      --border-stone: #E8E3DB;
+      --border-light: #F0ECE5;
+
       --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.03);
       --shadow-medium: 0 12px 36px rgba(0, 0, 0, 0.06);
       --shadow-float: 0 24px 60px rgba(20, 17, 24, 0.08);
 
       --font-sans: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       --font-mono: 'IBM Plex Mono', monospace;
-      --font-serif: 'IBM Plex Serif', serif;
-      --font-body: 'Matter SQ', 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-serif: 'IBM Plex Serif', Georgia, serif;
+      --font-body: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
 
       --bg-darkest: #1A1520;
 
@@ -89,12 +89,11 @@
       position: relative;
     }
 
-    /* Nav, buttons, and footer links stay on IBM Plex Sans — confirmed against the real
-       site's Webflow styles (.c2-nav-link-1, .c2-nav-cta-1, .c2-nav-signin-1, .c2-mobile-link,
-       .footer-link-3 all explicitly override the Matter SQ body default with IBM Plex Sans). */
-    .navbar, .btn, .mobile-toggle, .mobile-panel {
-      font-family: var(--font-sans);
-    }
+    /* This page is a "vs X" comparison template, not the marketing homepage — the real
+       sensible.so comparison pages (e.g. /sensible-vs-docsumo) run entirely on IBM Plex
+       Serif (headings, regular weight, tight negative letter-spacing) + IBM Plex Sans
+       (body/UI) + IBM Plex Mono (eyebrow labels). Matter SQ doesn't appear in that
+       template at all — it's specific to the general marketing site. */
 
     a { text-decoration: none; color: inherit; }
 
@@ -291,21 +290,23 @@
     }
 
     .hero-h1 {
-      font-size: 66px;
-      font-weight: 700;
+      font-family: var(--font-serif);
+      font-size: 62px;
+      font-weight: 400;
       line-height: 1.05;
-      letter-spacing: -0.035em;
+      letter-spacing: -0.025em;
       margin-bottom: 24px;
       color: var(--text-dark);
       text-wrap: balance;
     }
-    .hero-h1 span { 
-      color: var(--brand-magenta); 
+    .hero-h1 span {
+      color: var(--brand-magenta);
     }
-    
+
     .hero-intro {
-      font-size: 19px;
-      color: var(--text-dark);
+      font-family: var(--font-sans);
+      font-size: 17px;
+      color: var(--text-body);
       line-height: 1.6;
       margin-bottom: 40px;
       max-width: 540px;
@@ -494,19 +495,22 @@
       color: var(--text-muted);
     }
     .sec-h2 {
-      font-size: 36px;
-      font-weight: 700;
+      font-family: var(--font-serif);
+      font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+      font-weight: 400;
       color: var(--text-dark);
-      letter-spacing: -0.02em;
+      letter-spacing: -0.015em;
+      line-height: 1.12;
       margin-bottom: 16px;
       text-align: center;
     }
     .sec-desc {
-      font-size: 18px;
+      font-family: var(--font-sans);
+      font-size: 17px;
       color: var(--text-body);
       max-width: 640px;
       margin: 0 auto;
-      line-height: 1.6;
+      line-height: 1.65;
       text-align: center;
     }
 
@@ -580,43 +584,50 @@
     .th-empty {
       background: var(--bg-stone-subtle);
     }
-    .th-cell { 
-      padding: 24px 28px; 
-      display: flex; 
-      align-items: center; 
+    .th-cell {
+      padding: 24px 28px;
+      display: flex;
+      align-items: center;
       background: var(--bg-stone-subtle);
-      color: var(--text-body);
+      color: var(--text-muted);
       font-family: var(--font-mono);
-      font-size: 11px;
-      font-weight: 600;
+      font-size: 0.6875rem;
+      font-weight: 500;
       text-transform: uppercase;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.18em;
     }
-    .th-sensible { 
-      padding: 24px 28px; 
-      display: flex; 
-      align-items: center; 
-      background: var(--brand-magenta-dark); 
-      color: #FFF; 
+    .th-sensible {
+      padding: 22px 28px;
+      display: flex;
+      align-items: center;
+      background-image: linear-gradient(135deg, var(--brand-magenta-dark) 0%, var(--brand-magenta) 100%);
+      color: #FFF;
     }
 
-    .td-cell { padding: 32px 28px; font-size: 15px; line-height: 1.6; }
-    
-    .td-feature { 
-      font-weight: 600; 
-      color: var(--text-dark); 
-      background: var(--bg-stone-subtle); 
+    .td-cell { padding: 22px 28px; font-family: var(--font-sans); font-size: 14.5px; line-height: 1.55; }
+
+    .td-feature {
+      font-weight: 600;
+      letter-spacing: -0.005em;
+      font-size: 15px;
+      color: var(--text-dark);
+      background: var(--bg-stone-subtle);
     }
-    
-    .td-sensible { 
-      color: #FFF; 
-      font-weight: 500; 
+
+    .td-sensible {
+      color: #FFF;
+      font-weight: 500;
+      background-image: linear-gradient(135deg, var(--brand-magenta-dark) 0%, var(--brand-magenta) 100%);
     }
-    .matrix-row:nth-child(odd) .td-sensible { background: var(--brand-magenta-dark); }
-    .matrix-row:nth-child(even) .td-sensible { background: var(--brand-magenta); }
 
     .td-competitor { color: var(--text-body); background: var(--bg-stone-subtle); }
-    .td-why { color: var(--text-body); background: var(--bg-white); }
+    .td-why {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-weight: 400;
+      color: var(--text-body);
+      background: var(--bg-white);
+    }
 
     /* 4. HOW IT WORKS SECTION */
     .diagram-section {
