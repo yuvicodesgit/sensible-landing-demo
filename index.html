@@ -9,7 +9,7 @@
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"/>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Serif:wght@300;400&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Serif:wght@300;400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
 
   <style>
     /* Sensible's own brand webfont, pulled from their live site */
@@ -63,6 +63,7 @@
 
       --font-sans: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       --font-mono: 'IBM Plex Mono', monospace;
+      --font-mono-alt: 'Space Mono', monospace;
       --font-serif: 'IBM Plex Serif', Georgia, serif;
       --font-body: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
 
@@ -939,15 +940,17 @@
       padding-bottom: 64px;
     }
     .footer-col-label {
-      font-size: 12px;
-      font-weight: 600;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 500;
       text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: #8B857B;
-      margin-bottom: 16px;
+      letter-spacing: 0.18em;
+      color: #FEFDFB;
+      margin-bottom: 20px;
     }
     .footer-col a {
       display: block;
+      font-family: var(--font-sans);
       color: #C9C2B6;
       font-size: 14px;
       margin-bottom: 12px;
@@ -969,6 +972,13 @@
       gap: 16px;
       font-size: 13px;
       color: #8B857B;
+    }
+    .footer-copyright {
+      font-family: var(--font-mono-alt);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
     }
     .footer-bottom-links { display: flex; gap: 24px; }
     .footer-bottom-links a { color: #8B857B; text-decoration: none; transition: color 0.2s; }
@@ -1765,7 +1775,7 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <div>© Sensible 2026</div>
+        <div class="footer-copyright">© Sensible 2026</div>
         <div class="footer-bottom-links">
           <a href="https://www.sensible.so/terms">Terms</a>
           <a href="https://www.sensible.so/privacy">Privacy Policy</a>
