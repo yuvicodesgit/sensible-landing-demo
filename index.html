@@ -1132,8 +1132,8 @@
     /* ============ RESPONSIVE ============ */
 
     @media (max-width: 991px) {
-      .hero-container-1fold { grid-template-columns: 1fr; }
-      .hero-section { min-height: auto; padding: 48px 0; }
+      .hero-container-1fold { grid-template-columns: 1fr; padding-bottom: 40px; }
+      .hero-section { padding: 40px 0 0; }
       .hero-img-col { order: -1; }
       .hero-h1 { font-size: 48px; }
       .hero-intro { max-width: 100%; }
@@ -1302,15 +1302,8 @@
       <!-- Right Column: Hero Product Screenshot -->
       <div class="hero-img-col">
         <div class="hero-glow"></div>
-        <div class="hero-browser-frame">
-          <div class="hero-browser-titlebar">
-            <span class="hero-browser-dot" style="background: #ff5f56; border: 1px solid #e0443e;"></span>
-            <span class="hero-browser-dot" style="background: #ffbd2e; border: 1px solid #dea123;"></span>
-            <span class="hero-browser-dot" style="background: #27c93f; border: 1px solid #1aab29;"></span>
-          </div>
-          <div class="hero-shot-wrap">
-            <img src="hero_ui_screenshot.png" alt="Sensible extraction configuration UI showing the field schema, source PDF, and validated extracted data side by side"/>
-          </div>
+        <div class="hero-browser-frame" style="padding: 0; background: transparent; border: none; box-shadow: none;">
+          <img src="hero_ui_screenshot.png" alt="Sensible extraction configuration UI showing the field schema, source PDF, and validated extracted data side by side" style="width: 100%; border-radius: 12px; box-shadow: 0 30px 70px rgba(20, 17, 24, 0.15); border: 1px solid var(--border-stone); display: block;" />
         </div>
       </div>
 
@@ -1381,22 +1374,55 @@
 
       </div>
 
-      <div class="compare-2card-grid">
-        <!-- CARD 1: SENSIBLE -->
-        <div class="comp-card">
-          <div class="comp-card-logo sensible-logo">
+      <style>
+        .split-blocks {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          background: var(--bg-white);
+          border: 1px solid var(--border-stone);
+          border-radius: 16px;
+          overflow: hidden;
+          box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+        }
+        .split-block {
+          padding: 48px;
+        }
+        .split-block:first-child {
+          border-right: 1px solid var(--border-stone);
+        }
+        .split-block.sensible-side {
+          background: var(--brand-magenta-glow);
+        }
+        .sb-logo {
+          margin-bottom: 24px;
+        }
+        .sb-p {
+          font-size: 17px;
+          color: var(--text-body);
+          line-height: 1.75;
+        }
+        @media (max-width: 860px) {
+          .split-blocks { grid-template-columns: 1fr; }
+          .split-block:first-child { border-right: none; border-bottom: 1px solid var(--border-stone); }
+        }
+      </style>
+
+      <div class="split-blocks">
+        <!-- BLOCK 1: SENSIBLE -->
+        <div class="split-block sensible-side">
+          <div class="sb-logo" style="display: flex; align-items: center; height: 32px; margin-bottom: 24px;">
             <img src="https://cdn.prod.website-files.com/6033da353ede9143c0c56ff8/603523db465026cb1e88e905_LogoDefault.svg" alt="Sensible" style="height: 32px;"/>
           </div>
-          <p class="comp-card-p">Sensible is a production-grade extraction engine that combines LLM flexibility with SenseML layout rules to enforce deterministic, schema-validated accuracy on complex documents. It provides pixel-perfect bounding box traceability for every field and predictable flat per-document pricing, making it ideal for scalable pipelines and automated workflows.</p>
+          <p class="sb-p">Sensible is a production-grade extraction engine that combines LLM flexibility with SenseML layout rules to enforce deterministic, schema-validated accuracy on complex documents. It provides pixel-perfect bounding box traceability for every field and predictable flat per-document pricing, making it ideal for scalable pipelines and automated workflows.</p>
         </div>
 
-        <!-- CARD 2: LLAMAPARSE -->
-        <div class="comp-card">
-          <div class="comp-card-logo llamaparse-logo">
-            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path d="M15.855 17.122c-2.092.924-4.358.545-5.23.24 0 .21-.01.857-.048 1.78-.038.924-.332 1.507-.475 1.684.016.577.029 1.837-.047 2.26a1.93 1.93 0 01-.476.914H8.295c.114-.577.555-.946.761-1.058.114-1.193-.11-2.229-.238-2.597-.126.449-.437 1.49-.665 2.068a6.418 6.418 0 01-.713 1.299h-.951c-.048-.578.27-.77.475-.77.095-.177.323-.731.476-1.54.152-.807-.064-2.324-.19-2.981v-2.068c-1.522-.818-2.092-1.636-2.473-2.55-.304-.73-.222-1.843-.142-2.308-.096-.176-.373-.625-.476-1.25-.142-.866-.063-1.491 0-1.828-.095-.096-.285-.587-.285-1.78 0-1.192.349-1.811.523-1.972v-.529c-.666-.048-1.331-.336-1.712-.721-.38-.385-.095-.962.143-1.154.238-.193.475-.049.808-.145.333-.096.618-.192.76-.48C4.512 1.403 4.287.448 4.16 0c.57.077.935.577 1.046.818V0c.713.337 1.997 1.154 2.425 2.934.342 1.424.586 4.409.665 5.723 1.823.016 4.137-.26 6.229.193 1.901.412 2.757 1.25 3.755 1.25.999 0 1.57-.577 2.282-.096.714.481 1.094 1.828.999 2.838-.076.808-.697 1.074-.998 1.106-.38 1.27 0 2.485.237 2.934v1.827c.111.16.333.655.333 1.347 0 .693-.222 1.154-.333 1.299.19 1.077-.08 2.18-.238 2.597h-1.283c.152-.385.412-.481.523-.481.228-1.193.063-2.293-.048-2.693-.722-.424-1.188-1.17-1.331-1.491.016.272-.029 1.029-.333 1.875-.304.847-.76 1.347-.95 1.491v1.01h-1.284c0-.615.348-.737.523-.721.222-.4.76-1.01.76-2.212 0-1.015-.713-1.492-1.236-2.405-.248-.434-.127-.978-.047-1.203z"></path></svg>
+        <!-- BLOCK 2: LLAMAPARSE -->
+        <div class="split-block">
+          <div class="sb-logo" style="display: flex; align-items: center; gap: 10px; height: 32px; margin-bottom: 24px; font-family: var(--font-sans); font-size: 26px; font-weight: 600; color: var(--text-dark);">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" style="fill: currentColor;"><path d="M15.855 17.122c-2.092.924-4.358.545-5.23.24 0 .21-.01.857-.048 1.78-.038.924-.332 1.507-.475 1.684.016.577.029 1.837-.047 2.26a1.93 1.93 0 01-.476.914H8.295c.114-.577.555-.946.761-1.058.114-1.193-.11-2.229-.238-2.597-.126.449-.437 1.49-.665 2.068a6.418 6.418 0 01-.713 1.299h-.951c-.048-.578.27-.77.475-.77.095-.177.323-.731.476-1.54.152-.807-.064-2.324-.19-2.981v-2.068c-1.522-.818-2.092-1.636-2.473-2.55-.304-.73-.222-1.843-.142-2.308-.096-.176-.373-.625-.476-1.25-.142-.866-.063-1.491 0-1.828-.095-.096-.285-.587-.285-1.78 0-1.192.349-1.811.523-1.972v-.529c-.666-.048-1.331-.336-1.712-.721-.38-.385-.095-.962.143-1.154.238-.193.475-.049.808-.145.333-.096.618-.192.76-.48C4.512 1.403 4.287.448 4.16 0c.57.077.935.577 1.046.818V0c.713.337 1.997 1.154 2.425 2.934.342 1.424.586 4.409.665 5.723 1.823.016 4.137-.26 6.229.193 1.901.412 2.757 1.25 3.755 1.25.999 0 1.57-.577 2.282-.096.714.481 1.094 1.828.999 2.838-.076.808-.697 1.074-.998 1.106-.38 1.27 0 2.485.237 2.934v1.827c.111.16.333.655.333 1.347 0 .693-.222 1.154-.333 1.299.19 1.077-.08 2.18-.238 2.597h-1.283c.152-.385.412-.481.523-.481.228-1.193.063-2.293-.048-2.693-.722-.424-1.188-1.17-1.331-1.491.016.272-.029 1.029-.333 1.875-.304.847-.76 1.347-.95 1.491v1.01h-1.284c0-.615.348-.737.523-.721.222-.4.76-1.01.76-2.212 0-1.015-.713-1.492-1.236-2.405-.248-.434-.127-.978-.047-1.203z"></path></svg>
             <span>LlamaParse</span>
           </div>
-          <p class="comp-card-p">LlamaParse is a Vision LLM prompt parser that converts PDFs into raw Markdown text designed primarily for basic LLM search and RAG indexing. It charges per page and lacks layout guardrails, meaning it can hallucinate numbers on dense multi-column tables and lacks coordinate data for visual auditing.</p>
+          <p class="sb-p">LlamaParse is a Vision LLM prompt parser that converts PDFs into raw Markdown text designed primarily for basic LLM search and RAG indexing. It charges per page and lacks layout guardrails, meaning it can hallucinate numbers on dense multi-column tables and lacks coordinate data for visual auditing.</p>
         </div>
       </div>
     </div>
@@ -1408,7 +1434,6 @@
       <div class="sec-head">
         <div class="sec-eyebrow">Side-by-Side Matrix</div>
         <h2 class="sec-h2">Sensible vs. LlamaParse: Key Differences</h2>
-
       </div>
 
       <div class="matrix-wrap">
@@ -1812,13 +1837,79 @@
         <h2 class="sec-h2">Which One Should You Use?</h2>
       </div>
 
-      <div class="choices-grid">
-        <div class="choice-card">
-          <div class="choice-card-header" style="gap: 8px;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" style="fill: currentColor; margin-top:-2px;"><path d="M15.855 17.122c-2.092.924-4.358.545-5.23.24 0 .21-.01.857-.048 1.78-.038.924-.332 1.507-.475 1.684.016.577.029 1.837-.047 2.26a1.93 1.93 0 01-.476.914H8.295c.114-.577.555-.946.761-1.058.114-1.193-.11-2.229-.238-2.597-.126.449-.437 1.49-.665 2.068a6.418 6.418 0 01-.713 1.299h-.951c-.048-.578.27-.77.475-.77.095-.177.323-.731.476-1.54.152-.807-.064-2.324-.19-2.981v-2.068c-1.522-.818-2.092-1.636-2.473-2.55-.304-.73-.222-1.843-.142-2.308-.096-.176-.373-.625-.476-1.25-.142-.866-.063-1.491 0-1.828-.095-.096-.285-.587-.285-1.78 0-1.192.349-1.811.523-1.972v-.529c-.666-.048-1.331-.336-1.712-.721-.38-.385-.095-.962.143-1.154.238-.193.475-.049.808-.145.333-.096.618-.192.76-.48C4.512 1.403 4.287.448 4.16 0c.57.077.935.577 1.046.818V0c.713.337 1.997 1.154 2.425 2.934.342 1.424.586 4.409.665 5.723 1.823.016 4.137-.26 6.229.193 1.901.412 2.757 1.25 3.755 1.25.999 0 1.57-.577 2.282-.096.714.481 1.094 1.828.999 2.838-.076.808-.697 1.074-.998 1.106-.38 1.27 0 2.485.237 2.934v1.827c.111.16.333.655.333 1.347 0 .693-.222 1.154-.333 1.299.19 1.077-.08 2.18-.238 2.597h-1.283c.152-.385.412-.481.523-.481.228-1.193.063-2.293-.048-2.693-.722-.424-1.188-1.17-1.331-1.491.016.272-.029 1.029-.333 1.875-.304.847-.76 1.347-.95 1.491v1.01h-1.284c0-.615.348-.737.523-.721.222-.4.76-1.01.76-2.212 0-1.015-.713-1.492-1.236-2.405-.248-.434-.127-.978-.047-1.203z"></path></svg>
-            <span class="llamaparse-word">LlamaParse</span> if...
+      <style>
+        .split-blocks-takeaway {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          background: var(--bg-white);
+          border: 1px solid var(--border-stone);
+          border-radius: 16px;
+          overflow: hidden;
+          box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+        }
+        .split-block-takeaway {
+          padding: 48px;
+        }
+        .split-block-takeaway:first-child {
+          border-right: 1px solid var(--border-stone);
+        }
+        .split-block-takeaway.sensible-side {
+          background: var(--brand-magenta-glow);
+        }
+        .sbt-header {
+          font-size: 24px;
+          font-weight: 600;
+          color: var(--text-dark);
+          margin-bottom: 28px;
+          letter-spacing: -0.01em;
+          display: flex;
+          align-items: center;
+          gap: 12px;
+        }
+        .sbt-list {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          display: flex;
+          flex-direction: column;
+          gap: 20px;
+        }
+        .sbt-list li {
+          font-size: 15.5px;
+          line-height: 1.65;
+          color: var(--text-body);
+          position: relative;
+          padding-left: 24px;
+        }
+        .sbt-list li::before {
+          content: '▪';
+          position: absolute;
+          left: 0;
+          top: -1px;
+          color: var(--text-muted);
+          font-size: 16px;
+        }
+        .split-block-takeaway.sensible-side .sbt-list li::before {
+          color: var(--brand-magenta);
+        }
+        .sbt-list strong {
+          color: var(--text-dark);
+          font-weight: 600;
+        }
+        @media (max-width: 860px) {
+          .split-blocks-takeaway { grid-template-columns: 1fr; }
+          .split-block-takeaway:first-child { border-right: none; border-bottom: 1px solid var(--border-stone); }
+        }
+      </style>
+
+      <div class="split-blocks-takeaway">
+        <!-- BLOCK 1: LLAMAPARSE -->
+        <div class="split-block-takeaway">
+          <div class="sbt-header" style="font-family: var(--font-sans); font-size: 26px; font-weight: 600; color: var(--text-dark); display: flex; align-items: center; gap: 10px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" style="fill: currentColor;"><path d="M15.855 17.122c-2.092.924-4.358.545-5.23.24 0 .21-.01.857-.048 1.78-.038.924-.332 1.507-.475 1.684.016.577.029 1.837-.047 2.26a1.93 1.93 0 01-.476.914H8.295c.114-.577.555-.946.761-1.058.114-1.193-.11-2.229-.238-2.597-.126.449-.437 1.49-.665 2.068a6.418 6.418 0 01-.713 1.299h-.951c-.048-.578.27-.77.475-.77.095-.177.323-.731.476-1.54.152-.807-.064-2.324-.19-2.981v-2.068c-1.522-.818-2.092-1.636-2.473-2.55-.304-.73-.222-1.843-.142-2.308-.096-.176-.373-.625-.476-1.25-.142-.866-.063-1.491 0-1.828-.095-.096-.285-.587-.285-1.78 0-1.192.349-1.811.523-1.972v-.529c-.666-.048-1.331-.336-1.712-.721-.38-.385-.095-.962.143-1.154.238-.193.475-.049.808-.145.333-.096.618-.192.76-.48C4.512 1.403 4.287.448 4.16 0c.57.077.935.577 1.046.818V0c.713.337 1.997 1.154 2.425 2.934.342 1.424.586 4.409.665 5.723 1.823.016 4.137-.26 6.229.193 1.901.412 2.757 1.25 3.755 1.25.999 0 1.57-.577 2.282-.096.714.481 1.094 1.828.999 2.838-.076.808-.697 1.074-.998 1.106-.38 1.27 0 2.485.237 2.934v1.827c.111.16.333.655.333 1.347 0 .693-.222 1.154-.333 1.299.19 1.077-.08 2.18-.238 2.597h-1.283c.152-.385.412-.481.523-.481.228-1.193.063-2.293-.048-2.693-.722-.424-1.188-1.17-1.331-1.491.016.272-.029 1.029-.333 1.875-.304.847-.76 1.347-.95 1.491v1.01h-1.284c0-.615.348-.737.523-.721.222-.4.76-1.01.76-2.212 0-1.015-.713-1.492-1.236-2.405-.248-.434-.127-.978-.047-1.203z"></path></svg>
+            <span>LlamaParse if...</span>
           </div>
-          <ul class="choice-list">
+          <ul class="sbt-list">
             <li><strong>Semantic search and RAG indexing</strong> — you need fast, high-level document-to-text chunking for LLM embeddings and context retrieval.</li>
             <li><strong>Simple document layouts</strong> — your source files are narrative, standard PDFs without nested financial tables or multi-column grids.</li>
             <li><strong>Unstructured Markdown output</strong> — a broad text summary or Markdown dump for an AI agent to read is sufficient for your application.</li>
@@ -1826,12 +1917,13 @@
           </ul>
         </div>
 
-        <div class="choice-card sensible">
-          <div class="choice-card-header" style="gap: 8px;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 85 85" style="fill: var(--brand-magenta); flex-shrink: 0;"><path d="M0 63.78V42.52C11.2701 42.52 22.0791 46.9943 30.052 54.9597C38.0249 62.9251 42.5094 73.7299 42.52 85H21.26L0 63.78ZM21.26 42.52H42.52C42.52 31.243 38.0402 20.4279 30.0662 12.4538C22.0921 4.47977 11.277 0 0 0V21.26L21.26 42.52ZM63.78 0H42.52C42.52 11.2701 46.9943 22.0791 54.9597 30.052C62.9251 38.0249 73.7299 42.5094 85 42.52V21.26L63.78 0ZM63.78 42.52H42.52C42.5306 53.7831 47.0096 64.5819 54.9738 72.5462C62.9381 80.5104 73.7369 84.9894 85 85V63.78L63.78 42.52Z"></path></svg>
-            Sensible if...
+        <!-- BLOCK 2: SENSIBLE -->
+        <div class="split-block-takeaway sensible-side">
+          <div class="sbt-header" style="font-family: var(--font-sans); font-size: 26px; font-weight: 600; color: var(--text-dark); display: flex; align-items: center; gap: 10px;">
+            <img src="https://cdn.prod.website-files.com/6033da353ede9143c0c56ff8/603523db465026cb1e88e905_LogoDefault.svg" alt="Sensible" style="height: 32px;"/>
+            <span>if...</span>
           </div>
-          <ul class="choice-list">
+          <ul class="sbt-list">
             <li><strong>Production system automation</strong> — you require strict schema validation, type-coerced JSON payloads, and automated ingestion directly into downstream APIs or databases.</li>
             <li><strong>Complex &amp; non-standard documents</strong> — your pipeline processes dense 1,000+ page packets, borderless tabular data, multi-column forms, or scanned invoices.</li>
             <li><strong>Compliance &amp; visual auditability</strong> — you need pixel-perfect bounding-box [x, y, w, h] coordinates to verify every extracted number against source pages.</li>
