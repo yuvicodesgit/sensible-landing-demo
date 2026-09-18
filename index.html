@@ -384,25 +384,20 @@
     .marquee-track {
       display: inline-flex;
       align-items: center;
-      gap: 60px;
+      gap: 88px;
       animation: marqueeScroll 25s linear infinite;
     }
     .marquee-item {
       display: flex;
       align-items: center;
+      justify-content: center;
       flex-shrink: 0;
-      opacity: 0.65;
-      filter: grayscale(1);
-      transition: opacity 0.2s, filter 0.2s;
-    }
-    .marquee-item:hover {
-      opacity: 1;
-      filter: grayscale(0);
+      height: 40px;
     }
     .marquee-item img {
-      height: 26px;
+      height: 34px;
       width: auto;
-      max-width: 140px;
+      max-width: 150px;
       object-fit: contain;
       display: block;
     }
