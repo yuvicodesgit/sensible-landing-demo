@@ -720,165 +720,6 @@
       background: var(--bg-white);
     }
 
-    /* 4. CLEAN MODULAR ARCHITECTURE SYSTEM */
-    .arch-clean-section {
-      padding: 88px 0;
-      background: var(--bg-stone-subtle);
-      border-top: 1px solid var(--border-stone);
-      border-bottom: 1px solid var(--border-stone);
-    }
-    .arch-diagram-canvas {
-      max-width: 1240px;
-      margin: 44px auto 0;
-      background: var(--bg-white);
-      border: 1px solid var(--border-stone);
-      border-radius: 16px;
-      padding: 40px 32px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
-    }
-    .arch-diagram-grid {
-      display: grid;
-      grid-template-columns: 210px 42px 340px 42px 210px 42px 210px;
-      align-items: center;
-      gap: 0;
-    }
-    .arch-c-block {
-      background: var(--bg-stone-subtle);
-      border: 1px solid var(--border-stone);
-      border-radius: 12px;
-      padding: 22px 18px;
-      transition: all 0.2s ease;
-      position: relative;
-    }
-    .arch-c-block:hover {
-      border-color: rgba(132, 0, 85, 0.35);
-      background: #fff;
-      box-shadow: 0 6px 18px rgba(132, 0, 85, 0.05);
-    }
-    .arch-c-block.primary-accent {
-      border-color: rgba(132, 0, 85, 0.35);
-      background: linear-gradient(135deg, rgba(132,0,85,0.04), #fff);
-    }
-    .arch-c-badge {
-      font-family: var(--font-mono);
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--brand-magenta);
-      margin-bottom: 8px;
-    }
-    .arch-c-title {
-      font-family: var(--font-sans);
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--text-dark);
-      line-height: 1.25;
-      margin-bottom: 8px;
-    }
-    .arch-c-desc {
-      font-size: 12.5px;
-      color: var(--text-body);
-      line-height: 1.5;
-    }
-    .arch-c-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 5px;
-      margin-top: 12px;
-    }
-    .arch-c-tag {
-      font-family: var(--font-mono);
-      font-size: 9.5px;
-      background: #fff;
-      border: 1px solid var(--border-stone);
-      color: var(--text-muted);
-      padding: 2px 6px;
-      border-radius: 4px;
-    }
-
-    /* Dual engine central branch */
-    .arch-split-column {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-    .arch-dual-card {
-      background: #fff;
-      border: 1px solid var(--border-stone);
-      border-radius: 10px;
-      padding: 16px 16px;
-      position: relative;
-    }
-    .arch-dual-card.deterministic {
-      border-left: 3.5px solid var(--brand-magenta);
-      background: linear-gradient(135deg, rgba(132,0,85,0.02), #fff);
-    }
-    .arch-dual-card.llm {
-      border-left: 3.5px solid #6b7280;
-      background: #fff;
-    }
-    .arch-dual-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 6px;
-    }
-    .arch-dual-type {
-      font-family: var(--font-mono);
-      font-size: 9.5px;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-    }
-    .arch-dual-type.det { color: var(--brand-magenta); }
-    .arch-dual-type.gen { color: #4b5563; }
-    .arch-dual-pill {
-      font-size: 9px;
-      padding: 2px 6px;
-      border-radius: 3px;
-      background: var(--bg-stone-subtle);
-      color: var(--text-muted);
-      font-family: var(--font-mono);
-    }
-    .arch-dual-title {
-      font-size: 13.5px;
-      font-weight: 600;
-      color: var(--text-dark);
-      margin-bottom: 4px;
-    }
-    .arch-dual-desc {
-      font-size: 11.5px;
-      color: var(--text-body);
-      line-height: 1.45;
-    }
-
-    /* Clean Connectors */
-    .arch-link-arrow {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #9ca3af;
-    }
-    .arch-link-arrow svg {
-      width: 22px;
-      height: 22px;
-    }
-
-    @media (max-width: 1080px) {
-      .arch-diagram-grid {
-        grid-template-columns: 1fr;
-        gap: 16px;
-      }
-      .arch-link-arrow {
-        transform: rotate(90deg);
-        padding: 4px 0;
-      }
-      .arch-diagram-canvas {
-        padding: 28px 20px;
-      }
-    }
-
     /* 4. HOW IT WORKS SECTION */
     .diagram-section {
       padding: 90px 0;
@@ -1106,21 +947,28 @@
       list-style: none;
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 16px;
     }
     .choice-list li {
-      display: flex;
-      gap: 10px;
+      position: relative;
+      padding-left: 20px;
       font-size: 15px;
       color: var(--text-body);
-      line-height: 1.5;
+      line-height: 1.6;
     }
-    .choice-list .bullet-icon {
-      flex-shrink: 0;
-      margin-top: 3px;
-      color: var(--text-muted);
+    .choice-list li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 9px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--text-muted);
     }
-    .choice-card.sensible .choice-list .bullet-icon { color: var(--brand-magenta); }
+    .choice-card.sensible .choice-list li::before {
+      background: var(--brand-magenta);
+    }
 
     /* 7. CTA BANNER & FOOTER */
     .cta-banner {
@@ -1461,7 +1309,7 @@
             <span class="hero-browser-dot" style="background: #27c93f; border: 1px solid #1aab29;"></span>
           </div>
           <div class="hero-shot-wrap">
-            <img src="hero_product_clean.jpg" alt="Sensible extraction configuration UI showing the field schema, source PDF, and validated extracted data side by side"/>
+            <img src="hero_ui_screenshot.png" alt="Sensible extraction configuration UI showing the field schema, source PDF, and validated extracted data side by side"/>
           </div>
         </div>
       </div>
@@ -1578,8 +1426,8 @@
 
         <div class="matrix-row">
           <div class="td-cell td-feature">Extraction Architecture</div>
-          <div class="td-cell td-sensible"><span style="color: #FFF; font-weight:700;">✓</span> Hybrid (SenseML Layout Rules + LLMs)</div>
-          <div class="td-cell td-competitor"><span style="color: var(--check-green); font-weight:700;">✓</span> Vision-Language Model (VLM) Prompts</div>
+          <div class="td-cell td-sensible">Hybrid (SenseML Layout Rules + LLMs)</div>
+          <div class="td-cell td-competitor">Vision-Language Model (VLM) Prompts</div>
           <div class="td-cell td-why">VLMs alone struggle with deterministic structure; hybrid approaches enforce strict data constraints.</div>
         </div>
         
@@ -1592,141 +1440,293 @@
 
         <div class="matrix-row">
           <div class="td-cell td-feature">Output Format</div>
-          <div class="td-cell td-sensible"><span style="color: #FFF; font-weight:700;">✓</span> Highly structured JSON matching your schema</div>
-          <div class="td-cell td-competitor"><span style="color: var(--check-green); font-weight:700;">✓</span> Raw Markdown text for chunking</div>
+          <div class="td-cell td-sensible">Highly structured JSON matching your schema</div>
+          <div class="td-cell td-competitor">Raw Markdown text for chunking</div>
           <div class="td-cell td-why">Markdown is great for semantic search, but JSON is required for software pipelines.</div>
         </div>
 
         <div class="matrix-row">
           <div class="td-cell td-feature">Setup Speed</div>
-          <div class="td-cell td-sensible"><span style="color: #FFF; font-weight:700;">✓</span> 150+ pre-built industry schemas</div>
-          <div class="td-cell td-competitor"><span style="color: var(--check-green); font-weight:700;">✓</span> Fast setup via single API prompt</div>
+          <div class="td-cell td-sensible">150+ pre-built industry schemas</div>
+          <div class="td-cell td-competitor">Fast setup via single API prompt</div>
           <div class="td-cell td-why">Both platforms offer extremely fast time-to-value compared to legacy OCR models.</div>
         </div>
 
         <div class="matrix-row">
           <div class="td-cell td-feature">Source Audit Trail</div>
-          <div class="td-cell td-sensible"><span style="color: #FFF; font-weight:700;">✓</span> Pixel-perfect bounding box (x,y,w,h) coordinates</div>
-          <div class="td-cell td-competitor"><span style="color: var(--cross-red); font-weight:700;">✕</span> Unanchored text with no coordinate mapping</div>
+          <div class="td-cell td-sensible">Pixel-perfect bounding box (x,y,w,h) coordinates</div>
+          <div class="td-cell td-competitor">Unanchored text with no coordinate mapping</div>
           <div class="td-cell td-why">Essential for human-in-the-loop verification and compliance auditing.</div>
         </div>
 
         <div class="matrix-row">
           <div class="td-cell td-feature">Complex Table Parsing</div>
-          <div class="td-cell td-sensible"><span style="color: #FFF; font-weight:700;">✓</span> Handles borderless, multi-page, & nested tables</div>
-          <div class="td-cell td-competitor"><span style="color: var(--cross-red); font-weight:700;">✕</span> Drops structure on complex borderless tables</div>
+          <div class="td-cell td-sensible">Handles borderless, multi-page, & nested tables</div>
+          <div class="td-cell td-competitor">Drops structure on complex borderless tables</div>
           <div class="td-cell td-why">Financial and insurance documents rely heavily on complex tabular data.</div>
         </div>
 
         <div class="matrix-row">
           <div class="td-cell td-feature">Large Document Handling</div>
-          <div class="td-cell td-sensible"><span style="color: #FFF; font-weight:700;">✓</span> Processes 1,000+ page documents efficiently</div>
-          <div class="td-cell td-competitor"><span style="color: var(--cross-red); font-weight:700;">✕</span> Hits context limits and latency spikes</div>
+          <div class="td-cell td-sensible">Processes 1,000+ page documents efficiently</div>
+          <div class="td-cell td-competitor">Hits context limits and latency spikes</div>
           <div class="td-cell td-why">Critical for processing massive mortgage packets or insurance loss runs.</div>
         </div>
         
         <div class="matrix-row">
           <div class="td-cell td-feature">Human Exception Routing</div>
-          <div class="td-cell td-sensible"><span style="color: #FFF; font-weight:700;">✓</span> Built-in review queue API for uncertain fields</div>
-          <div class="td-cell td-competitor"><span style="color: var(--cross-red); font-weight:700;">✕</span> Requires building a custom UI microservice</div>
+          <div class="td-cell td-sensible">Built-in review queue API for uncertain fields</div>
+          <div class="td-cell td-competitor">Requires building a custom UI microservice</div>
           <div class="td-cell td-why">Reduces internal engineering lift for deploying human-in-the-loop workflows.</div>
         </div>
 
         <div class="matrix-row">
           <div class="td-cell td-feature">Pricing Structure</div>
-          <div class="td-cell td-sensible"><span style="color: #FFF; font-weight:700;">✓</span> Predictable flat per-document pricing</div>
-          <div class="td-cell td-competitor"><span style="color: var(--cross-red); font-weight:700;">✕</span> Variable per-page pricing ($0.003+/page)</div>
+          <div class="td-cell td-sensible">Predictable flat per-document pricing</div>
+          <div class="td-cell td-competitor">Variable per-page pricing ($0.003+/page)</div>
           <div class="td-cell td-why">Per-page pricing compounds quickly and makes costs unpredictable at volume.</div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- 4. CLEAN MODULAR ARCHITECTURE SYSTEM -->
-  <section class="arch-clean-section">
-    <div class="container" style="max-width: 1280px;">
-      <div class="sec-head">
+  <!-- 4. HOW IT WORKS SECTION -->
+  <!-- 4. NEXT-LEVEL PIPELINE ARCHITECTURE FLOW -->
+  <section class="complex-arch-section" style="padding: 48px 0 36px 0; background: #fafafa; border-top: 1px solid var(--border-stone); border-bottom: 1px solid var(--border-stone); overflow: hidden;">
+    <div class="container" style="max-width: 1520px;">
+      <div class="sec-head" style="margin-bottom: 28px; text-align: center;">
         <div class="sec-eyebrow">Technical Architecture</div>
         <h2 class="sec-h2">The Hybrid Extraction Pipeline</h2>
-        <p class="sec-desc">A unified deterministic and multimodal architecture engineered to eliminate hallucinations and deliver schema-validated data at enterprise scale.</p>
+        <p class="sec-desc" style="max-width: 600px; margin: 0 auto; font-size: 14.5px;">A sleek, high-performance pipeline routing structured and unstructured fields through concurrent deterministic and generative layers.</p>
       </div>
 
-      <div class="arch-diagram-canvas">
-        <div class="arch-diagram-grid">
-          
-          <!-- STAGE 1: INGESTION -->
-          <div class="arch-c-block">
-            <div class="arch-c-badge">Stage 01 · Input</div>
-            <div class="arch-c-title">Document Ingestion</div>
-            <div class="arch-c-desc">High-fidelity token stream extraction with per-character coordinate mapping.</div>
-            <div class="arch-c-tags">
-              <span class="arch-c-tag">PDF</span>
-              <span class="arch-c-tag">TIFF</span>
-              <span class="arch-c-tag">Scans</span>
-              <span class="arch-c-tag">Excel</span>
+      <div class="arch-scale-outer">
+        <div class="arch-scale-inner" style="position: absolute; top: 0; left: 0; width: 1600px; height: 500px; background: #ffffff; border: 1px solid var(--border-stone); border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02), 0 10px 15px -3px rgba(0,0,0,0.03); overflow: hidden;">
+
+          <!-- Subtle Grid -->
+          <div style="position: absolute; inset: 0; background-image: radial-gradient(#e5e7eb 1px, transparent 1px); background-size: 24px 24px; opacity: 0.6; z-index: 0;"></div>
+
+          <style>
+            /* Fluid scale: canvas fills 100% of the available container width via container query units,
+               no horizontal scroll and no hand-tuned breakpoint table. */
+            .arch-scale-outer {
+              width: 100%;
+              container-type: inline-size;
+              position: relative;
+              aspect-ratio: 1600 / 500;
+            }
+            .arch-scale-inner {
+              transform-origin: top left;
+              transform: scale(calc(100cqw / 1600px));
+            }
+
+            .pipe-path { fill: none; stroke: #e5e7eb; stroke-width: 9; stroke-linecap: round; stroke-linejoin: round; }
+            .pipe-path-inner { fill: none; stroke: #f3f4f6; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 4 4; }
+            .pipe-path-branch { fill: none; stroke: #d9dbe0; stroke-width: 5; stroke-linecap: round; stroke-dasharray: 2 7; }
+
+            /* Nodes */
+            .pipe-node {
+              position: absolute;
+              transform: translate(-50%, -50%);
+              background: #ffffff;
+              border: 1px solid #e5e7eb;
+              border-radius: 12px;
+              box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02), 0 2px 4px -2px rgba(0,0,0,0.01);
+              display: flex;
+              align-items: center;
+              gap: 12px;
+              padding: 13px 16px;
+              z-index: 10;
+              width: 200px;
+              transition: all 0.3s ease;
+            }
+            .pipe-node:hover {
+              transform: translate(-50%, -52%);
+              box-shadow: 0 10px 15px -3px rgba(0,0,0,0.06), 0 4px 6px -4px rgba(0,0,0,0.03);
+              border-color: var(--brand-magenta);
+            }
+
+            .pn-icon {
+              width: 38px; height: 38px;
+              border-radius: 9px;
+              display: flex; align-items: center; justify-content: center;
+              flex-shrink: 0;
+              background: linear-gradient(135deg, rgba(132,0,85,0.12), rgba(132,0,85,0.04));
+              color: var(--brand-magenta);
+            }
+            .pn-icon svg { width: 19px; height: 19px; }
+
+            .pn-text { display: flex; flex-direction: column; gap: 3px; }
+            .pn-title { font-family: var(--font-sans); font-size: 14.5px; font-weight: 600; color: #111827; line-height: 1.15; }
+            .pn-sub { font-size: 11.5px; color: #6b7280; line-height: 1.25; }
+          </style>
+
+          <svg style="position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1;" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <filter id="glow-magenta" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="4" result="blur" />
+                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+            </defs>
+
+            <!-- Complete Continuous Paths -->
+            <path id="full-top" class="pipe-path" d="M 130 250 L 360 250 C 470 250, 470 110, 580 110 C 690 110, 690 250, 800 250 L 1020 250 L 1240 250 L 1460 250" />
+            <path id="full-bot" class="pipe-path" d="M 130 250 L 360 250 C 470 250, 470 390, 580 390 C 690 390, 690 250, 800 250 L 1020 250 L 1240 250 L 1460 250" />
+
+            <!-- Conditional branch: flagged extractions route to human review -->
+            <path class="pipe-path-branch" d="M 1020 250 L 1020 390" />
+
+            <!-- Animated Glowing Particles (One by one, perfectly staggered) -->
+            <!-- Top particle: Travels the full path in 3.5s -->
+            <circle r="4.5" fill="var(--brand-magenta)" filter="url(#glow-magenta)">
+              <animateMotion dur="3.5s" repeatCount="indefinite">
+                <mpath href="#full-top"/>
+              </animateMotion>
+            </circle>
+
+            <!-- Bottom particle: Travels the full path in 3.5s, delayed by exactly half (1.75s) -->
+            <circle r="4.5" fill="var(--brand-magenta)" filter="url(#glow-magenta)">
+              <animateMotion dur="3.5s" begin="1.75s" repeatCount="indefinite">
+                <mpath href="#full-bot"/>
+              </animateMotion>
+            </circle>
+          </svg>
+
+          <!-- PIPELINE NODES (Centered at specific coordinates) -->
+
+          <div class="pipe-node" style="left: 130px; top: 250px;">
+            <div class="pn-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+            </div>
+            <div class="pn-text">
+              <div class="pn-title">Document Ingestion</div>
+              <div class="pn-sub">PDFs, Images, Text</div>
             </div>
           </div>
 
-          <!-- CONNECTOR 1 -->
-          <div class="arch-link-arrow">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-          </div>
-
-          <!-- STAGE 2: DUAL ENGINE ORCHESTRATION -->
-          <div class="arch-split-column">
-            <div class="arch-dual-card deterministic">
-              <div class="arch-dual-header">
-                <span class="arch-dual-type det">Deterministic Engine</span>
-                <span class="arch-dual-pill">100% Exact</span>
-              </div>
-              <div class="arch-dual-title">SenseML Layout Rules</div>
-              <div class="arch-dual-desc">Spatial anchors, coordinate boundaries, regex, and positional row/column parsers.</div>
+          <div class="pipe-node" style="left: 360px; top: 250px; border-color: rgba(132,0,85,0.3); box-shadow: 0 4px 12px rgba(132,0,85,0.06);">
+            <div class="pn-icon" style="background: var(--brand-gradient); color: #fff;">
+              <svg viewBox="0 0 85 85" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 63.78V42.52C11.2701 42.52 22.0791 46.9943 30.052 54.9597C38.0249 62.9251 42.5094 73.7299 42.52 85H21.26L0 63.78ZM21.26 42.52H42.52C42.52 31.243 38.0402 20.4279 30.0662 12.4538C22.0921 4.47977 11.277 0 0 0V21.26L21.26 42.52ZM63.78 0H42.52C42.52 11.2701 46.9943 22.0791 54.9597 30.052C62.9251 38.0249 73.7299 42.5094 85 42.52V21.26L63.78 0ZM63.78 42.52H42.52C42.5306 53.7831 47.0096 64.5819 54.9738 72.5462C62.9381 80.5104 73.7369 84.9894 85 85V63.78L63.78 42.52Z" fill="currentColor"/></svg>
             </div>
-
-            <div class="arch-dual-card llm">
-              <div class="arch-dual-header">
-                <span class="arch-dual-type gen">Generative Engine</span>
-                <span class="arch-dual-pill">Multimodal</span>
-              </div>
-              <div class="arch-dual-title">Vision LLM Parser</div>
-              <div class="arch-dual-desc">Contextual inference for freeform paragraphs, unusual layouts, and handwriting.</div>
+            <div class="pn-text">
+              <div class="pn-title">SenseML Router</div>
+              <div class="pn-sub">Rule-based orchestrator</div>
             </div>
           </div>
 
-          <!-- CONNECTOR 2 -->
-          <div class="arch-link-arrow">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-          </div>
-
-          <!-- STAGE 3: VALIDATION & HUMAN-IN-THE-LOOP -->
-          <div class="arch-c-block primary-accent">
-            <div class="arch-c-badge">Stage 03 · Guardrails</div>
-            <div class="arch-c-title">Validation &amp; Routing</div>
-            <div class="arch-c-desc">JsonLogic rule checks, arithmetic checksums, and conditional human review routing.</div>
-            <div class="arch-c-tags">
-              <span class="arch-c-tag">JsonLogic</span>
-              <span class="arch-c-tag">Checksums</span>
-              <span class="arch-c-tag">Review Queue</span>
+          <div class="pipe-node" style="left: 580px; top: 110px;">
+            <div class="pn-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7V5a2 2 0 0 1 2-2h2"></path><path d="M17 3h2a2 2 0 0 1 2 2v2"></path><path d="M21 17v2a2 2 0 0 1-2 2h-2"></path><path d="M7 21H5a2 2 0 0 1-2-2v-2"></path><line x1="7" y1="12" x2="17" y2="12"></line></svg>
+            </div>
+            <div class="pn-text">
+              <div class="pn-title">Deterministic Engine</div>
+              <div class="pn-sub">Spatial Anchors &amp; Regex</div>
             </div>
           </div>
 
-          <!-- CONNECTOR 3 -->
-          <div class="arch-link-arrow">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-          </div>
-
-          <!-- STAGE 4: OUTPUT & AUDIT -->
-          <div class="arch-c-block">
-            <div class="arch-c-badge">Stage 04 · Delivery</div>
-            <div class="arch-c-title">Structured JSON &amp; Audit</div>
-            <div class="arch-c-desc">Strict schema-compliant JSON with pixel bounding box [x,y,w,h] provenance for every field.</div>
-            <div class="arch-c-tags">
-              <span class="arch-c-tag">Typed JSON</span>
-              <span class="arch-c-tag">Coordinates</span>
-              <span class="arch-c-tag">Webhooks</span>
+          <div class="pipe-node" style="left: 580px; top: 390px;">
+            <div class="pn-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .962 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path></svg>
+            </div>
+            <div class="pn-text">
+              <div class="pn-title">Multimodal LLM Engine</div>
+              <div class="pn-sub">Generative Interpretation</div>
             </div>
           </div>
 
+          <div class="pipe-node" style="left: 800px; top: 250px;">
+            <div class="pn-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"></rect><rect x="9" y="9" width="6" height="6"></rect><path d="M15 2v2"></path><path d="M15 20v2"></path><path d="M2 15h2"></path><path d="M2 9h2"></path><path d="M20 15h2"></path><path d="M20 9h2"></path><path d="M9 2v2"></path><path d="M9 20v2"></path></svg>
+            </div>
+            <div class="pn-text">
+              <div class="pn-title">Compute</div>
+              <div class="pn-sub">Type coercion &amp; derived fields</div>
+            </div>
+          </div>
+
+          <div class="pipe-node" style="left: 1020px; top: 250px; border-color: rgba(132,0,85,0.3); box-shadow: 0 4px 12px rgba(132,0,85,0.06);">
+            <div class="pn-icon" style="background: var(--brand-gradient); color: #fff;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 3v6c0 5-3.5 8.5-8 11-4.5-2.5-8-6-8-11V5l8-3z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>
+            </div>
+            <div class="pn-text">
+              <div class="pn-title">Validate</div>
+              <div class="pn-sub">JsonLogic rule checks</div>
+            </div>
+          </div>
+
+          <div class="pipe-node" style="left: 1020px; top: 390px; width: 190px;">
+            <div class="pn-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><polyline points="16 11 18 13 22 9"></polyline></svg>
+            </div>
+            <div class="pn-text">
+              <div class="pn-title">Human Review</div>
+              <div class="pn-sub">Flagged docs, one-click fix</div>
+            </div>
+          </div>
+
+          <div class="pipe-node" style="left: 1240px; top: 250px;">
+            <div class="pn-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"></path><path d="M18 17V9"></path><path d="M13 17V5"></path><path d="M8 17v-3"></path></svg>
+            </div>
+            <div class="pn-text">
+              <div class="pn-title">Score</div>
+              <div class="pn-sub">Per-field confidence</div>
+            </div>
+          </div>
+
+          <div class="pipe-node" style="left: 1460px; top: 250px;">
+            <div class="pn-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22h14a2 2 0 0 0 2-2V7.5L14.5 2H6a2 2 0 0 0-2 2v4"></path><polyline points="14 2 14 8 20 8"></polyline><path d="m3 15 2 2 4-4"></path></svg>
+            </div>
+            <div class="pn-text">
+              <div class="pn-title">Structured Output</div>
+              <div class="pn-sub">Typed JSON + bounding boxes</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Mobile fallback: vertical stacked flow (the scaled canvas above is desktop/tablet only) -->
+      <div class="arch-mobile-list">
+        <div class="arch-mobile-item">
+          <div class="pn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></div>
+          <div class="pn-text"><div class="pn-title">Document Ingestion</div><div class="pn-sub">PDFs, Images, Text</div></div>
+        </div>
+        <div class="arch-mobile-item accent">
+          <div class="pn-icon accent"><svg viewBox="0 0 85 85" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 63.78V42.52C11.2701 42.52 22.0791 46.9943 30.052 54.9597C38.0249 62.9251 42.5094 73.7299 42.52 85H21.26L0 63.78ZM21.26 42.52H42.52C42.52 31.243 38.0402 20.4279 30.0662 12.4538C22.0921 4.47977 11.277 0 0 0V21.26L21.26 42.52ZM63.78 0H42.52C42.52 11.2701 46.9943 22.0791 54.9597 30.052C62.9251 38.0249 73.7299 42.5094 85 42.52V21.26L63.78 0ZM63.78 42.52H42.52C42.5306 53.7831 47.0096 64.5819 54.9738 72.5462C62.9381 80.5104 73.7369 84.9894 85 85V63.78L63.78 42.52Z" fill="currentColor"/></svg></div>
+          <div class="pn-text"><div class="pn-title">SenseML Router</div><div class="pn-sub">Rule-based orchestrator</div></div>
+        </div>
+        <div class="arch-mobile-branch">
+          <div class="arch-mobile-item">
+            <div class="pn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7V5a2 2 0 0 1 2-2h2"></path><path d="M17 3h2a2 2 0 0 1 2 2v2"></path><path d="M21 17v2a2 2 0 0 1-2 2h-2"></path><path d="M7 21H5a2 2 0 0 1-2-2v-2"></path><line x1="7" y1="12" x2="17" y2="12"></line></svg></div>
+            <div class="pn-text"><div class="pn-title">Deterministic Engine</div><div class="pn-sub">Spatial Anchors &amp; Regex</div></div>
+          </div>
+          <div class="arch-mobile-branch-label">+</div>
+          <div class="arch-mobile-item">
+            <div class="pn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .962 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path></svg></div>
+            <div class="pn-text"><div class="pn-title">Multimodal LLM Engine</div><div class="pn-sub">Generative Interpretation</div></div>
+          </div>
+        </div>
+        <div class="arch-mobile-item">
+          <div class="pn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"></rect><rect x="9" y="9" width="6" height="6"></rect><path d="M15 2v2"></path><path d="M15 20v2"></path><path d="M2 15h2"></path><path d="M2 9h2"></path><path d="M20 15h2"></path><path d="M20 9h2"></path><path d="M9 2v2"></path><path d="M9 20v2"></path></svg></div>
+          <div class="pn-text"><div class="pn-title">Compute</div><div class="pn-sub">Type coercion &amp; derived fields</div></div>
+        </div>
+        <div class="arch-mobile-item accent">
+          <div class="pn-icon accent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 3v6c0 5-3.5 8.5-8 11-4.5-2.5-8-6-8-11V5l8-3z"></path><polyline points="9 12 11 14 15 10"></polyline></svg></div>
+          <div class="pn-text"><div class="pn-title">Validate</div><div class="pn-sub">JsonLogic rule checks</div></div>
+        </div>
+        <div class="arch-mobile-item conditional">
+          <div class="pn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><polyline points="16 11 18 13 22 9"></polyline></svg></div>
+          <div class="pn-text"><div class="pn-title">Human Review <span class="arch-mobile-tag">if flagged</span></div><div class="pn-sub">Flagged docs, one-click fix</div></div>
+        </div>
+        <div class="arch-mobile-item">
+          <div class="pn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"></path><path d="M18 17V9"></path><path d="M13 17V5"></path><path d="M8 17v-3"></path></svg></div>
+          <div class="pn-text"><div class="pn-title">Score</div><div class="pn-sub">Per-field confidence</div></div>
+        </div>
+        <div class="arch-mobile-item">
+          <div class="pn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22h14a2 2 0 0 0 2-2V7.5L14.5 2H6a2 2 0 0 0-2 2v4"></path><polyline points="14 2 14 8 20 8"></polyline><path d="m3 15 2 2 4-4"></path></svg></div>
+          <div class="pn-text"><div class="pn-title">Structured Output</div><div class="pn-sub">Typed JSON + bounding boxes</div></div>
         </div>
       </div>
     </div>
@@ -1819,10 +1819,10 @@
             <span class="llamaparse-word">LlamaParse</span> if...
           </div>
           <ul class="choice-list">
-            <li><span class="bullet-icon">→</span> You need fast, cheap PDF-to-text for RAG or semantic search.</li>
-            <li><span class="bullet-icon">→</span> Your documents are simple, mostly text, and low-stakes.</li>
-            <li><span class="bullet-icon">→</span> A Markdown dump for an LLM to read is all you need.</li>
-            <li><span class="bullet-icon">→</span> Per-page pricing works fine at your current volume.</li>
+            <li><strong>Semantic search and RAG indexing</strong> — you need fast, high-level document-to-text chunking for LLM embeddings and context retrieval.</li>
+            <li><strong>Simple document layouts</strong> — your source files are narrative, standard PDFs without nested financial tables or multi-column grids.</li>
+            <li><strong>Unstructured Markdown output</strong> — a broad text summary or Markdown dump for an AI agent to read is sufficient for your application.</li>
+            <li><strong>Per-page consumption pricing</strong> — your ingestion volume is light, so variable per-page API costs remain manageable within your budget.</li>
           </ul>
         </div>
 
@@ -1832,11 +1832,11 @@
             Sensible if...
           </div>
           <ul class="choice-list">
-            <li><span class="bullet-icon">✓</span> You need guaranteed, schema-validated JSON for production systems.</li>
-            <li><span class="bullet-icon">✓</span> Your documents are complex — dense tables, multi-page, borderless.</li>
-            <li><span class="bullet-icon">✓</span> You need pixel-perfect bounding-box audit trails for compliance.</li>
-            <li><span class="bullet-icon">✓</span> You want predictable flat per-document pricing at scale.</li>
-            <li><span class="bullet-icon">✓</span> You need a built-in human review queue for edge cases.</li>
+            <li><strong>Production system automation</strong> — you require strict schema validation, type-coerced JSON payloads, and automated ingestion directly into downstream APIs or databases.</li>
+            <li><strong>Complex &amp; non-standard documents</strong> — your pipeline processes dense 1,000+ page packets, borderless tabular data, multi-column forms, or scanned invoices.</li>
+            <li><strong>Compliance &amp; visual auditability</strong> — you need pixel-perfect bounding-box [x, y, w, h] coordinates to verify every extracted number against source pages.</li>
+            <li><strong>Predictable enterprise pricing</strong> — you want flat per-document pricing that scales predictably without compounding costs per page.</li>
+            <li><strong>Human-in-the-loop exception routing</strong> — you need built-in review queues for flagged confidence scores to eliminate hallucinations before delivery.</li>
           </ul>
         </div>
       </div>
