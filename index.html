@@ -112,7 +112,7 @@
       background: rgba(254, 253, 251, 0.92);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-      border-bottom: 1px solid; border-image: linear-gradient(90deg, transparent, var(--border-stone) 15%, var(--border-stone) 85%, transparent) 1;
+      background-image: linear-gradient(90deg, transparent, var(--border-stone) 15%, var(--border-stone) 85%, transparent); background-size: 100% 1px; background-position: bottom; background-repeat: no-repeat; border-bottom: none;
       position: sticky;
       top: 0;
       z-index: 1000;
@@ -175,7 +175,7 @@
       overflow-y: auto;
       padding: 8px 20px 20px;
       background: var(--bg-white);
-      border-bottom: 1px solid; border-image: linear-gradient(90deg, transparent, var(--border-stone) 15%, var(--border-stone) 85%, transparent) 1;
+      background-image: linear-gradient(90deg, transparent, var(--border-stone) 15%, var(--border-stone) 85%, transparent); background-size: 100% 1px; background-position: bottom; background-repeat: no-repeat; border-bottom: none;
       box-shadow: 0 8px 24px rgba(0,0,0,0.08);
       position: absolute;
       top: 100%;
@@ -186,7 +186,7 @@
     .mobile-link {
       display: block;
       padding: 14px 0;
-      border-bottom: 1px solid; border-image: linear-gradient(90deg, transparent, var(--border-light) 15%, var(--border-light) 85%, transparent) 1;
+      background-image: linear-gradient(90deg, transparent, var(--border-light) 15%, var(--border-light) 85%, transparent); background-size: 100% 1px; background-position: bottom; background-repeat: no-repeat; border-bottom: none;
       font-size: 1.0625rem;
       font-weight: 500;
       color: var(--text-dark);
@@ -414,7 +414,7 @@
     .hero-browser-titlebar {
       height: 32px;
       background: #fdfdfd;
-      border-bottom: 1px solid; border-image: linear-gradient(90deg, transparent, var(--border-light) 15%, var(--border-light) 85%, transparent) 1;
+      background-image: linear-gradient(90deg, transparent, var(--border-light) 15%, var(--border-light) 85%, transparent); background-size: 100% 1px; background-position: bottom; background-repeat: no-repeat; border-bottom: none;
       display: flex;
       align-items: center;
       padding: 0 14px;
@@ -448,8 +448,12 @@
     /* PROOF RIBBON BAR (Sensible Homepage Component) */
     .d12-ribbon {
       background-color: var(--bg-stone-subtle);
-      border-top: 1px solid; border-image: linear-gradient(90deg, transparent, var(--border-stone) 15%, var(--border-stone) 85%, transparent) 1;
-      border-bottom: 1px solid; border-image: linear-gradient(90deg, transparent, var(--border-stone) 15%, var(--border-stone) 85%, transparent) 1;
+      background-image: linear-gradient(90deg, transparent, var(--border-stone) 15%, var(--border-stone) 85%, transparent), linear-gradient(90deg, transparent, var(--border-stone) 15%, var(--border-stone) 85%, transparent); 
+      background-size: 100% 1px, 100% 1px; 
+      background-position: top, bottom; 
+      background-repeat: no-repeat; 
+      border-top: none; 
+      border-bottom: none;
     }
     .d12-proof {
       display: grid;
@@ -650,7 +654,7 @@
     .table-section {
       padding: 90px 0;
       background: var(--bg-white);
-      border-bottom: 1px solid; border-image: linear-gradient(90deg, transparent, var(--border-stone) 15%, var(--border-stone) 85%, transparent) 1;
+      background-image: linear-gradient(90deg, transparent, var(--border-stone) 15%, var(--border-stone) 85%, transparent); background-size: 100% 1px; background-position: bottom; background-repeat: no-repeat; border-bottom: none;
     }
     .matrix-wrap {
       border: 1px solid var(--border-stone);
@@ -661,7 +665,7 @@
     .matrix-row {
       display: grid;
       grid-template-columns: 1.1fr 1.4fr 1.4fr 1.3fr;
-      border-bottom: 1px solid; border-image: linear-gradient(90deg, transparent, var(--border-stone) 15%, var(--border-stone) 85%, transparent) 1;
+      background-image: linear-gradient(90deg, transparent, var(--border-stone) 15%, var(--border-stone) 85%, transparent); background-size: 100% 1px; background-position: bottom; background-repeat: no-repeat; border-bottom: none;
     }
     .matrix-row:last-child { border-bottom: none; }
     
@@ -726,7 +730,7 @@
     .diagram-section {
       padding: 90px 0;
       background: var(--bg-stone-subtle);
-      border-bottom: 1px solid; border-image: linear-gradient(90deg, transparent, var(--border-stone) 15%, var(--border-stone) 85%, transparent) 1;
+      background-image: linear-gradient(90deg, transparent, var(--border-stone) 15%, var(--border-stone) 85%, transparent); background-size: 100% 1px; background-position: bottom; background-repeat: no-repeat; border-bottom: none;
     }
 
     /* 5-step overview strip */
@@ -761,7 +765,7 @@
       align-items: center;
       justify-content: space-between;
       padding: 20px 32px;
-      border-bottom: 1px solid; border-image: linear-gradient(90deg, transparent, var(--border-light) 15%, var(--border-light) 85%, transparent) 1;
+      background-image: linear-gradient(90deg, transparent, var(--border-light) 15%, var(--border-light) 85%, transparent); background-size: 100% 1px; background-position: bottom; background-repeat: no-repeat; border-bottom: none;
     }
     .detail-panel-title {
       font-family: var(--font-mono);
@@ -1169,7 +1173,7 @@
       }
       .matrix-row:first-child { display: none; }
       .matrix-row:last-child { margin-bottom: 0; }
-      .td-cell { padding: 16px 20px; border-bottom: 1px solid; border-image: linear-gradient(90deg, transparent, var(--border-light) 15%, var(--border-light) 85%, transparent) 1; }
+      .td-cell { padding: 16px 20px; background-image: linear-gradient(90deg, transparent, var(--border-light) 15%, var(--border-light) 85%, transparent); background-size: 100% 1px; background-position: bottom; background-repeat: no-repeat; border-bottom: none; }
       .td-cell:last-child { border-bottom: none; }
       .td-feature { font-size: 15px; }
       .td-sensible::before, .td-competitor::before, .td-why::before {
@@ -1202,7 +1206,7 @@
 
       .d12-proof { grid-template-columns: 1fr 1fr; }
       .d12-proof-cell:nth-child(2n+1) { border-left: none; }
-      .d12-proof-cell:nth-child(n+3) { border-top: 1px solid; border-image: linear-gradient(90deg, transparent, var(--border-stone) 15%, var(--border-stone) 85%, transparent) 1; }
+      .d12-proof-cell:nth-child(n+3) { background-image: linear-gradient(90deg, transparent, var(--border-stone) 15%, var(--border-stone) 85%, transparent); background-size: 100% 1px; background-position: top; background-repeat: no-repeat; border-top: none; }
 
       .compare-2card-section, .table-section, .faq-section, .takeaways-section { padding: 56px 0; }
       .comp-card { padding: 32px 24px; }
@@ -1406,7 +1410,7 @@
         }
         @media (max-width: 860px) {
           .split-blocks { grid-template-columns: 1fr; }
-          .split-block:first-child { border-right: none; border-bottom: 1px solid; border-image: linear-gradient(90deg, transparent, var(--border-stone) 15%, var(--border-stone) 85%, transparent) 1; }
+          .split-block:first-child { border-right: none; background-image: linear-gradient(90deg, transparent, var(--border-stone) 15%, var(--border-stone) 85%, transparent); background-size: 100% 1px; background-position: bottom; background-repeat: no-repeat; border-bottom: none; }
         }
       </style>
 
@@ -1892,7 +1896,7 @@
         }
         @media (max-width: 860px) {
           .split-blocks-takeaway { grid-template-columns: 1fr; }
-          .split-block-takeaway:first-child { border-right: none; border-bottom: 1px solid; border-image: linear-gradient(90deg, transparent, var(--border-stone) 15%, var(--border-stone) 85%, transparent) 1; }
+          .split-block-takeaway:first-child { border-right: none; background-image: linear-gradient(90deg, transparent, var(--border-stone) 15%, var(--border-stone) 85%, transparent); background-size: 100% 1px; background-position: bottom; background-repeat: no-repeat; border-bottom: none; }
         }
       </style>
 
