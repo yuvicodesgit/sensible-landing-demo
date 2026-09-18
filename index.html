@@ -553,16 +553,18 @@
       text-transform: uppercase;
       letter-spacing: 0.14em;
       margin-bottom: 16px;
-    }
-    .sec-eyebrow::before,
-    .sec-eyebrow::after {
-      content: '▪';
-      font-size: 8px;
-      color: var(--text-muted);
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--brand-magenta-dark);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 12px;
+      text-align: center;
     }
     .sec-h2 {
       font-family: var(--font-serif);
-      font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+      font-size: clamp(1.85rem, 3.5vw, 2.6rem);
       font-weight: 400;
       color: var(--text-dark);
       letter-spacing: -0.015em;
@@ -572,9 +574,9 @@
     }
     .sec-desc {
       font-family: var(--font-sans);
-      font-size: 17px;
+      font-size: 18px;
       color: var(--text-body);
-      max-width: 640px;
+      max-width: 680px;
       margin: 0 auto;
       line-height: 1.65;
       text-align: center;
@@ -617,18 +619,24 @@
       height: 32px;
     }
     .llamaparse-logo {
-      color: #9C95A3; /* Similar to text-muted but slightly more solid */
+      color: var(--text-dark);
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
     .llamaparse-logo svg {
-      width: 32px;
-      height: 32px;
-      color: #9C95A3;
+      width: 30px;
+      height: 30px;
+      color: var(--text-dark);
+      fill: currentColor;
     }
     .llamaparse-logo span,
     .llamaparse-word {
-      font-family: var(--font-sans); /* LlamaParse's brand typeface (Overused Grotesk) isn't a licensed asset here; IBM Plex Sans is the closest already-loaded geometric-grotesk stand-in */
+      font-family: var(--font-sans);
+      font-size: 22px;
       font-weight: 600;
       letter-spacing: -0.01em;
+      color: var(--text-dark);
     }
     .comp-card-p {
       font-size: 17px;
@@ -665,10 +673,18 @@
       background: var(--bg-stone-subtle);
       color: var(--text-muted);
       font-family: var(--font-mono);
-      font-size: 0.6875rem;
-      font-weight: 500;
+      font-size: 0.72rem;
+      font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.18em;
+      letter-spacing: 0.15em;
+    }
+    .th-cell.th-brand {
+      color: var(--text-dark);
+      font-family: var(--font-sans);
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: normal;
+      text-transform: none;
     }
     .th-sensible {
       padding: 22px 28px;
@@ -696,11 +712,171 @@
 
     .td-competitor { color: var(--text-body); background: var(--bg-stone-subtle); }
     .td-why {
-      font-family: var(--font-serif);
-      font-style: italic;
+      font-family: var(--font-sans);
+      font-style: normal;
       font-weight: 400;
+      font-size: 14px;
       color: var(--text-body);
       background: var(--bg-white);
+    }
+
+    /* 4. CLEAN MODULAR ARCHITECTURE SYSTEM */
+    .arch-clean-section {
+      padding: 88px 0;
+      background: var(--bg-stone-subtle);
+      border-top: 1px solid var(--border-stone);
+      border-bottom: 1px solid var(--border-stone);
+    }
+    .arch-diagram-canvas {
+      max-width: 1240px;
+      margin: 44px auto 0;
+      background: var(--bg-white);
+      border: 1px solid var(--border-stone);
+      border-radius: 16px;
+      padding: 40px 32px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    }
+    .arch-diagram-grid {
+      display: grid;
+      grid-template-columns: 210px 42px 340px 42px 210px 42px 210px;
+      align-items: center;
+      gap: 0;
+    }
+    .arch-c-block {
+      background: var(--bg-stone-subtle);
+      border: 1px solid var(--border-stone);
+      border-radius: 12px;
+      padding: 22px 18px;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+    .arch-c-block:hover {
+      border-color: rgba(132, 0, 85, 0.35);
+      background: #fff;
+      box-shadow: 0 6px 18px rgba(132, 0, 85, 0.05);
+    }
+    .arch-c-block.primary-accent {
+      border-color: rgba(132, 0, 85, 0.35);
+      background: linear-gradient(135deg, rgba(132,0,85,0.04), #fff);
+    }
+    .arch-c-badge {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--brand-magenta);
+      margin-bottom: 8px;
+    }
+    .arch-c-title {
+      font-family: var(--font-sans);
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-dark);
+      line-height: 1.25;
+      margin-bottom: 8px;
+    }
+    .arch-c-desc {
+      font-size: 12.5px;
+      color: var(--text-body);
+      line-height: 1.5;
+    }
+    .arch-c-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 12px;
+    }
+    .arch-c-tag {
+      font-family: var(--font-mono);
+      font-size: 9.5px;
+      background: #fff;
+      border: 1px solid var(--border-stone);
+      color: var(--text-muted);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    /* Dual engine central branch */
+    .arch-split-column {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .arch-dual-card {
+      background: #fff;
+      border: 1px solid var(--border-stone);
+      border-radius: 10px;
+      padding: 16px 16px;
+      position: relative;
+    }
+    .arch-dual-card.deterministic {
+      border-left: 3.5px solid var(--brand-magenta);
+      background: linear-gradient(135deg, rgba(132,0,85,0.02), #fff);
+    }
+    .arch-dual-card.llm {
+      border-left: 3.5px solid #6b7280;
+      background: #fff;
+    }
+    .arch-dual-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    .arch-dual-type {
+      font-family: var(--font-mono);
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .arch-dual-type.det { color: var(--brand-magenta); }
+    .arch-dual-type.gen { color: #4b5563; }
+    .arch-dual-pill {
+      font-size: 9px;
+      padding: 2px 6px;
+      border-radius: 3px;
+      background: var(--bg-stone-subtle);
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+    }
+    .arch-dual-title {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text-dark);
+      margin-bottom: 4px;
+    }
+    .arch-dual-desc {
+      font-size: 11.5px;
+      color: var(--text-body);
+      line-height: 1.45;
+    }
+
+    /* Clean Connectors */
+    .arch-link-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #9ca3af;
+    }
+    .arch-link-arrow svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    @media (max-width: 1080px) {
+      .arch-diagram-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+      .arch-link-arrow {
+        transform: rotate(90deg);
+        padding: 4px 0;
+      }
+      .arch-diagram-canvas {
+        padding: 28px 20px;
+      }
     }
 
     /* 4. HOW IT WORKS SECTION */
@@ -1393,9 +1569,9 @@
           <div class="th-sensible">
             <img src="https://cdn.prod.website-files.com/69d90e4abf8f50428ec28825/69d90e4abf8f50428ec28870_LogoWhite.svg" alt="Sensible" style="height: 24px;"/>
           </div>
-          <div class="th-cell" style="gap: 8px;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: currentColor;"><path d="M15.855 17.122c-2.092.924-4.358.545-5.23.24 0 .21-.01.857-.048 1.78-.038.924-.332 1.507-.475 1.684.016.577.029 1.837-.047 2.26a1.93 1.93 0 01-.476.914H8.295c.114-.577.555-.946.761-1.058.114-1.193-.11-2.229-.238-2.597-.126.449-.437 1.49-.665 2.068a6.418 6.418 0 01-.713 1.299h-.951c-.048-.578.27-.77.475-.77.095-.177.323-.731.476-1.54.152-.807-.064-2.324-.19-2.981v-2.068c-1.522-.818-2.092-1.636-2.473-2.55-.304-.73-.222-1.843-.142-2.308-.096-.176-.373-.625-.476-1.25-.142-.866-.063-1.491 0-1.828-.095-.096-.285-.587-.285-1.78 0-1.192.349-1.811.523-1.972v-.529c-.666-.048-1.331-.336-1.712-.721-.38-.385-.095-.962.143-1.154.238-.193.475-.049.808-.145.333-.096.618-.192.76-.48C4.512 1.403 4.287.448 4.16 0c.57.077.935.577 1.046.818V0c.713.337 1.997 1.154 2.425 2.934.342 1.424.586 4.409.665 5.723 1.823.016 4.137-.26 6.229.193 1.901.412 2.757 1.25 3.755 1.25.999 0 1.57-.577 2.282-.096.714.481 1.094 1.828.999 2.838-.076.808-.697 1.074-.998 1.106-.38 1.27 0 2.485.237 2.934v1.827c.111.16.333.655.333 1.347 0 .693-.222 1.154-.333 1.299.19 1.077-.08 2.18-.238 2.597h-1.283c.152-.385.412-.481.523-.481.228-1.193.063-2.293-.048-2.693-.722-.424-1.188-1.17-1.331-1.491.016.272-.029 1.029-.333 1.875-.304.847-.76 1.347-.95 1.491v1.01h-1.284c0-.615.348-.737.523-.721.222-.4.76-1.01.76-2.212 0-1.015-.713-1.492-1.236-2.405-.248-.434-.127-.978-.047-1.203z"></path></svg>
-            LLAMAPARSE
+          <div class="th-cell th-brand" style="gap: 8px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" style="fill: currentColor;"><path d="M15.855 17.122c-2.092.924-4.358.545-5.23.24 0 .21-.01.857-.048 1.78-.038.924-.332 1.507-.475 1.684.016.577.029 1.837-.047 2.26a1.93 1.93 0 01-.476.914H8.295c.114-.577.555-.946.761-1.058.114-1.193-.11-2.229-.238-2.597-.126.449-.437 1.49-.665 2.068a6.418 6.418 0 01-.713 1.299h-.951c-.048-.578.27-.77.475-.77.095-.177.323-.731.476-1.54.152-.807-.064-2.324-.19-2.981v-2.068c-1.522-.818-2.092-1.636-2.473-2.55-.304-.73-.222-1.843-.142-2.308-.096-.176-.373-.625-.476-1.25-.142-.866-.063-1.491 0-1.828-.095-.096-.285-.587-.285-1.78 0-1.192.349-1.811.523-1.972v-.529c-.666-.048-1.331-.336-1.712-.721-.38-.385-.095-.962.143-1.154.238-.193.475-.049.808-.145.333-.096.618-.192.76-.48C4.512 1.403 4.287.448 4.16 0c.57.077.935.577 1.046.818V0c.713.337 1.997 1.154 2.425 2.934.342 1.424.586 4.409.665 5.723 1.823.016 4.137-.26 6.229.193 1.901.412 2.757 1.25 3.755 1.25.999 0 1.57-.577 2.282-.096.714.481 1.094 1.828.999 2.838-.076.808-.697 1.074-.998 1.106-.38 1.27 0 2.485.237 2.934v1.827c.111.16.333.655.333 1.347 0 .693-.222 1.154-.333 1.299.19 1.077-.08 2.18-.238 2.597h-1.283c.152-.385.412-.481.523-.481.228-1.193.063-2.293-.048-2.693-.722-.424-1.188-1.17-1.331-1.491.016.272-.029 1.029-.333 1.875-.304.847-.76 1.347-.95 1.491v1.01h-1.284c0-.615.348-.737.523-.721.222-.4.76-1.01.76-2.212 0-1.015-.713-1.492-1.236-2.405-.248-.434-.127-.978-.047-1.203z"></path></svg>
+            <span>LlamaParse</span>
           </div>
           <div class="th-cell">WHY IT MATTERS</div>
         </div>
@@ -1466,245 +1642,91 @@
     </div>
   </section>
 
-  <!-- 4. HOW IT WORKS SECTION -->
-  <!-- 4. NEXT-LEVEL PIPELINE ARCHITECTURE FLOW -->
-  <!-- 4. HOW IT WORKS SECTION -->
-  <!-- 4. NEXT-LEVEL PIPELINE ARCHITECTURE FLOW -->
-  <section class="complex-arch-section" style="padding: 48px 0 36px 0; background: #fafafa; border-top: 1px solid var(--border-stone); border-bottom: 1px solid var(--border-stone); overflow: hidden;">
-    <div class="container" style="max-width: 1520px;">
-      <div class="sec-head" style="margin-bottom: 28px; text-align: center;">
+  <!-- 4. CLEAN MODULAR ARCHITECTURE SYSTEM -->
+  <section class="arch-clean-section">
+    <div class="container" style="max-width: 1280px;">
+      <div class="sec-head">
         <div class="sec-eyebrow">Technical Architecture</div>
         <h2 class="sec-h2">The Hybrid Extraction Pipeline</h2>
-        <p class="sec-desc" style="max-width: 600px; margin: 0 auto; font-size: 14.5px;">A sleek, high-performance pipeline routing structured and unstructured fields through concurrent deterministic and generative layers.</p>
+        <p class="sec-desc">A unified deterministic and multimodal architecture engineered to eliminate hallucinations and deliver schema-validated data at enterprise scale.</p>
       </div>
 
-      <div class="arch-scale-outer">
-        <div class="arch-scale-inner" style="position: absolute; top: 0; left: 0; width: 1600px; height: 500px; background: #ffffff; border: 1px solid var(--border-stone); border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02), 0 10px 15px -3px rgba(0,0,0,0.03); overflow: hidden;">
-
-          <!-- Subtle Grid -->
-          <div style="position: absolute; inset: 0; background-image: radial-gradient(#e5e7eb 1px, transparent 1px); background-size: 24px 24px; opacity: 0.6; z-index: 0;"></div>
-
-          <style>
-            /* Fluid scale: canvas fills 100% of the available container width via container query units,
-               no horizontal scroll and no hand-tuned breakpoint table. */
-            .arch-scale-outer {
-              width: 100%;
-              container-type: inline-size;
-              position: relative;
-              aspect-ratio: 1600 / 500;
-            }
-            .arch-scale-inner {
-              transform-origin: top left;
-              transform: scale(calc(100cqw / 1600px));
-            }
-
-            .pipe-path { fill: none; stroke: #e5e7eb; stroke-width: 9; stroke-linecap: round; stroke-linejoin: round; }
-            .pipe-path-inner { fill: none; stroke: #f3f4f6; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 4 4; }
-            .pipe-path-branch { fill: none; stroke: #d9dbe0; stroke-width: 5; stroke-linecap: round; stroke-dasharray: 2 7; }
-
-            /* Nodes */
-            .pipe-node {
-              position: absolute;
-              transform: translate(-50%, -50%);
-              background: #ffffff;
-              border: 1px solid #e5e7eb;
-              border-radius: 12px;
-              box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02), 0 2px 4px -2px rgba(0,0,0,0.01);
-              display: flex;
-              align-items: center;
-              gap: 12px;
-              padding: 13px 16px;
-              z-index: 10;
-              width: 200px;
-              transition: all 0.3s ease;
-            }
-            .pipe-node:hover {
-              transform: translate(-50%, -52%);
-              box-shadow: 0 10px 15px -3px rgba(0,0,0,0.06), 0 4px 6px -4px rgba(0,0,0,0.03);
-              border-color: var(--brand-magenta);
-            }
-
-            .pn-icon {
-              width: 38px; height: 38px;
-              border-radius: 9px;
-              display: flex; align-items: center; justify-content: center;
-              flex-shrink: 0;
-              background: linear-gradient(135deg, rgba(132,0,85,0.12), rgba(132,0,85,0.04));
-              color: var(--brand-magenta);
-            }
-            .pn-icon svg { width: 19px; height: 19px; }
-
-            .pn-text { display: flex; flex-direction: column; gap: 3px; }
-            .pn-title { font-family: var(--font-sans); font-size: 14.5px; font-weight: 600; color: #111827; line-height: 1.15; }
-            .pn-sub { font-size: 11.5px; color: #6b7280; line-height: 1.25; }
-          </style>
-
-          <svg style="position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1;" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <filter id="glow-magenta" x="-50%" y="-50%" width="200%" height="200%">
-                <feGaussianBlur stdDeviation="4" result="blur" />
-                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-              </filter>
-            </defs>
-
-            <!-- Complete Continuous Paths -->
-            <path id="full-top" class="pipe-path" d="M 130 250 L 360 250 C 470 250, 470 110, 580 110 C 690 110, 690 250, 800 250 L 1020 250 L 1240 250 L 1460 250" />
-            <path id="full-bot" class="pipe-path" d="M 130 250 L 360 250 C 470 250, 470 390, 580 390 C 690 390, 690 250, 800 250 L 1020 250 L 1240 250 L 1460 250" />
-
-            <!-- Conditional branch: flagged extractions route to human review -->
-            <path class="pipe-path-branch" d="M 1020 250 L 1020 390" />
-
-            <!-- Animated Glowing Particles (One by one, perfectly staggered) -->
-            <!-- Top particle: Travels the full path in 3.5s -->
-            <circle r="4.5" fill="var(--brand-magenta)" filter="url(#glow-magenta)">
-              <animateMotion dur="3.5s" repeatCount="indefinite">
-                <mpath href="#full-top"/>
-              </animateMotion>
-            </circle>
-
-            <!-- Bottom particle: Travels the full path in 3.5s, delayed by exactly half (1.75s) -->
-            <circle r="4.5" fill="var(--brand-magenta)" filter="url(#glow-magenta)">
-              <animateMotion dur="3.5s" begin="1.75s" repeatCount="indefinite">
-                <mpath href="#full-bot"/>
-              </animateMotion>
-            </circle>
-          </svg>
-
-          <!-- PIPELINE NODES (Centered at specific coordinates) -->
-
-          <div class="pipe-node" style="left: 130px; top: 250px;">
-            <div class="pn-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
-            </div>
-            <div class="pn-text">
-              <div class="pn-title">Document Ingestion</div>
-              <div class="pn-sub">PDFs, Images, Text</div>
+      <div class="arch-diagram-canvas">
+        <div class="arch-diagram-grid">
+          
+          <!-- STAGE 1: INGESTION -->
+          <div class="arch-c-block">
+            <div class="arch-c-badge">Stage 01 · Input</div>
+            <div class="arch-c-title">Document Ingestion</div>
+            <div class="arch-c-desc">High-fidelity token stream extraction with per-character coordinate mapping.</div>
+            <div class="arch-c-tags">
+              <span class="arch-c-tag">PDF</span>
+              <span class="arch-c-tag">TIFF</span>
+              <span class="arch-c-tag">Scans</span>
+              <span class="arch-c-tag">Excel</span>
             </div>
           </div>
 
-          <div class="pipe-node" style="left: 360px; top: 250px; border-color: rgba(132,0,85,0.3); box-shadow: 0 4px 12px rgba(132,0,85,0.06);">
-            <div class="pn-icon" style="background: var(--brand-gradient); color: #fff;">
-              <svg viewBox="0 0 85 85" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 63.78V42.52C11.2701 42.52 22.0791 46.9943 30.052 54.9597C38.0249 62.9251 42.5094 73.7299 42.52 85H21.26L0 63.78ZM21.26 42.52H42.52C42.52 31.243 38.0402 20.4279 30.0662 12.4538C22.0921 4.47977 11.277 0 0 0V21.26L21.26 42.52ZM63.78 0H42.52C42.52 11.2701 46.9943 22.0791 54.9597 30.052C62.9251 38.0249 73.7299 42.5094 85 42.52V21.26L63.78 0ZM63.78 42.52H42.52C42.5306 53.7831 47.0096 64.5819 54.9738 72.5462C62.9381 80.5104 73.7369 84.9894 85 85V63.78L63.78 42.52Z" fill="currentColor"/></svg>
+          <!-- CONNECTOR 1 -->
+          <div class="arch-link-arrow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </div>
+
+          <!-- STAGE 2: DUAL ENGINE ORCHESTRATION -->
+          <div class="arch-split-column">
+            <div class="arch-dual-card deterministic">
+              <div class="arch-dual-header">
+                <span class="arch-dual-type det">Deterministic Engine</span>
+                <span class="arch-dual-pill">100% Exact</span>
+              </div>
+              <div class="arch-dual-title">SenseML Layout Rules</div>
+              <div class="arch-dual-desc">Spatial anchors, coordinate boundaries, regex, and positional row/column parsers.</div>
             </div>
-            <div class="pn-text">
-              <div class="pn-title">SenseML Router</div>
-              <div class="pn-sub">Rule-based orchestrator</div>
+
+            <div class="arch-dual-card llm">
+              <div class="arch-dual-header">
+                <span class="arch-dual-type gen">Generative Engine</span>
+                <span class="arch-dual-pill">Multimodal</span>
+              </div>
+              <div class="arch-dual-title">Vision LLM Parser</div>
+              <div class="arch-dual-desc">Contextual inference for freeform paragraphs, unusual layouts, and handwriting.</div>
             </div>
           </div>
 
-          <div class="pipe-node" style="left: 580px; top: 110px;">
-            <div class="pn-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7V5a2 2 0 0 1 2-2h2"></path><path d="M17 3h2a2 2 0 0 1 2 2v2"></path><path d="M21 17v2a2 2 0 0 1-2 2h-2"></path><path d="M7 21H5a2 2 0 0 1-2-2v-2"></path><line x1="7" y1="12" x2="17" y2="12"></line></svg>
-            </div>
-            <div class="pn-text">
-              <div class="pn-title">Deterministic Engine</div>
-              <div class="pn-sub">Spatial Anchors &amp; Regex</div>
+          <!-- CONNECTOR 2 -->
+          <div class="arch-link-arrow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </div>
+
+          <!-- STAGE 3: VALIDATION & HUMAN-IN-THE-LOOP -->
+          <div class="arch-c-block primary-accent">
+            <div class="arch-c-badge">Stage 03 · Guardrails</div>
+            <div class="arch-c-title">Validation &amp; Routing</div>
+            <div class="arch-c-desc">JsonLogic rule checks, arithmetic checksums, and conditional human review routing.</div>
+            <div class="arch-c-tags">
+              <span class="arch-c-tag">JsonLogic</span>
+              <span class="arch-c-tag">Checksums</span>
+              <span class="arch-c-tag">Review Queue</span>
             </div>
           </div>
 
-          <div class="pipe-node" style="left: 580px; top: 390px;">
-            <div class="pn-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .962 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path></svg>
-            </div>
-            <div class="pn-text">
-              <div class="pn-title">Multimodal LLM Engine</div>
-              <div class="pn-sub">Generative Interpretation</div>
+          <!-- CONNECTOR 3 -->
+          <div class="arch-link-arrow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </div>
+
+          <!-- STAGE 4: OUTPUT & AUDIT -->
+          <div class="arch-c-block">
+            <div class="arch-c-badge">Stage 04 · Delivery</div>
+            <div class="arch-c-title">Structured JSON &amp; Audit</div>
+            <div class="arch-c-desc">Strict schema-compliant JSON with pixel bounding box [x,y,w,h] provenance for every field.</div>
+            <div class="arch-c-tags">
+              <span class="arch-c-tag">Typed JSON</span>
+              <span class="arch-c-tag">Coordinates</span>
+              <span class="arch-c-tag">Webhooks</span>
             </div>
           </div>
 
-          <div class="pipe-node" style="left: 800px; top: 250px;">
-            <div class="pn-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"></rect><rect x="9" y="9" width="6" height="6"></rect><path d="M15 2v2"></path><path d="M15 20v2"></path><path d="M2 15h2"></path><path d="M2 9h2"></path><path d="M20 15h2"></path><path d="M20 9h2"></path><path d="M9 2v2"></path><path d="M9 20v2"></path></svg>
-            </div>
-            <div class="pn-text">
-              <div class="pn-title">Compute</div>
-              <div class="pn-sub">Type coercion &amp; derived fields</div>
-            </div>
-          </div>
-
-          <div class="pipe-node" style="left: 1020px; top: 250px; border-color: rgba(132,0,85,0.3); box-shadow: 0 4px 12px rgba(132,0,85,0.06);">
-            <div class="pn-icon" style="background: var(--brand-gradient); color: #fff;">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 3v6c0 5-3.5 8.5-8 11-4.5-2.5-8-6-8-11V5l8-3z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>
-            </div>
-            <div class="pn-text">
-              <div class="pn-title">Validate</div>
-              <div class="pn-sub">JsonLogic rule checks</div>
-            </div>
-          </div>
-
-          <div class="pipe-node" style="left: 1020px; top: 390px; width: 190px;">
-            <div class="pn-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><polyline points="16 11 18 13 22 9"></polyline></svg>
-            </div>
-            <div class="pn-text">
-              <div class="pn-title">Human Review</div>
-              <div class="pn-sub">Flagged docs, one-click fix</div>
-            </div>
-          </div>
-
-          <div class="pipe-node" style="left: 1240px; top: 250px;">
-            <div class="pn-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"></path><path d="M18 17V9"></path><path d="M13 17V5"></path><path d="M8 17v-3"></path></svg>
-            </div>
-            <div class="pn-text">
-              <div class="pn-title">Score</div>
-              <div class="pn-sub">Per-field confidence</div>
-            </div>
-          </div>
-
-          <div class="pipe-node" style="left: 1460px; top: 250px;">
-            <div class="pn-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22h14a2 2 0 0 0 2-2V7.5L14.5 2H6a2 2 0 0 0-2 2v4"></path><polyline points="14 2 14 8 20 8"></polyline><path d="m3 15 2 2 4-4"></path></svg>
-            </div>
-            <div class="pn-text">
-              <div class="pn-title">Structured Output</div>
-              <div class="pn-sub">Typed JSON + bounding boxes</div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- Mobile fallback: vertical stacked flow (the scaled canvas above is desktop/tablet only) -->
-      <div class="arch-mobile-list">
-        <div class="arch-mobile-item">
-          <div class="pn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></div>
-          <div class="pn-text"><div class="pn-title">Document Ingestion</div><div class="pn-sub">PDFs, Images, Text</div></div>
-        </div>
-        <div class="arch-mobile-item accent">
-          <div class="pn-icon accent"><svg viewBox="0 0 85 85" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 63.78V42.52C11.2701 42.52 22.0791 46.9943 30.052 54.9597C38.0249 62.9251 42.5094 73.7299 42.52 85H21.26L0 63.78ZM21.26 42.52H42.52C42.52 31.243 38.0402 20.4279 30.0662 12.4538C22.0921 4.47977 11.277 0 0 0V21.26L21.26 42.52ZM63.78 0H42.52C42.52 11.2701 46.9943 22.0791 54.9597 30.052C62.9251 38.0249 73.7299 42.5094 85 42.52V21.26L63.78 0ZM63.78 42.52H42.52C42.5306 53.7831 47.0096 64.5819 54.9738 72.5462C62.9381 80.5104 73.7369 84.9894 85 85V63.78L63.78 42.52Z" fill="currentColor"/></svg></div>
-          <div class="pn-text"><div class="pn-title">SenseML Router</div><div class="pn-sub">Rule-based orchestrator</div></div>
-        </div>
-        <div class="arch-mobile-branch">
-          <div class="arch-mobile-item">
-            <div class="pn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7V5a2 2 0 0 1 2-2h2"></path><path d="M17 3h2a2 2 0 0 1 2 2v2"></path><path d="M21 17v2a2 2 0 0 1-2 2h-2"></path><path d="M7 21H5a2 2 0 0 1-2-2v-2"></path><line x1="7" y1="12" x2="17" y2="12"></line></svg></div>
-            <div class="pn-text"><div class="pn-title">Deterministic Engine</div><div class="pn-sub">Spatial Anchors &amp; Regex</div></div>
-          </div>
-          <div class="arch-mobile-branch-label">+</div>
-          <div class="arch-mobile-item">
-            <div class="pn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .962 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path></svg></div>
-            <div class="pn-text"><div class="pn-title">Multimodal LLM Engine</div><div class="pn-sub">Generative Interpretation</div></div>
-          </div>
-        </div>
-        <div class="arch-mobile-item">
-          <div class="pn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"></rect><rect x="9" y="9" width="6" height="6"></rect><path d="M15 2v2"></path><path d="M15 20v2"></path><path d="M2 15h2"></path><path d="M2 9h2"></path><path d="M20 15h2"></path><path d="M20 9h2"></path><path d="M9 2v2"></path><path d="M9 20v2"></path></svg></div>
-          <div class="pn-text"><div class="pn-title">Compute</div><div class="pn-sub">Type coercion &amp; derived fields</div></div>
-        </div>
-        <div class="arch-mobile-item accent">
-          <div class="pn-icon accent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 3v6c0 5-3.5 8.5-8 11-4.5-2.5-8-6-8-11V5l8-3z"></path><polyline points="9 12 11 14 15 10"></polyline></svg></div>
-          <div class="pn-text"><div class="pn-title">Validate</div><div class="pn-sub">JsonLogic rule checks</div></div>
-        </div>
-        <div class="arch-mobile-item conditional">
-          <div class="pn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><polyline points="16 11 18 13 22 9"></polyline></svg></div>
-          <div class="pn-text"><div class="pn-title">Human Review <span class="arch-mobile-tag">if flagged</span></div><div class="pn-sub">Flagged docs, one-click fix</div></div>
-        </div>
-        <div class="arch-mobile-item">
-          <div class="pn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"></path><path d="M18 17V9"></path><path d="M13 17V5"></path><path d="M8 17v-3"></path></svg></div>
-          <div class="pn-text"><div class="pn-title">Score</div><div class="pn-sub">Per-field confidence</div></div>
-        </div>
-        <div class="arch-mobile-item">
-          <div class="pn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22h14a2 2 0 0 0 2-2V7.5L14.5 2H6a2 2 0 0 0-2 2v4"></path><polyline points="14 2 14 8 20 8"></polyline><path d="m3 15 2 2 4-4"></path></svg></div>
-          <div class="pn-text"><div class="pn-title">Structured Output</div><div class="pn-sub">Typed JSON + bounding boxes</div></div>
         </div>
       </div>
     </div>
