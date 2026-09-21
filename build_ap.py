@@ -212,8 +212,6 @@ new_css = r"""
     /* ---------- 10/11 ---------- */
     .faq-group-label { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--brand-magenta); margin: 18px 0 -6px; }
     .faq-content p + p { margin-top: 10px; }
-    .cta-banner { background-image: radial-gradient(circle at 30% 20%, rgba(132,0,85,0.32) 0%, transparent 55%), radial-gradient(circle at 80% 100%, rgba(248,156,42,0.1) 0%, transparent 50%); background-size: 100% 100%; background-position: center; }
-    .cta-p { max-width: 520px; }
 
 
     /* ---------- HERO: split layout, demo in first fold ---------- */
@@ -346,27 +344,6 @@ new_css = r"""
     .m-btn.p:hover { background: linear-gradient(135deg, var(--brand-magenta-dark), var(--brand-magenta)); }
     .m-btn.s { border: 1px solid var(--border-stone); color: var(--text-dark); background: var(--bg-white); }
     .m-btn.s:hover { border-color: var(--text-muted); }
-
-    .cta-banner { background-color: var(--bg-stone-subtle); color: var(--text-dark);
-      background-image: radial-gradient(circle at 30% 20%, rgba(132,0,85,0.10) 0%, transparent 55%), radial-gradient(circle at 80% 100%, rgba(248,156,42,0.12) 0%, transparent 50%); }
-    .cta-h2 { color: var(--text-dark); }
-    .cta-p { color: var(--text-body); }
-    .cta-btn-primary { background: var(--brand-gradient); color: #fff; box-shadow: 0 2px 8px var(--brand-magenta-glow); }
-    .cta-btn-primary:hover { background: linear-gradient(135deg, var(--brand-magenta-dark), var(--brand-magenta)); }
-    .cta-btn-secondary { color: var(--text-dark); background: var(--bg-white); border: 1px solid var(--border-stone); }
-    .cta-btn-secondary:hover { border-color: var(--text-muted); }
-    .cta-note { color: var(--text-muted); }
-
-    .footer { background-color: var(--bg-white); color: var(--text-body); border-top: 1px solid var(--border-stone); }
-    .footer-logo-img { filter: none; }
-    .footer-col-label { color: var(--text-dark); }
-    .footer-col a { color: var(--text-body); }
-    .footer-col a:hover { color: var(--brand-magenta); }
-    .footer-brand-blurb { color: var(--text-muted); }
-    .footer-social a { color: var(--text-muted); } .footer-social a:hover { color: var(--brand-magenta); }
-    .footer-bottom { border-top: 1px solid var(--border-stone); color: var(--text-muted); }
-    .footer-copyright { color: var(--text-dark); }
-    .footer-bottom-links a { color: var(--text-muted); } .footer-bottom-links a:hover { color: var(--brand-magenta); }
 
     /* ---------- responsive ---------- */
     @media (max-width: 1100px) {
