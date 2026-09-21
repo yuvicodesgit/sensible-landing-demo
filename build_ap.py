@@ -2,6 +2,7 @@
 """Assembles accounts-payable.html: shared CSS + nav/footer/CTA reused from index.html
 (which already mirrors sensible.so), plus the new AP-specific sections."""
 import re
+from ap_sections import mid_sections
 
 src = open('index.html').read().split('\n')
 L = lambda a, b: '\n'.join(src[a - 1:b])          # 1-indexed inclusive
@@ -478,6 +479,103 @@ new_css = r"""
     .d12-proof-cell { border-left-color: var(--neutral-line); }
     @media (max-width: 767px) { .d12-proof-cell:nth-child(n+3) { border-top-color: var(--neutral-line); } }
 
+
+    /* ============ EDITORIAL LAYOUTS: split sections, ruled lists, flat rail (replaces card grids) ============ */
+    .sec { padding: 88px 0; }
+    .sp-kicker { display: block; font-family: var(--font-mono); font-size: .6875rem; font-weight: 500; letter-spacing: .18em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 16px; }
+    .sp-h2 { font-family: var(--font-serif); font-size: 2.25rem; line-height: 1.14; letter-spacing: -.015em; font-weight: 400; color: var(--text-dark); margin: 0 0 18px; text-align: left; }
+    .sp-h2 em { font-style: italic; color: var(--brand-magenta); }
+    .sp-lede { font-size: 1.0625rem; line-height: 1.62; color: var(--text-body); max-width: 46ch; margin: 0; }
+    .sp-lede-2 { margin-top: 14px; }
+    .sp-split { display: grid; grid-template-columns: minmax(0, .82fr) minmax(0, 1.4fr); gap: 80px; align-items: start; }
+    .sp-split-head { position: sticky; top: 96px; }
+    .head-row { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 64px; align-items: end; margin-bottom: 44px; }
+    .head-row .sp-h2 { margin-bottom: 0; }
+    .head-row .sp-lede { padding-bottom: 6px; }
+
+    /* ruled list (real site's editorial 2px dark top rule + hairlines) */
+    .rl-list { border-top: 2px solid var(--text-dark); }
+    .rl-item { display: grid; grid-template-columns: 52px minmax(0, 1fr); gap: 16px; padding: 26px 0 28px; border-bottom: 1px solid var(--neutral-line); }
+    .rl-num { font-family: var(--font-mono); font-size: .6875rem; font-weight: 500; letter-spacing: .16em; color: var(--text-muted); padding-top: 7px; }
+    .rl-item h3 { font-family: var(--font-serif); font-size: 1.375rem; font-weight: 500; letter-spacing: -.005em; line-height: 1.25; color: var(--text-dark); margin: 0 0 8px; }
+    .rl-item p { font-size: 1rem; line-height: 1.62; color: var(--text-body); margin: 0; max-width: 60ch; }
+    .rl-tag { font-family: var(--font-mono); font-size: .625rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--brand-magenta); margin-left: 10px; vertical-align: middle; }
+
+    /* pipeline rail */
+    .rail { display: grid; grid-template-columns: repeat(5, 1fr); border-top: 2px solid var(--text-dark); }
+    .rail-cell { padding: 24px 22px 8px; border-left: 1px solid var(--neutral-line); display: flex; flex-direction: column; }
+    .rail-cell:first-child { border-left: none; padding-left: 0; }
+    .rail-cell:last-child { padding-right: 0; }
+    .rail-cell h3 { font-family: var(--font-serif); font-size: 1.5rem; font-weight: 500; letter-spacing: -.01em; margin: 10px 0 10px; color: var(--text-dark); }
+    .rail-cell p { font-size: .9375rem; line-height: 1.6; color: var(--text-body); margin: 0 0 18px; flex: 1; }
+    .rail-io { font-family: var(--font-mono); font-size: .6875rem; line-height: 1.7; color: var(--text-muted); padding-top: 12px; border-top: 1px solid var(--neutral-line); }
+    .rail-io b { color: var(--brand-magenta); font-weight: 500; display: inline-block; width: 30px; }
+    .rail-scope { display: flex; align-items: center; gap: 16px; margin-top: 22px; }
+    .rail-scope .bar { height: 1px; flex: 1; background: var(--text-dark); position: relative; }
+    .rail-scope .lbl { font-family: var(--font-mono); font-size: .6875rem; letter-spacing: .16em; text-transform: uppercase; color: var(--text-dark); }
+    .handoff { display: grid; grid-template-columns: 90px minmax(0, 1fr); gap: 16px; margin-top: 28px; padding: 22px 0; border-top: 1px solid var(--neutral-line); border-bottom: 1px solid var(--neutral-line); }
+    .handoff .hk { font-family: var(--font-mono); font-size: .6875rem; letter-spacing: .16em; text-transform: uppercase; color: var(--text-muted); padding-top: 4px; }
+    .handoff p { margin: 0; font-size: 1rem; line-height: 1.6; color: var(--text-body); max-width: 72ch; }
+    .trace-line { display: flex; flex-wrap: wrap; gap: 6px 26px; padding-top: 22px; font-family: var(--font-mono); font-size: .75rem; color: var(--text-body); }
+    .trace-line .tl { color: var(--text-muted); text-transform: uppercase; letter-spacing: .12em; font-size: .6875rem; }
+    .trace-line .k { color: var(--brand-magenta); } .trace-line .v { color: #A8620F; }
+
+    /* validation: flat list, no card */
+    .val-plain { border-top: 2px solid var(--text-dark); }
+    .val-plain-head { display: flex; justify-content: space-between; padding: 12px 0; font-family: var(--font-mono); font-size: .6875rem; letter-spacing: .14em; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid var(--neutral-line); }
+    .val-plain .val-row { padding: 18px 0; background: none; border-bottom: 1px solid var(--neutral-line); }
+    .val-plain .val-row.flag { background: #FFF7EA; padding: 18px 14px; margin: 0 -14px; }
+    .val-note { margin: 26px 0 0; padding-left: 16px; border-left: 2px solid var(--brand-magenta); font-family: var(--font-serif); font-size: 1.0625rem; line-height: 1.55; color: var(--text-dark); max-width: 44ch; }
+
+    /* managed */
+    .mg-actions { margin-top: 26px; }
+
+    /* formats: definition rows */
+    .dl-list { border-top: 2px solid var(--text-dark); }
+    .dl-row { display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 24px; padding: 24px 0; border-bottom: 1px solid var(--neutral-line); }
+    .dl-k h3 { font-family: var(--font-serif); font-weight: 500; font-size: 1.25rem; margin: 0 0 4px; color: var(--text-dark); }
+    .dl-k span { font-family: var(--font-mono); font-size: .6875rem; letter-spacing: .12em; text-transform: uppercase; color: var(--text-muted); }
+    .dl-v { margin: 0; font-size: 1.0625rem; line-height: 1.75; color: var(--text-dark); }
+    .dl-v span { white-space: nowrap; }
+    .dl-v i { font-style: normal; color: var(--text-muted); margin: 0 4px; }
+
+    /* faq: plain hairline list */
+    .faq-plain { border-top: 2px solid var(--text-dark); }
+    .faq-plain .faq-accordion { background: none; border: 0; border-bottom: 1px solid var(--neutral-line); border-radius: 0; }
+    .faq-plain .faq-accordion[open] { background: none; border-color: var(--neutral-line); }
+    .faq-plain .faq-summary { padding: 22px 0; font-size: 1.1875rem; }
+    .faq-plain .faq-content { padding: 0 0 24px; max-width: 64ch; }
+
+    /* fields: underline tabs + open table */
+    .ft-wrap { max-width: none; }
+    .ft-tabs { gap: 28px; margin-bottom: 0; border-bottom: 1px solid var(--neutral-line); }
+    .ft-tab { background: none; border: 0; border-bottom: 2px solid transparent; border-radius: 0; padding: 12px 2px; margin-bottom: -1px; box-shadow: none; color: var(--text-muted); font-size: 1rem; }
+    .ft-tab:hover { border-color: transparent; color: var(--text-dark); }
+    .ft-tab[aria-selected="true"] { background: none; color: var(--text-dark); border-bottom-color: var(--brand-magenta); box-shadow: none; }
+    .ft-tab[aria-selected="true"] span { color: var(--brand-magenta); }
+    .ft-table { border: 0; border-radius: 0; box-shadow: none; background: none; border-top: 0; }
+    .ft-head { background: none; padding-left: 0; padding-right: 0; }
+    .ft-row { padding-left: 0; padding-right: 0; }
+    .ft-row:not(.ft-head):hover { background: none; }
+    .ft-schema { max-width: none; margin-top: 36px; padding: 26px 0 0; border: 0; border-top: 2px solid var(--text-dark); border-radius: 0; background: none; }
+    .ft-schema-copy b { font-weight: 500; font-size: 1.25rem; }
+
+    @media (max-width: 991px) {
+      .sp-split { grid-template-columns: 1fr; gap: 36px; }
+      .sp-split-head { position: static; }
+      .head-row { grid-template-columns: 1fr; gap: 16px; }
+      .rail { grid-template-columns: 1fr 1fr; }
+      .rail-cell { padding: 22px 18px 8px 0; border-left: 0; border-bottom: 1px solid var(--neutral-line); }
+      .rail-cell:first-child { padding-left: 0; }
+    }
+    @media (max-width: 767px) {
+      .sp-h2 { font-size: 1.75rem; }
+      .rail { grid-template-columns: 1fr; }
+      .rl-item { grid-template-columns: 38px minmax(0, 1fr); gap: 10px; }
+      .dl-row { grid-template-columns: 1fr; gap: 8px; }
+      .handoff { grid-template-columns: 1fr; gap: 6px; }
+    }
+
     /* ---------- responsive ---------- */
     @media (max-width: 1100px) {
       .pipe-grid { grid-template-columns: 1fr; gap: 26px; }
@@ -797,10 +895,9 @@ def fields_section():
     return f'''
   <section class="sec white" id="fields">
     <div class="container">
-      <div class="sec-head">
-        <span class="sec-eyebrow">What Sensible extracts</span>
-        <h2 class="sec-h2">Every field typed, checked, and traceable</h2>
-        <p class="sec-desc">Three buckets, 25 fields AP teams request most. Each comes back typed, keeps its printed text, and links to its source location on the page.</p>
+      <div class="head-row">
+        <div><span class="sp-kicker">What Sensible extracts</span><h2 class="sp-h2">The fields we extract</h2></div>
+        <p class="sp-lede">Grouped the way AP teams ask for them. Each field comes back typed, keeps the text as printed, and points to where it sits on the page.</p>
       </div>
       <div class="ft-wrap">
         <div class="ft-tabs" role="tablist" aria-label="Field groups">{tabs}</div>
@@ -863,126 +960,7 @@ body = f'''
   {marq_html}
 
 
-  <!-- 4. WHY HARD -->
-  <section class="sec stone" id="why-hard">
-    <div class="container">
-      <div class="sec-head">
-        <span class="sec-eyebrow">Why AP extraction is hard in production</span>
-        <h2 class="sec-h2">The demo invoice is easy. Your AP inbox is not.</h2>
-        <p class="sec-desc">Headers, totals, and line-item tables land somewhere new on every vendor&rsquo;s document. Hybrid extraction absorbs the variation, and deterministic validation re-checks the math before the data reaches your ledger.</p>
-      </div>
-      <div class="hard-grid">
-        <article class="hard-card"><div class="hard-num">01</div><h3>Vendor format diversity</h3><p>QuickBooks exports, SAP invoices, handwritten bills, custom ERP outputs: each places fields differently. Hybrid extraction (LLM parsing plus SenseML rules) absorbs the variation instead of breaking on it.</p></article>
-        <article class="hard-card"><div class="hard-num">02</div><h3>Line item table extraction</h3><p>Multi-page tables, merged cells, multi-line descriptions, varying tax codes. Quantity, unit price, tax and amount stay intact on every row, and page breaks are handled transparently.</p></article>
-        <article class="hard-card"><div class="hard-num">03</div><h3>Calculation validation</h3><p>Do line items sum to the subtotal? Does the tax match the rate? Does the grand total reconcile? This is the check that catches a bad extraction before it reaches the ledger, not after.</p></article>
-        <article class="hard-card ap"><div class="hard-num">04 <span class="hard-tag">AP-SPECIFIC</span></div><h3>PO and three-way-match readiness</h3><p>An invoice&rsquo;s PO number is only useful if it can be checked against the PO and goods receipt it references. Extraction has to preserve that reference cleanly enough to match on, not just capture it as a string.</p></article>
-      </div>
-    </div>
-  </section>
-
-  <!-- 5. FIELDS -->
-  {fields_section()}
-
-  <!-- 6. PIPELINE -->
-  <section class="sec stone" id="how-it-works">
-    <div class="container">
-      <div class="sec-head">
-        <span class="sec-eyebrow">How it works</span>
-        <h2 class="sec-h2">A five-stage pipeline. Every field traceable.</h2>
-        <p class="sec-desc">From a raw supplier document to schema-enforced JSON in your AP system, with a checkpoint at every stage.</p>
-      </div>
-      <div class="pipe-scope">
-        <span class="pipe-scope-label">Sensible: the extraction layer</span>
-        <div class="pipe-grid">
-          <div class="pl-stage"><div class="pl-num">01</div><h3>Ingest</h3><p>PDF, scan, email attachment, or spreadsheet. Any source, no pre-sorting required.</p><div class="pl-io"><b>in</b> raw files, email, API upload<br><b>out</b> normalized pages</div></div>
-          <div class="pl-stage"><div class="pl-num">02</div><h3>Classify</h3><p>Document type identified (invoice, PO, credit memo, remittance) before extraction runs.</p><div class="pl-io"><b>in</b> normalized pages<br><b>out</b> typed document</div></div>
-          <div class="pl-stage"><div class="pl-num">03</div><h3>Extract</h3><p>Hybrid AI plus deterministic SenseML rules pull header, line item, and total fields regardless of layout.</p><div class="pl-io"><b>in</b> typed document<br><b>out</b> candidate fields</div></div>
-          <div class="pl-stage"><div class="pl-num">04</div><h3>Validate</h3><p>Calculation checks run automatically: line items to subtotal, tax to rate, PO reference format. Discrepancies are flagged with a confidence score.</p><div class="pl-io"><b>in</b> candidate fields<br><b>out</b> checked fields + flags</div></div>
-          <div class="pl-stage"><div class="pl-num">05</div><h3>Deliver</h3><p>Schema-enforced JSON, every field traced to page and bounding box, sent via webhook or pulled via API.</p><div class="pl-io"><b>in</b> checked fields<br><b>out</b> JSON to your system</div></div>
-        </div>
-      </div>
-      <div class="pipe-handoff"><div class="stem"></div><div class="lbl">webhook · API</div><div class="stem"></div></div>
-      <div class="pipe-down"><b>Your AP system, ERP, or matching engine</b><span>Three-way matching, approval routing, posting and payment stay here. Sensible hands over data you can trust; it does not run those steps.</span></div>
-      <div class="trace-strip"><span class="tl">Every field is traceable</span><span><span class="k">total_due</span> → page <span class="v">1</span></span><span><span class="k">bbox</span> <span class="v">[412, 688, 540, 712]</span></span><span><span class="k">confidence</span> <span class="v">0.99</span></span><span><span class="k">source</span> <span class="v">"$15,091.75"</span></span></div>
-    </div>
-  </section>
-
-  <!-- 7. VALIDATION -->
-  <section class="sec white" id="validation">
-    <div class="container">
-      <div class="val-grid">
-        <div class="val-copy">
-          <span class="sec-eyebrow" style="text-align:left;margin-bottom:14px;display:block">Validation, not just extraction</span>
-          <h2>Extraction alone isn&rsquo;t the hard part. Trusting the output is.</h2>
-          <p>Any tool can return a number. The question your finance team asks is whether it&rsquo;s the right number. So Sensible checks the output the way an AP clerk would: do the line items sum to the subtotal, does the tax match the stated rate, does the grand total reconcile, is the PO reference in a valid format.</p>
-          <p>When a check fails, the field is flagged with a confidence score and routed for review instead of flowing silently into your ledger.</p>
-          <div class="val-quote">We don&rsquo;t publish a flat accuracy percentage. Accuracy depends on document quality and configuration, and a single number hides both.</div>
-        </div>
-        <div class="val-card">
-          <div class="val-head"><span>Validation results</span><span>NB-2024-0418</span></div>
-          <div class="val-row"><span class="val-ic ok">✓</span><div><b>Line items sum to subtotal</b><span class="d">5 lines add up to the stated subtotal</span></div><span class="val-res">$14,204.00</span></div>
-          <div class="val-row"><span class="val-ic ok">✓</span><div><b>Tax matches rate</b><span class="d">6.25% of subtotal equals stated tax</span></div><span class="val-res">$887.75</span></div>
-          <div class="val-row"><span class="val-ic ok">✓</span><div><b>Grand total reconciles</b><span class="d">Subtotal + tax − discount = total due</span></div><span class="val-res">$15,091.75</span></div>
-          <div class="val-row"><span class="val-ic ok">✓</span><div><b>PO reference format</b><span class="d">Matches your PO number pattern</span></div><span class="val-res">PO-2024-0284</span></div>
-          <div class="val-row flag"><span class="val-ic warn">!</span><div><b>Example of a flagged check</b><span class="d">Lines sum to $14,204.00 but subtotal reads $14,240.00, so the field is sent to review with a low-confidence score</span></div><span class="val-res">review</span></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 8. SELF-SERVE OR MANAGED -->
-  <section class="sec stone" id="managed">
-    <div class="container">
-      <div class="managed">
-        <span class="eyebrow">Self-serve or managed</span>
-        <h2>Don&rsquo;t want to build the AP config yourself? <em>Our team can run the extraction backend for you.</em></h2>
-        <p>Solutions engineers handle plan, build, deploy, and adjust on your behalf. You see clean JSON in your API response. Same engine as self-serve, with the configuration work outsourced.</p>
-        <div class="m-steps">
-          <div class="m-step"><i>01</i><b>Plan</b><span>Engineers review your samples and pick the right method</span></div>
-          <div class="m-step"><i>02</i><b>Build</b><span>SenseML configs written from your samples</span></div>
-          <div class="m-step"><i>03</i><b>Deploy</b><span>Same engine as self-serve, ready for production</span></div>
-          <div class="m-step"><i>04</i><b>Adjust</b><span>Configs updated when formats shift or new edge cases appear</span></div>
-          <div class="m-step"><i>05</i><b>Integrate</b><span>Help with custom integration into your downstream systems</span></div>
-        </div>
-        <div class="m-actions">
-          <a class="m-btn p" href="https://www.sensible.so/managed-services">See managed services →</a>
-          <a class="m-btn s" href="https://www.sensible.so/contact-us">Talk to our team</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 9. SUPPORTED FORMATS -->
-  <section class="sec white" id="formats">
-    <div class="container">
-      <div class="sec-head">
-        <span class="sec-eyebrow">Supported formats</span>
-        <h2 class="sec-h2">Any vendor, any accounting system, any country</h2>
-        <p class="sec-desc">The extraction logic is explicit in SenseML, not hidden in prompt tuning, so new formats can be configured quickly and audited later.</p>
-      </div>
-      <div class="fmt-list">
-        <div class="fmt-row"><h3>By source<small>accounting systems</small></h3><ul class="field-list">{chips(['QuickBooks','Xero','NetSuite','SAP','Oracle','FreshBooks','Wave','Custom / manual invoices'])}</ul></div>
-        <div class="fmt-row"><h3>By type<small>invoice variants</small></h3><ul class="field-list">{chips(['Standard invoices','Credit memos','Debit notes','Proforma invoices','Recurring invoices','Construction progress billing'])}</ul></div>
-        <div class="fmt-row"><h3>By AP document<small>for three-way matching</small></h3><ul class="field-list">{chips(['Purchase orders','Goods receipts','Remittance advices'])}</ul></div>
-      </div>
-      <p class="fmt-note">Three-way matching needs all three document types extracted consistently, so purchase orders and goods receipts run through the same schema-validated pipeline as invoices.</p>
-    </div>
-  </section>
-
-  <!-- 10. FAQ -->
-  <section class="faq-section" id="faq" style="background:var(--bg-stone-subtle)">
-    <div class="container">
-      <div class="sec-head">
-        <span class="sec-eyebrow">Common questions</span>
-        <h2 class="sec-h2">Answers for AP teams</h2>
-        <p class="sec-desc">Straight answers on matching, duplicates, pricing, and where Sensible stops and your AP system starts.</p>
-      </div>
-      <div class="faq-container">
-        {''.join(faqs_ap)}
-      </div>
-    </div>
-  </section>
-
+{mid_sections(fields_section(), ''.join(faqs_ap))}
   <!-- 11. CLOSING CTA -->
   <section class="cta-banner">
     <div class="cta-inner">
