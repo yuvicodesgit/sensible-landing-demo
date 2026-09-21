@@ -850,6 +850,20 @@
       .ft-key, .ft-note, .ft-chk { grid-column: 1 / -1; }
     }
 
+
+    /* ---------- STATS RIBBON: exact values from sensible.so (.d12-ribbon / .d12-proof) ---------- */
+    .d12-ribbon { background-color: #f8f6f1; border-top: 1px solid #e8e3db; }
+    .d12-proof { display: grid; grid-template-columns: repeat(4, 1fr); }
+    .d12-proof-cell { display: flex; flex-direction: column; align-items: center; text-align: center; row-gap: 3px; padding: 19px 22px 17px; border-left: 1px solid #e8e3db; }
+    .d12-proof-cell:first-child { border-left: none; }
+    .d12-proof-v { color: #1a1520; margin: 0; font-family: 'IBM Plex Serif', serif; font-size: 1.375rem; font-weight: 400; line-height: 1.05; }
+    .d12-proof-l { color: #8b857b; letter-spacing: .12em; text-transform: uppercase; margin: 0; font-family: 'IBM Plex Mono', monospace; font-size: .625rem; }
+    @media (max-width: 767px) {
+      .d12-proof { grid-template-columns: 1fr 1fr; }
+      .d12-proof-cell:nth-child(2n+1) { border-left: none; }
+      .d12-proof-cell:nth-child(n+3) { border-top: 1px solid #e8e3db; }
+    }
+
     /* ---------- LIGHT THEME OVERRIDES: no black anywhere on this page ---------- */
     .demo-tab[aria-selected="true"] { background: var(--brand-gradient); color: #fff; border-color: transparent; box-shadow: 0 2px 8px var(--brand-magenta-glow); }
     .demo-json-col { background: var(--bg-white); color: var(--text-dark); border-left: 1px solid var(--border-stone); }
@@ -1158,14 +1172,20 @@
         <p class="demo-caption">Hover a field to trace it to the source. Sample data; output is illustrative.</p>
       </div>
      </div>
-      <div class="stats-row">
-        <div class="stat hot"><b>75M+</b><span>documents processed</span></div>
-        <div class="stat hot"><b>150+</b><span>library configurations, so your vendor formats have likely been seen before</span></div>
-        <div class="stat"><b>Validated JSON</b><span>Schema-enforced output; every field matches your contract</span></div>
-        <div class="stat"><b>Per-document</b><span>Predictable cost. No token-volatility surprises</span></div>
-      </div>
     </div>
   </section>
+
+  <!-- STATS RIBBON (same component as sensible.so homepage) -->
+  <div class="d12-ribbon">
+    <div class="container">
+      <div class="d12-proof">
+        <div class="d12-proof-cell"><p class="d12-proof-v">75M+</p><p class="d12-proof-l">documents processed</p></div>
+        <div class="d12-proof-cell"><p class="d12-proof-v">150+</p><p class="d12-proof-l">library configurations</p></div>
+        <div class="d12-proof-cell"><p class="d12-proof-v">SOC 2 + HIPAA</p><p class="d12-proof-l">independently audited</p></div>
+        <div class="d12-proof-cell"><p class="d12-proof-v">No credit card</p><p class="d12-proof-l">14-day free trial</p></div>
+      </div>
+    </div>
+  </div>
 
   <!-- 3. TRUST STRIP -->
   <!-- ANIMATED LOGO MARQUEE SCROLLER -->
