@@ -458,6 +458,26 @@ new_css = r"""
     .hard-card.ap { border-color: rgba(132,0,85,.35); }
     .ap-hero { border-bottom: none; }
 
+
+    /* no beige: white sections, neutral (non-warm) grey only for inset panels */
+    :root { --bg-stone-subtle: #FFFFFF; --warm-alt: #FFFFFF; --neutral-soft: #F6F6F7; --neutral-line: #E6E6E9; }
+    body, .ap-hero, .demo-sec { background: #fff; }
+    .sec.stone, .sec.white, .faq-section { background: #fff !important; }
+    .sec.stone, .sec.white { border-top: 1px solid var(--neutral-line); }
+    .demo-doc-col, .json-body, .api-bar, .ft-head, .val-head, .field-card, .fmt-list, .ft-schema, .m-step, .pipe-down, .ft-row:not(.ft-head):hover { background: var(--neutral-soft); }
+    .demo-doc-col, .demo-json-col, .api-bar, .json-foot, .ft-table, .val-card, .fmt-list, .field-card, .ft-schema, .m-step, .hard-card, .pipe-scope, .pipe-stage, .pl-stage, .trace-strip, .managed, .demo-frame, .faq-accordion, .ft-row, .fmt-row, .val-row, .val-head, .ft-head { border-color: var(--neutral-line); }
+    .pipe-scope-label { background: #fff; }
+    .hard-card.ap { border-color: rgba(132,0,85,.35); }
+    .ft-t { background: var(--neutral-soft); }
+    .val-row.flag { background: #FFF7EA; }
+    .faq-accordion { background: #fff; }
+    .marquee-section { background-image: none; background-color: #fff; }
+
+
+    .d12-ribbon { background-color: var(--neutral-soft); border-top: 1px solid var(--neutral-line); border-bottom: 1px solid var(--neutral-line); }
+    .d12-proof-cell { border-left-color: var(--neutral-line); }
+    @media (max-width: 767px) { .d12-proof-cell:nth-child(n+3) { border-top-color: var(--neutral-line); } }
+
     /* ---------- responsive ---------- */
     @media (max-width: 1100px) {
       .pipe-grid { grid-template-columns: 1fr; gap: 26px; }
