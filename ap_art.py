@@ -44,27 +44,83 @@ def hero_rects():
 
 
 # ---------------------------------------------------------------- chaos -> order scene
+SANS = "font-family=\"IBM Plex Sans, sans-serif\""
+SERIF = "font-family=\"IBM Plex Serif, serif\""
+MUTE = '#8B857B'
+
+
+def _t(x, y, txt, size, fam=SANS, fill=INK, anchor='start', weight=400, ls=0):
+    return (f'<text x="{x}" y="{y}" font-size="{size}" {fam} fill="{fill}" stroke="none" '
+            f'text-anchor="{anchor}" font-weight="{weight}" letter-spacing="{ls}">{txt}</text>')
+
+
+def _rows(x0, x1, y0, rows, step=10, size=6.5):
+    out = ''
+    for i, (d, amt) in enumerate(rows):
+        y = y0 + i * step
+        out += _t(x0, y, d, size) + _t(x1, y, amt, size, anchor='end', fam=MONO)
+        out += f'<path d="M{x0} {y+3.5}H{x1}" stroke="#E6E6E9" stroke-width=".8"/>'
+    return out
+
+
+def chaos_doc(v, name, num, total, rows):
+    """One vendor invoice. Three layouts on purpose: fields sit in different places per vendor."""
+    W, H = 172, 122
+    s = f'<rect width="{W}" height="{H}" rx="3" fill="#fff"/>'
+    if v == 0:      # header left, total bottom-right
+        s += _t(10, 18, name, 9, SERIF, weight=500) + _t(162, 17, 'INVOICE', 6.5, MONO, anchor='end', ls=1.4)
+        s += _t(162, 26, num, 5.5, MONO, MUTE, 'end')
+        s += f'<path d="M10 33H162" stroke-width=".9" opacity=".5"/>'
+        s += _t(10, 43, 'DESCRIPTION', 5, MONO, MUTE, ls=.6) + _t(162, 43, 'AMOUNT', 5, MONO, MUTE, 'end', ls=.6)
+        s += _rows(10, 162, 54, rows)
+        s += _t(10, 106, 'TOTAL DUE', 5.5, MONO, MUTE, ls=.6)
+        s += _t(156, 106, total, 8, MONO, INK, 'end', 600)
+        tx, ty, tw, th = 100, 94, 64, 17
+    elif v == 1:    # big title, boxed table, total bottom-left
+        s += _t(10, 24, 'Invoice', 15, SERIF, weight=500) + _t(10, 35, name, 6.5, SANS, MUTE)
+        s += _t(162, 18, num, 5.5, MONO, MUTE, 'end') + _t(162, 27, 'Net 30', 5.5, MONO, MUTE, 'end')
+        s += f'<rect x="10" y="42" width="152" height="46" rx="2" stroke-width=".9" opacity=".6"/>'
+        s += f'<path d="M10 53H162M10 64H162M10 75H162M118 42V88" stroke-width=".7" opacity=".45"/>'
+        for i, (d, amt) in enumerate(rows):
+            y = 50 + i * 11
+            s += _t(14, y, d, 6) + _t(158, y, amt, 5.8, MONO, anchor='end')
+        s += _t(14, 103, 'Amount due', 6, SANS, MUTE) + _t(14, 114, total, 9, MONO, INK, weight=600)
+        tx, ty, tw, th = 10, 96, 70, 22
+    else:           # centered vendor, total top-right, lines below
+        s += _t(86, 16, name, 9, SERIF, anchor='middle', weight=500)
+        s += _t(10, 40, 'Ref ' + num, 5.5, MONO, MUTE)
+        s += _t(162, 39, total, 8, MONO, INK, 'end', 600) + _t(162, 32, 'TOTAL', 5, MONO, MUTE, 'end', ls=.6)
+        s += f'<path d="M10 47H162" stroke-width=".9" opacity=".5"/>'
+        s += _rows(10, 162, 58, rows, step=11)
+        s += _t(10, 112, 'Payable within 30 days', 5.5, SANS, MUTE)
+        tx, ty, tw, th = 108, 24, 58, 19
+    s += (f'<rect class="ap-cs-hl" x="{tx}" y="{ty}" width="{tw}" height="{th}" rx="2" fill="rgba(132,0,85,.08)" '
+          f'stroke="{MAG}" stroke-width="1.2" stroke-dasharray="3 3"/>')
+    return s
+
+
 def chaos_scene():
     defs = ('<defs><linearGradient id="apg" x1="0" y1="0" x2="1" y2="1">'
             f'<stop offset="0" stop-color="{MAG}"/><stop offset="1" stop-color="#F89C2A"/></linearGradient></defs>')
-    scatter = [(-230, -110, -22), (60, -170, 14), (250, -90, 26), (-200, 40, 12), (20, 150, -30),
-               (210, 120, -14), (-90, 190, 20), (150, -20, -40), (-30, -60, 32)]
-    variants = [(96, 80), (14, 80), (96, 10)]  # where the "total" sits on each doc
-    out = ['<svg class="ap-chaos-svg" viewBox="55 20 600 470" xmlns="http://www.w3.org/2000/svg" '
+    scatter = [(-150, -70, -18), (150, -90, 20), (-130, 60, 14), (120, 50, -22), (-80, 140, -26), (140, 120, 30)]
+    docs = [
+        ('Northbridge Studio', 'NB-2024-0418', '$15,091.75', [('Strategy workshop', '3,700.00'), ('UX research', '3,400.00'), ('Design audit', '4,200.00')]),
+        ('Halden &amp; Co.', 'HC-88213', '$8,940.00', [('Freight', '2,100.00'), ('Handling', '640.00'), ('Insurance', '6,200.00')]),
+        ('Kite Freight', '#4471', 'USD 1,205.50', [('Pallets x4', '480.00'), ('Fuel surcharge', '95.50'), ('Delivery', '630.00')]),
+        ('ACME Supply', 'AS-1029', '$3,317.20', [('Materials', '1,900.00'), ('Tooling', '1,200.00'), ('Tax', '217.20')]),
+        ('Orrin Labs', 'OL-5560', '$22,480.00', [('Assay panel', '9,600.00'), ('Sample prep', '4,880.00'), ('Rush fee', '8,000.00')]),
+        ('Bellweather LLC', 'BW-0317', '$640.00', [('Hosting', '400.00'), ('Support', '190.00'), ('Domain', '50.00')]),
+    ]
+    out = ['<svg class="ap-chaos-svg" viewBox="36 8 438 522" xmlns="http://www.w3.org/2000/svg" '
            'fill="none" stroke="url(#apg)" stroke-width="1.4" aria-hidden="true" focusable="false">', defs]
     n = 0
     for j in range(3):
-        for i in range(3):
-            bx, by = 95 + i * 190, 55 + j * 140
-            dx, dy, r = scatter[n]
-            tx, ty = variants[n % 3]
-            out.append(
-                f'<g transform="translate({bx} {by})"><g class="ap-cs" data-dx="{dx}" data-dy="{dy}" data-r="{r}">'
-                f'<rect width="150" height="104" rx="3" fill="#fff"/>'
-                f'<path d="M12 14h44M12 24h70M12 34h56M12 44h64" stroke-width="1.1" opacity=".6"/>'
-                f'<rect class="ap-cs-hl" x="{tx}" y="{ty}" width="40" height="14" fill="rgba(132,0,85,.10)" stroke="{MAG}" stroke-dasharray="3 3"/>'
-                f'<path d="M{tx+6} {ty+7}h28" stroke="{MAG}" stroke-width="1.2"/>'
-                f'</g></g>')
+        for i in range(2):
+            bx, by = 56 + i * 212, 28 + j * 152
+            dx, dy, rot = scatter[n]
+            name, num, total, rows = docs[n]
+            out.append(f'<g transform="translate({bx} {by})"><g class="ap-cs" data-dx="{dx}" data-dy="{dy}" data-r="{rot}">'
+                       f'{chaos_doc(n % 3, name, num, total, rows)}</g></g>')
             n += 1
     out.append('</svg>')
     return ''.join(out)

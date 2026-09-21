@@ -99,17 +99,13 @@
   var cs = $$('.ap-cs');
   if (cs.length) {
     cs.forEach(function (el) {
-      gsap.set(el, { x: +el.dataset.dx, y: +el.dataset.dy, rotation: +el.dataset.r, transformOrigin: '75px 52px' });
+      gsap.set(el, { x: +el.dataset.dx, y: +el.dataset.dy, rotation: +el.dataset.r, transformOrigin: '86px 61px' });
     });
     gsap.timeline({ scrollTrigger: { trigger: '.ap-chaos', start: 'top 70%', end: 'center 42%', scrub: 0.8 } })
       .to(cs, { x: 0, y: 0, rotation: 0, duration: 1, ease: 'power2.inOut', stagger: 0.04 }, 0)
       .to('.ap-chaos-label .a', { opacity: 0, duration: 0.25 }, 0.35)
       .to('.ap-chaos-label .b', { opacity: 1, duration: 0.3 }, 0.6)
       .to('.ap-cs-hl', { opacity: 1, duration: 0.4, stagger: 0.05 }, 0.8);
-    /* gentle idle drift while scattered */
-    cs.forEach(function (el, i) {
-      gsap.to(el, { rotation: '+=' + (i % 2 ? 3 : -3), duration: 3 + (i % 3), repeat: -1, yoyo: true, ease: 'sine.inOut' });
-    });
   }
 
   /* generic reveal */
