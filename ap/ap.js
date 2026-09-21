@@ -37,9 +37,11 @@
     t.addEventListener('click', function () {
       $$('.ap-ftab').forEach(function (x) { x.setAttribute('aria-selected', x === t ? 'true' : 'false'); });
       $$('.ap-fpane').forEach(function (p) { p.classList.toggle('on', p.id === 'ap-f-' + t.dataset.ft); });
+      var sc = $('.ap-schem'); if (sc) sc.dataset.active = t.dataset.ft;
       afterField();
     });
   });
+  var sc0 = $('.ap-schem'); if (sc0) sc0.dataset.active = 'header';
 
   /* ---------- motion ---------- */
   if (!window.gsap || !window.ScrollTrigger || reduce) { html.classList.remove('ap-js'); return; }

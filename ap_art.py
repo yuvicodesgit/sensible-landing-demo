@@ -210,3 +210,27 @@ def icon(name):
     }[name]
     return (f'<svg class="ap-icon" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="{INK}" '
             f'stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">{p}</svg>')
+
+
+# ---------------------------------------------------------------- invoice schematic for the fields explorer
+def schematic():
+    def lines(x, y, n, w=150, step=9, op=.5):
+        return ''.join(f'<path d="M{x} {y + i * step}h{w - (i % 3) * 22}" stroke-width="1.1" opacity="{op}"/>' for i in range(n))
+    s = _open(230, 300, 'ap-schem')
+    s += f'<rect x="19" y="13" width="200" height="278" rx="3" fill="{SH}" stroke="none"/><rect x="14" y="8" width="200" height="278" rx="3" fill="#fff"/>'
+    # header
+    s += '<g class="rg rg-header"><rect class="bg" x="22" y="16" width="184" height="70" rx="2"/>'
+    s += f'<text x="30" y="34" font-size="10" {SERIF} fill="{INK}" stroke="none" font-weight="500">Vendor name</text>'
+    s += f'<text x="198" y="34" font-size="7" {MONO} fill="{INK}" stroke="none" text-anchor="end" letter-spacing="1.4">INVOICE</text>'
+    s += lines(30, 44, 3, 96) + f'<path d="M150 44h48M150 53h48M150 62h48" stroke="{MAG}" stroke-width="1.4" opacity=".7"/>'
+    s += f'<text x="30" y="80" font-size="6" {MONO} fill="{MAG}" stroke="none" letter-spacing=".8" class="lb">HEADER · 9 FIELDS</text></g>'
+    # line items
+    s += '<g class="rg rg-lines"><rect class="bg" x="22" y="96" width="184" height="112" rx="2"/>'
+    s += '<path d="M30 112h168M30 128h168M30 144h168M30 160h168M30 176h168M30 112V176M112 112V176M150 112V176" stroke-width=".9" opacity=".45"/>'
+    s += lines(34, 121, 1, 60) + lines(34, 137, 1, 50) + lines(34, 153, 1, 64) + lines(34, 169, 1, 44)
+    s += f'<text x="30" y="202" font-size="6" {MONO} fill="{MAG}" stroke="none" letter-spacing=".8" class="lb">LINE ITEMS · 8 FIELDS</text></g>'
+    # totals
+    s += '<g class="rg rg-totals"><rect class="bg" x="22" y="216" width="184" height="62" rx="2"/>'
+    s += '<path d="M116 228h82M116 240h82M116 252h82" stroke-width="1.1" opacity=".5"/><path d="M116 262h82" stroke-width="1.6"/>'
+    s += f'<text x="30" y="272" font-size="6" {MONO} fill="{MAG}" stroke="none" letter-spacing=".8" class="lb">TOTALS · 8 FIELDS</text></g>'
+    return s + '</svg>'

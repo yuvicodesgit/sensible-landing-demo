@@ -6,7 +6,7 @@ Outputs
   accounts-payable.html  standalone demo page = real nav + fragment + real CTA/footer + GSAP
 """
 import re
-from ap_art import hero_rects, chaos_scene, mini, pipe_ill, icon
+from ap_art import hero_rects, chaos_scene, mini, pipe_ill, icon, schematic
 
 src = open('index.html').read().split('\n')
 L = lambda a, b: '\n'.join(src[a - 1:b])
@@ -151,35 +151,35 @@ demo = (pane('inv', True, doc_inv(), '/v0/extract/invoice', 'invoice', json_inv(
 # ============================================================ section content
 FIELD_TABS = [
     ('header', 'Header', '01', 9, [
-        ('Invoice number', 'invoice_number', 'string', 'Kept exactly as printed. With vendor, date and total it forms a duplicate-check key in your system.', ''),
-        ('Invoice date', 'invoice_date', 'date', 'ISO 8601 value; the original text is preserved alongside it as <code>source</code>.', ''),
-        ('Due date', 'due_date', 'date', 'ISO 8601 value with the original text preserved.', ''),
-        ('PO number', 'po_number', 'string', 'Format-checked, and kept clean enough to match against the PO and goods receipt it references.', 'PO format'),
-        ('Vendor name', 'vendor_name', 'string', 'Mapped to your schema whether the invoice says &ldquo;From&rdquo;, &ldquo;Billed by&rdquo; or &ldquo;Seller&rdquo;.', ''),
-        ('Vendor address', 'vendor_address', 'string', 'Captured as printed, from the header or the footer of the document.', ''),
-        ('Bill-to name', 'bill_to_name', 'string', 'The entity being billed, for entity and cost-center routing.', ''),
-        ('Bill-to address', 'bill_to_address', 'string', 'Captured as printed.', ''),
-        ('Payment terms', 'payment_terms', 'string', 'Terms as written (Net 30, 2/10 Net 30) so your system can compute the due date its own way.', ''),
+        ('Invoice number', 'invoice_number', 'string', 'Kept as printed; part of a duplicate-check key in your system.', ''),
+        ('Invoice date', 'invoice_date', 'date', 'ISO 8601 value, with the printed text kept as <code>source</code>.', ''),
+        ('Due date', 'due_date', 'date', 'ISO 8601 value, printed text kept.', ''),
+        ('PO number', 'po_number', 'string', 'Format-checked and clean enough to match a PO and receipt.', 'PO format'),
+        ('Vendor name', 'vendor_name', 'string', 'Mapped from &ldquo;From&rdquo;, &ldquo;Billed by&rdquo;, &ldquo;Seller&rdquo; and the like.', ''),
+        ('Vendor address', 'vendor_address', 'string', 'As printed, from the header or footer.', ''),
+        ('Bill-to name', 'bill_to_name', 'string', 'The billed entity, for routing.', ''),
+        ('Bill-to address', 'bill_to_address', 'string', 'As printed.', ''),
+        ('Payment terms', 'payment_terms', 'string', 'As written (Net 30, 2/10 Net 30).', ''),
     ]),
     ('lines', 'Line items', '02', 8, [
-        ('Description', 'description', 'string', 'Multi-line descriptions are kept together as one row instead of splitting across lines.', ''),
-        ('Quantity', 'quantity', 'number', 'Parsed to a number; handles credit-memo negatives.', ''),
-        ('Unit price', 'unit_price', 'currency', 'Parsed to a number; the printed text is preserved in <code>source</code>.', ''),
-        ('Unit of measure', 'unit_of_measure', 'string', 'Hours, each, per diem or whatever the vendor prints, when the invoice carries one.', ''),
-        ('Discount', 'discount', 'currency', 'Row-level discount, when present.', ''),
-        ('Tax amount', 'tax_amount', 'currency', 'Row-level tax for invoices with varying tax codes.', 'Tax'),
-        ('Extended amount', 'extended_amount', 'currency', 'The row total. Tables that run across page breaks are read as one table.', 'Subtotal'),
-        ('SKU / part number', 'sku', 'string', 'Captured when present, so lines can be matched to PO lines.', ''),
+        ('Description', 'description', 'string', 'Multi-line descriptions stay in one row.', ''),
+        ('Quantity', 'quantity', 'number', 'Parsed to a number; credit-memo negatives handled.', ''),
+        ('Unit price', 'unit_price', 'currency', 'A number, with the printed text kept as <code>source</code>.', ''),
+        ('Unit of measure', 'unit_of_measure', 'string', 'Hours, each, per diem: whatever is printed.', ''),
+        ('Discount', 'discount', 'currency', 'Row-level, when present.', ''),
+        ('Tax amount', 'tax_amount', 'currency', 'Row-level tax for mixed tax codes.', 'Tax'),
+        ('Extended amount', 'extended_amount', 'currency', 'The row total. Tables across page breaks read as one.', 'Subtotal'),
+        ('SKU / part number', 'sku', 'string', 'When present, so lines can match PO lines.', ''),
     ]),
     ('totals', 'Totals', '03', 8, [
-        ('Subtotal', 'subtotal', 'currency', 'Checked against the sum of the line items.', 'Subtotal'),
+        ('Subtotal', 'subtotal', 'currency', 'Checked against the sum of the lines.', 'Subtotal'),
         ('Discount total', 'discount_total', 'currency', 'Document-level discount.', ''),
         ('Tax total', 'tax_total', 'currency', 'Checked against the stated tax rate.', 'Tax'),
-        ('Shipping / freight', 'shipping_freight', 'currency', 'Separated from the goods total so it does not distort the subtotal check.', ''),
+        ('Shipping / freight', 'shipping_freight', 'currency', 'Kept apart from goods so the subtotal check stays clean.', ''),
         ('Grand total', 'grand_total', 'currency', 'Must reconcile: subtotal + tax + shipping &minus; discount.', 'Total'),
         ('Amount paid', 'amount_paid', 'currency', 'For part-paid invoices and deposits.', ''),
         ('Balance due', 'balance_due', 'currency', 'What is actually payable now.', ''),
-        ('Currency', 'currency', 'string', 'The currency printed on the document, so multi-currency AP does not guess.', ''),
+        ('Currency', 'currency', 'string', 'As printed, so multi-currency AP does not guess.', ''),
     ]),
 ]
 
@@ -192,12 +192,13 @@ def fields_block():
     panes = ''
     for i, (k, name, num, n, rows) in enumerate(FIELD_TABS):
         body = ''.join(
-            f'<div class="ap-frow"><div class="ap-fname">{f}</div><div><code>{key}</code></div>'
-            f'<div class="ap-tp"><span class="ap-type t-{typ}">{typ}</span></div><div>{note}</div>'
-            f'<div>{f"<span class=ap-chk>{chk}</span>" if chk else ""}</div></div>'
+            f'<div class="ap-frow"><div class="ap-fname">{f}</div>'
+            f'<div class="ap-fkey"><code>{key}</code><span class="ap-type t-{typ}">{typ}</span></div>'
+            f'<div class="ap-fnote">{note}</div>'
+            f'<div class="ap-fchk">{f"<span class=ap-chk>{chk}</span>" if chk else ""}</div></div>'
             for f, key, typ, note, chk in rows)
         panes += (f'<div class="ap-fpane{" on" if i == 0 else ""}" id="ap-f-{k}" role="tabpanel">'
-                  f'<div class="ap-frow h"><div>Field</div><div>Schema key</div><div>Type</div><div>How Sensible handles it</div><div>Validated in</div></div>{body}</div>')
+                  f'<div class="ap-frow h"><div>Field</div><div>Schema key</div><div>How Sensible handles it</div><div>Validated in</div></div>{body}</div>')
     return tabs, panes
 
 
@@ -356,6 +357,7 @@ fragment = f'''<div class="ap">
         <h2 class="ap-h2">The fields we extract</h2>
         <p class="ap-lede">Grouped the way AP teams ask for them. Each field comes back typed, keeps the text as printed, and points to where it sits on the page.</p>
         <div class="ap-ftabs" role="tablist" aria-label="Field groups">{ftabs}</div>
+        <div class="ap-schem-wrap">{schematic()}</div>
       </div>
       <div data-reveal>
         {fpanes}
