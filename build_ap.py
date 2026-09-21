@@ -21,6 +21,32 @@ marq_html = marq_html.replace('Trusted by teams turning complex documents into p
                               'Trusted by teams turning documents into production data')
 
 new_css = r"""
+
+    /* ============ SENSIBLE DESIGN TOKENS (read from the Webflow site via MCP: Brand variable collection) ============ */
+    :root {
+      --bg-stone: #FEFDFB;          /* --_brand---bg-primary */
+      --bg-stone-subtle: #F8F6F1;   /* --_brand---bg-alt */
+      --bg-white: #FFFFFF;          /* --_brand---bg-surface */
+      --bg-darkest: #1A1520;        /* --_brand---bg-dark */
+      --bg-dark-accent: #1A1520;
+      --brand-magenta: #840055;     /* --_brand---accent */
+      --brand-magenta-light: #9A1066;
+      --brand-magenta-dark: #4B0532;
+      --brand-magenta-glow: rgba(132, 0, 85, 0.15);
+      --text-dark: #1A1520;         /* --_brand---text-primary */
+      --text-body: #4A4540;         /* --_brand---text-secondary */
+      --text-muted: #8B857B;        /* --_brand---text-tertiary */
+      --border-stone: #E8E3DB;      /* --_brand---border */
+      --border-light: #F0ECE5;      /* --_brand---border-light */
+      --check-green: #2E7B40;       /* --ok */
+      --warn: #D88B1F;              /* --warn */
+      --cta-amber: #F89C2A;         /* --_brand---cta */
+      --warm-alt: #F0EBE0;          /* .dt-sec-alt */
+      --warm-alt-border: #D8D0C0;
+      --shadow-soft: 0 4px 20px rgba(26, 21, 32, 0.04);
+      --shadow-medium: 0 12px 36px rgba(26, 21, 32, 0.06);
+      --shadow-float: 0 24px 60px rgba(26, 21, 32, 0.08);
+    }
     .sensible-font { font-family: 'Matter SQ', var(--font-sans); font-weight: 500; }
     section[id] { scroll-margin-top: 80px; }
 
@@ -43,7 +69,7 @@ new_css = r"""
 
     /* ---------- 1. HERO ---------- */
     .ap-hero { padding: 72px 0 40px; text-align: center;
-      background: radial-gradient(ellipse at 50% -10%, rgba(132,0,85,0.07), transparent 60%), var(--bg-stone); }
+      background: var(--bg-stone); }
     .ap-hero .eyebrow { display: inline-block; margin-bottom: 20px; }
     .ap-h1 {
       font-family: var(--font-serif); font-weight: 400; color: var(--text-dark);
@@ -144,7 +170,7 @@ new_css = r"""
 
     /* ---------- 6. PIPELINE ---------- */
     .pipe-scope { border: 1.5px dashed rgba(132,0,85,.45); border-radius: 20px; padding: 26px 22px 24px; position: relative; background: rgba(255,255,255,.55); }
-    .pipe-scope-label { position: absolute; top: -12px; left: 24px; background: var(--bg-stone-subtle); padding: 0 12px; font-family: var(--font-mono);
+    .pipe-scope-label { position: absolute; top: -12px; left: 24px; background: var(--warm-alt); padding: 0 12px; font-family: var(--font-mono);
       font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--brand-magenta); font-weight: 600; }
     .pipe-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 22px; }
     .pl-stage { background: var(--bg-white); border: 1px solid var(--border-stone); border-radius: 14px; padding: 22px 18px 20px; position: relative; display: flex; flex-direction: column; box-shadow: var(--shadow-soft); }
@@ -358,6 +384,71 @@ new_css = r"""
     .m-btn.p:hover { background: linear-gradient(135deg, var(--brand-magenta-dark), var(--brand-magenta)); }
     .m-btn.s { border: 1px solid var(--border-stone); color: var(--text-dark); background: var(--bg-white); }
     .m-btn.s:hover { border-color: var(--text-muted); }
+
+
+    /* ============ MATCH REAL .dt-* / .sp-* STYLES (queried via Webflow MCP) ============ */
+    /* sections: .dt-sec (white, 1px #E8E3DB borders) and .dt-sec-alt (#F0EBE0, #D8D0C0 borders) */
+    .sec.white { background: #fff; border-top: 1px solid var(--border-stone); border-bottom: 1px solid var(--border-stone); }
+    .sec.stone { background: var(--warm-alt); border-top: 1px solid var(--warm-alt-border); border-bottom: 1px solid var(--warm-alt-border); }
+    .ap-hero { background: var(--bg-stone); }
+
+    /* headings: .dt-h1 / .dt-h2 */
+    .ap-hero .ap-h1 { font-size: clamp(2rem, 3.6vw, 3rem); line-height: 1.05; letter-spacing: -0.02em; font-weight: 400; }
+    .sec-h2, .val-copy h2 { font-size: 2.5rem; line-height: 1.12; letter-spacing: -0.015em; font-weight: 400; }
+    .managed h2 { font-size: 2.5rem; line-height: 1.12; letter-spacing: -0.015em; }
+    .sec-desc, .ap-hero .ap-frame, .val-copy p, .managed > p { font-size: 1.0625rem; line-height: 1.6; color: var(--text-body); }
+    .sec-desc { max-width: 56ch; }
+
+    /* eyebrows: .ms-flow-eyebrow (IBM Plex Mono .6875rem / 500 / .18em, accent) */
+    .eyebrow, .sec-eyebrow { font-family: var(--font-mono); font-size: .6875rem; font-weight: 500; letter-spacing: .18em; text-transform: uppercase; color: var(--brand-magenta); }
+    .sec-eyebrow { margin-bottom: 14px; display: block; }
+
+    /* buttons: .dt-btn / .dt-btn-primary (solid #840055) / .dt-btn-secondary */
+    .ap-hero .btn { font-size: .9375rem; font-weight: 500; padding: 12px 22px; border-radius: 6px; }
+    .ap-hero .btn-primary { background: #840055; box-shadow: none; }
+    .ap-hero .btn-primary:hover { background: #4B0532; transform: none; box-shadow: none; }
+    .ap-hero .btn-secondary { background: #fff; color: var(--text-dark); border-color: var(--border-stone); }
+    .demo-tab[aria-selected="true"], .ft-tab[aria-selected="true"] { background: #840055; box-shadow: none; }
+    .m-btn { font-size: .9375rem; font-weight: 500; padding: 12px 22px; border-radius: 6px; }
+    .m-btn.p { background: #840055; box-shadow: none; } .m-btn.p:hover { background: #4B0532; }
+
+    /* cards: .dt-supported-card (white, 1px #E8E3DB, 12px radius, 32/32/28) */
+    .hard-card, .field-card, .val-card, .ft-table, .fmt-list, .managed, .ft-schema, .demo-frame { border-radius: 12px; }
+    .hard-card { padding: 32px 32px 28px; }
+    .hard-card h3 { font-size: 1.25rem; font-weight: 500; letter-spacing: 0; line-height: 1.3; }
+    .hard-card p { font-size: .9375rem; line-height: 1.6; }
+    .hard-card.ap { border-color: rgba(132,0,85,.4); background: #fff; }
+    /* numbers/labels: .dt-field-cat-num (Plex Mono .6875rem / 500 / .16em, #8B857B) */
+    .hard-num { font-family: var(--font-mono); font-size: .6875rem; font-weight: 500; letter-spacing: .16em; color: var(--text-muted); }
+    .hard-tag { background: #840055; color: #fff; font-size: .625rem; letter-spacing: .14em; }
+    .pl-num { width: auto; height: auto; border-radius: 0; background: none; color: var(--brand-magenta); font-size: .6875rem; font-weight: 500; letter-spacing: .16em; margin-bottom: 12px; justify-content: flex-start; }
+    .pl-stage { border-radius: 12px; }
+    .pl-stage h3 { font-size: 1.25rem; font-weight: 500; letter-spacing: 0; }
+    .pl-stage p { font-size: .9375rem; }
+    .m-step b { font-weight: 500; font-size: 1.125rem; }
+    .fmt-row h3, .ft-field { font-weight: 500; }
+
+    /* chips: .dt-quick-link */
+    .chip { font-size: .8125rem; padding: 8px 14px; color: var(--text-body); border: 1px solid var(--border-stone); background: #fff; }
+    .field-card { background: var(--bg-stone-subtle); }
+    .fmt-list { background: var(--bg-stone-subtle); }
+
+    /* FAQ: .dt-faq-summary (Plex Serif 1.125rem / 500) + .dt-faq-body (.9375rem) */
+    .faq-summary { font-size: 1.125rem; font-weight: 500; }
+    .faq-content, .faq-content p { font-size: .9375rem; line-height: 1.6; }
+
+    /* status colors: --ok #2E7B40, --warn #D88B1F (no blue in the brand palette) */
+    .val-ic.ok { background: var(--check-green); } .val-ic.warn { background: var(--warn); }
+    .val-row.flag { background: rgba(216,139,31,.08); } .val-row.flag .val-res { color: #A8620F; }
+    .ft-check { color: var(--check-green); background: rgba(46,123,64,.10); }
+    .api-bar .verb { background: rgba(46,123,64,.12); color: var(--check-green); } .api-bar .ok { color: var(--check-green); }
+    .js { color: var(--check-green); } .jn { color: #A8620F; }
+    .trace-strip .v { color: #A8620F; }
+    .ft-t.t-date { color: var(--brand-magenta); border-color: rgba(132,0,85,.2); background: rgba(132,0,85,.05); }
+    .ft-t.t-currency, .ft-t.t-number { color: #A8620F; border-color: rgba(216,139,31,.3); background: rgba(216,139,31,.08); }
+    .ft-key code, .ft-note code { background: rgba(132,0,85,.06); }
+    [data-f].hl { background: rgba(132,0,85,.12); box-shadow: 0 0 0 2px rgba(132,0,85,.12); }
+    .jl.hl { background: rgba(132,0,85,.10); }
 
     /* ---------- responsive ---------- */
     @media (max-width: 1100px) {
@@ -775,11 +866,11 @@ body = f'''
       <div class="pipe-scope">
         <span class="pipe-scope-label">Sensible: the extraction layer</span>
         <div class="pipe-grid">
-          <div class="pl-stage"><div class="pl-num">1</div><h3>Ingest</h3><p>PDF, scan, email attachment, or spreadsheet. Any source, no pre-sorting required.</p><div class="pl-io"><b>in</b> raw files, email, API upload<br><b>out</b> normalized pages</div></div>
-          <div class="pl-stage"><div class="pl-num">2</div><h3>Classify</h3><p>Document type identified (invoice, PO, credit memo, remittance) before extraction runs.</p><div class="pl-io"><b>in</b> normalized pages<br><b>out</b> typed document</div></div>
-          <div class="pl-stage"><div class="pl-num">3</div><h3>Extract</h3><p>Hybrid AI plus deterministic SenseML rules pull header, line item, and total fields regardless of layout.</p><div class="pl-io"><b>in</b> typed document<br><b>out</b> candidate fields</div></div>
-          <div class="pl-stage"><div class="pl-num">4</div><h3>Validate</h3><p>Calculation checks run automatically: line items to subtotal, tax to rate, PO reference format. Discrepancies are flagged with a confidence score.</p><div class="pl-io"><b>in</b> candidate fields<br><b>out</b> checked fields + flags</div></div>
-          <div class="pl-stage"><div class="pl-num">5</div><h3>Deliver</h3><p>Schema-enforced JSON, every field traced to page and bounding box, sent via webhook or pulled via API.</p><div class="pl-io"><b>in</b> checked fields<br><b>out</b> JSON to your system</div></div>
+          <div class="pl-stage"><div class="pl-num">01</div><h3>Ingest</h3><p>PDF, scan, email attachment, or spreadsheet. Any source, no pre-sorting required.</p><div class="pl-io"><b>in</b> raw files, email, API upload<br><b>out</b> normalized pages</div></div>
+          <div class="pl-stage"><div class="pl-num">02</div><h3>Classify</h3><p>Document type identified (invoice, PO, credit memo, remittance) before extraction runs.</p><div class="pl-io"><b>in</b> normalized pages<br><b>out</b> typed document</div></div>
+          <div class="pl-stage"><div class="pl-num">03</div><h3>Extract</h3><p>Hybrid AI plus deterministic SenseML rules pull header, line item, and total fields regardless of layout.</p><div class="pl-io"><b>in</b> typed document<br><b>out</b> candidate fields</div></div>
+          <div class="pl-stage"><div class="pl-num">04</div><h3>Validate</h3><p>Calculation checks run automatically: line items to subtotal, tax to rate, PO reference format. Discrepancies are flagged with a confidence score.</p><div class="pl-io"><b>in</b> candidate fields<br><b>out</b> checked fields + flags</div></div>
+          <div class="pl-stage"><div class="pl-num">05</div><h3>Deliver</h3><p>Schema-enforced JSON, every field traced to page and bounding box, sent via webhook or pulled via API.</p><div class="pl-io"><b>in</b> checked fields<br><b>out</b> JSON to your system</div></div>
         </div>
       </div>
       <div class="pipe-handoff"><div class="stem"></div><div class="lbl">webhook · API</div><div class="stem"></div></div>
