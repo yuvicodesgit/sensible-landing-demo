@@ -574,8 +574,8 @@
       --check-green: #2E7B40;       /* --ok */
       --warn: #D88B1F;              /* --warn */
       --cta-amber: #F89C2A;         /* --_brand---cta */
-      --warm-alt: #F0EBE0;          /* .dt-sec-alt */
-      --warm-alt-border: #D8D0C0;
+      --warm-alt: #F8F6F1;          /* --_brand---bg-alt */
+      --warm-alt-border: #E8E3DB;
       --shadow-soft: 0 4px 20px rgba(26, 21, 32, 0.04);
       --shadow-medium: 0 12px 36px rgba(26, 21, 32, 0.06);
       --shadow-float: 0 24px 60px rgba(26, 21, 32, 0.08);
@@ -982,6 +982,14 @@
     .ft-key code, .ft-note code { background: rgba(132,0,85,.06); }
     [data-f].hl { background: rgba(132,0,85,.12); box-shadow: 0 0 0 2px rgba(132,0,85,.12); }
     .jl.hl { background: rgba(132,0,85,.10); }
+
+
+    /* lighter section rhythm: white / #F8F6F1, hairline dividers, no tinted gradients */
+    .sec.stone, .sec.white { border-top: 1px solid var(--border-stone); border-bottom: none; }
+    .managed { background-image: none; background: #fff; }
+    .pipe-scope { background: rgba(255,255,255,.7); border-color: rgba(132,0,85,.3); }
+    .hard-card.ap { border-color: rgba(132,0,85,.35); }
+    .ap-hero { border-bottom: none; }
 
     /* ---------- responsive ---------- */
     @media (max-width: 1100px) {
