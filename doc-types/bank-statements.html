@@ -1,0 +1,1672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Bank Statement Extraction &amp; OCR API | Sensible Document Types</title>
+  <meta name="description" content="Pre-built SenseML configurations for extracting multi-page bank statements across 150+ institutions. Automated ledger arithmetic, running balance checks, and bounding box coordinates."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"/>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Serif:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+  <script>document.documentElement.classList.add('ap-js')</script>
+  <style>
+    /* Sensible's own brand webfont, pulled from their live site */
+    @font-face {
+      font-family: 'Matter SQ';
+      src: url('../assets/fonts/MatterSQ-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Matter SQ';
+      src: url('../assets/fonts/MatterSQ-Medium.woff2') format('woff2');
+      font-weight: 500;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Matter SQ';
+      src: url('../assets/fonts/MatterSQ-Bold.woff2') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    /* Sensible Editorial Tokens */
+    :root {
+      --bg-stone: #FBFBF9;
+      --bg-white: #FFFFFF;
+      --bg-stone-subtle: #F4F3EF;
+      --bg-dark-accent: #17121C;
+      
+      --brand-magenta: #840055;
+      --brand-magenta-dark: #4B0532;
+      --brand-magenta-light: #9A1066;
+      --brand-magenta-accent: #E279BF;
+      --brand-magenta-glow: rgba(132, 0, 85, 0.15);
+      --brand-gradient: linear-gradient(135deg, #840055 0%, #9A1066 100%);
+      
+      --text-dark: #1A1520;
+      --text-body: #4A4540;
+      --text-muted: #8B857B;
+      --text-light: #FFFFFF;
+
+      --border-stone: #E8E3DB;
+      --border-light: #F0ECE5;
+
+      --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.03);
+      --shadow-medium: 0 12px 36px rgba(0, 0, 0, 0.06);
+      --shadow-float: 0 24px 60px rgba(20, 17, 24, 0.08);
+
+      --font-sans: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'IBM Plex Mono', monospace;
+      --font-mono-alt: 'Space Mono', monospace;
+      --font-serif: 'IBM Plex Serif', Georgia, serif;
+      --font-body: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+
+      --bg-darkest: #1A1520;
+
+      --check-green: #00875A;
+      --cross-red: #E03E2E;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
+
+    html {
+      overflow-x: hidden;
+      width: 100%;
+    }
+
+    body {
+      background-color: var(--bg-stone);
+      color: var(--text-dark);
+      font-family: var(--font-body);
+      line-height: 1.55;
+      overflow-x: hidden;
+      width: 100%;
+      position: relative;
+    }
+
+    /* This page is a "vs X" comparison template, not the marketing homepage the real
+       sensible.so comparison pages (e.g. /sensible-vs-docsumo) run entirely on IBM Plex
+       Serif (headings, regular weight, tight negative letter-spacing) + IBM Plex Sans
+       (body/UI) + IBM Plex Mono (eyebrow labels). Matter SQ doesn't appear in that
+       template at all it's specific to the general marketing site. */
+
+    a { text-decoration: none; color: inherit; }
+
+    .container {
+      max-width: 1260px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Navbar */
+    .navbar {
+      background: rgba(254, 253, 251, 0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      background-image: linear-gradient(90deg, transparent, var(--border-stone) 15%, var(--border-stone) 85%, transparent); background-size: 100% 1px; background-position: bottom; background-repeat: no-repeat; border-bottom: none;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .navbar-inner {
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 20px;
+      color: var(--text-dark);
+      flex-shrink: 0;
+    }
+    .nav-links {
+      display: flex;
+      gap: 4px;
+      list-style: none;
+      font-size: 14px;
+      font-weight: 500;
+      color: #4A4540;
+      align-items: center;
+    }
+    .nav-links a {
+      padding: 8px 12px;
+      border-radius: 4px;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--brand-magenta); }
+
+    .nav-signin {
+      color: #4A4540;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-signin:hover { color: var(--text-dark); }
+
+    /* Mobile nav toggle + slide-down panel (hidden until the 860px breakpoint) */
+    .mobile-toggle {
+      display: none;
+      color: var(--text-dark);
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px 8px;
+      font-size: 1.25rem;
+      line-height: 1;
+    }
+    .mobile-panel {
+      display: none;
+      flex-direction: column;
+      max-height: calc(100vh - 60px);
+      overflow-y: auto;
+      padding: 8px 20px 20px;
+      background: var(--bg-white);
+      background-image: linear-gradient(90deg, transparent, var(--border-stone) 15%, var(--border-stone) 85%, transparent); background-size: 100% 1px; background-position: bottom; background-repeat: no-repeat; border-bottom: none;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+    }
+    .mobile-panel.is-open { display: flex; }
+    .mobile-link {
+      display: block;
+      padding: 14px 0;
+      background-image: linear-gradient(90deg, transparent, var(--border-light) 15%, var(--border-light) 85%, transparent); background-size: 100% 1px; background-position: bottom; background-repeat: no-repeat; border-bottom: none;
+      font-size: 1.0625rem;
+      font-weight: 500;
+      color: var(--text-dark);
+    }
+    .mobile-link:hover { color: var(--brand-magenta); }
+    .mobile-signin {
+      display: block;
+      margin-top: 8px;
+      padding: 14px 0;
+      font-size: 0.9375rem;
+      color: var(--text-body);
+    }
+    .mobile-signin:hover { color: var(--text-dark); }
+    .mobile-cta {
+      display: block;
+      margin-top: 12px;
+      padding: 14px 20px;
+      text-align: center;
+      font-weight: 500;
+      color: #fff;
+      background: var(--brand-gradient);
+      border-radius: 6px;
+      box-shadow: 0 1px 3px var(--brand-magenta-glow);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 26px;
+      border-radius: 6px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      border: 1px solid transparent;
+      white-space: nowrap;
+    }
+    .btn-primary {
+      background: var(--brand-gradient);
+      color: var(--text-light);
+      box-shadow: 0 2px 8px var(--brand-magenta-glow);
+    }
+    .btn-primary:hover {
+      background: linear-gradient(135deg, var(--brand-magenta-dark), var(--brand-magenta));
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(132, 0, 85, 0.25);
+    }
+    .btn-secondary {
+      background: var(--bg-white);
+      color: var(--text-dark);
+      border-color: var(--border-stone);
+    }
+    .btn-secondary:hover {
+      background: var(--bg-stone-subtle);
+      border-color: var(--text-muted);
+    }
+    /* 7. CTA BANNER & FOOTER */
+    .cta-banner {
+      background-color: var(--bg-darkest);
+      /* Light, short blend from the takeaways section's stone bg down into the dark banner (solid-to-solid, not faded-to-transparent, so it doesn't muddy against the dark bg), layered above the brand glows */
+      background-image: linear-gradient(180deg, var(--bg-stone-subtle), var(--bg-darkest)), radial-gradient(circle at 30% 20%, rgba(132,0,85,0.32) 0%, transparent 55%), radial-gradient(circle at 80% 100%, rgba(248,156,42,0.1) 0%, transparent 50%);
+      background-size: 100% 56px, 100% 100%, 100% 100%;
+      background-position: top, center, center;
+      background-repeat: no-repeat, no-repeat, no-repeat;
+      padding: clamp(72px, 10vw, 128px) 40px;
+      text-align: center;
+      color: #FEFDFB;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-inner { position: relative; z-index: 1; max-width: 620px; margin: 0 auto; }
+    .cta-h2 {
+      font-family: var(--font-serif);
+      font-weight: 400;
+      font-size: clamp(1.875rem, 4vw, 2.875rem);
+      line-height: 1.12;
+      letter-spacing: -0.015em;
+      margin-bottom: 16px;
+      color: #FEFDFB;
+    }
+    .cta-p { font-size: 17px; color: #E5E0D8; max-width: 440px; margin: 0 auto 32px; }
+    .cta-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .cta-btn-primary {
+      background: #F89C2A;
+      color: #1A1520;
+      border-radius: 6px;
+      padding: 12px 24px;
+      font-size: 0.9063rem;
+      font-weight: 600;
+      display: inline-block;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .cta-btn-primary:hover { background: #e08d1f; }
+    .cta-btn-secondary {
+      color: #E5E0D8;
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 6px;
+      padding: 12px 24px;
+      font-size: 0.9063rem;
+      font-weight: 500;
+      display: inline-block;
+      text-decoration: none;
+      transition: border-color 0.2s;
+    }
+    .cta-btn-secondary:hover { border-color: rgba(255,255,255,0.5); }
+    .cta-note {
+      color: #8B857B;
+      letter-spacing: 0.16em;
+      margin-top: 22px;
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      text-transform: uppercase;
+    }
+
+    .footer {
+      background-color: var(--bg-darkest);
+      color: #E5E0D8;
+      padding: 96px 0 48px;
+      font-size: 14px;
+      font-family: var(--font-sans);
+    }
+    .footer-logo-img { filter: brightness(0) invert(1); max-height: 33px; }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr 1fr 1fr 1fr;
+      gap: 40px;
+      padding-bottom: 64px;
+    }
+    .footer-col-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: #FEFDFB;
+      margin-bottom: 20px;
+    }
+    .footer-col a {
+      display: block;
+      font-family: var(--font-sans);
+      color: #C9C2B6;
+      font-size: 14px;
+      margin-bottom: 12px;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-col a:hover { color: #FEFDFB; }
+    .footer-brand-blurb { color: #A69EAD; font-size: 14px; margin: 16px 0 20px; }
+    .footer-social { display: flex; gap: 14px; }
+    .footer-social a { color: #A69EAD; transition: color 0.2s; }
+    .footer-social a:hover { color: #FEFDFB; }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding-top: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-size: 13px;
+      color: #8B857B;
+    }
+    .footer-copyright {
+      font-family: var(--font-mono-alt);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+    .footer-bottom-links { display: flex; gap: 24px; }
+    .footer-bottom-links a { color: #8B857B; text-decoration: none; transition: color 0.2s; }
+    .footer-bottom-links a:hover { color: #FEFDFB; }
+    /* Mobile fallback list for the architecture diagram hidden until the diagram
+       breakpoint below, where it replaces the fixed-width scaled canvas entirely
+       (the cqw-scale trick doesn't degrade gracefully on real small-screen browsers). */
+    .arch-mobile-list { display: none; flex-direction: column; gap: 12px; }
+    .arch-mobile-item, .arch-mobile-branch > .arch-mobile-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 16px;
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+    }
+    .arch-mobile-item.accent { border-color: rgba(132,0,85,0.3); box-shadow: 0 4px 12px rgba(132,0,85,0.06); }
+    .arch-mobile-item.conditional { border-style: dashed; border-color: #d9dbe0; background: #fafafa; }
+    .arch-mobile-branch {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 10px 0 10px 20px;
+      margin-left: 10px;
+      border-left: 2px dashed #e5e7eb;
+    }
+    .arch-mobile-branch-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-left: 4px;
+    }
+    .arch-mobile-tag {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      background: var(--bg-stone-subtle);
+      border: 1px solid var(--border-stone);
+      border-radius: 4px;
+      padding: 2px 6px;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+    .pn-icon.accent { background: var(--brand-gradient); color: #fff; }
+
+
+    @media (max-width: 991px) { .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px 24px; } }
+    @media (max-width: 860px) { .navbar-inner { height: 60px; } .nav-links { display: none; } .nav-cta-group { display: none !important; } .mobile-toggle { display: block; } }
+    @media (max-width: 767px) { .container { padding: 0 20px; } .cta-h2 { font-size: 28px; } .cta-banner { padding: 56px 24px; }
+      .footer { padding: 64px 0 40px; } .footer-grid { grid-template-columns: 1fr; gap: 40px; padding-bottom: 40px; } .footer-bottom { flex-direction: column; align-items: flex-start; } }
+    @media (max-width: 480px) { .nav-logo img { height: 22px !important; } }
+    .sensible-font { font-family: 'Matter SQ', var(--font-sans); font-weight: 500; }
+
+/* ==========================================================================
+   Sensible /solutions/accounts-payable
+   All selectors are scoped under .ap and prefixed ap- so they cannot collide with
+   the site's existing Webflow classes (dt-*, sp-*, d12-*, c2-*, .container, .btn ...).
+   Tokens come from the real Brand variable collection (read via the Webflow MCP).
+   ========================================================================== */
+.ap {
+  --ap-ink: #1A1520;        /* --_brand---text-primary */
+  --ap-body: #4A4540;       /* --_brand---text-secondary */
+  --ap-muted: #8B857B;      /* --_brand---text-tertiary */
+  --ap-line: #E6E6E9;
+  --ap-soft: #F6F6F7;
+  --ap-tint: #F1DDE8;       /* light magenta tint for the hero panel */
+  --ap-mag: #840055;        /* --_brand---accent */
+  --ap-mag-dk: #4B0532;
+  --ap-ok: #2E7B40;         /* --ok */
+  --ap-warn: #D88B1F;       /* --warn */
+  --ap-serif: 'IBM Plex Serif', Georgia, serif;
+  --ap-sans: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --ap-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  font-family: var(--ap-sans);
+  color: var(--ap-ink);
+  background: #fff;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+.ap *, .ap *::before, .ap *::after { box-sizing: border-box; }
+.ap :where(h1, h2, h3, p, ul, dl, dd, blockquote) { margin: 0; padding: 0; }
+.ap :where(ul) { list-style: none; }
+.ap a { color: inherit; text-decoration: none; }
+.ap button { font: inherit; }
+.ap-wrap { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 32px; }
+.ap-sec { padding: 112px 0; border-top: 1px solid var(--ap-line); position: relative; }
+
+/* ---------- type ---------- */
+.ap-kicker { display: inline-flex; align-items: center; gap: 10px; font-family: var(--ap-mono); font-size: .75rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--ap-muted); }
+.ap-kicker::before { content: ''; width: 6px; height: 6px; background: currentColor; flex: none; }
+.ap-h1 { font-family: var(--ap-serif); font-weight: 400; font-size: clamp(2rem, 3.4vw, 2.75rem); line-height: 1.08; letter-spacing: -.02em; margin: 18px 0 18px; }
+.ap-h1 em, .ap-h2 em { font-style: normal; color: var(--ap-mag); }
+.ap-h2 { font-family: var(--ap-serif); font-weight: 400; font-size: clamp(1.9rem, 3.2vw, 2.5rem); line-height: 1.12; letter-spacing: -.015em; margin: 18px 0 0; }
+.ap-lede { font-size: 1.0625rem; line-height: 1.6; color: var(--ap-body); max-width: 50ch; }
+.ap-center { text-align: center; }
+.ap-center .ap-lede { margin-left: auto; margin-right: auto; }
+.ap-head { margin-bottom: 64px; }
+.ap-head .ap-lede { margin-top: 20px; }
+.ap-tag { display: inline-block; background: #F1DCE8; color: var(--ap-ink); font-family: var(--ap-mono); font-size: .8125rem; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; padding: 11px 15px; }
+.ap-btns { display: flex; gap: 12px; flex-wrap: wrap; }
+.ap-btn { display: inline-flex; align-items: center; gap: 8px; padding: 13px 22px; border-radius: 6px; font-size: .9375rem; font-weight: 500; border: 1px solid transparent; cursor: pointer; transition: background .2s, border-color .2s, transform .2s; }
+.ap-btn.p { background: var(--ap-mag); color: #fff; } .ap-btn.p:hover { background: var(--ap-mag-dk); }
+.ap-btn.s { background: #fff; color: var(--ap-ink); border-color: var(--ap-line); } .ap-btn.s:hover { border-color: var(--ap-muted); }
+.ap-note { font-family: var(--ap-mono); font-size: .75rem; color: var(--ap-muted); letter-spacing: .04em; margin-top: 16px; }
+
+/* ---------- 1. hero ---------- */
+.ap-hero { display: grid; grid-template-columns: minmax(0, .95fr) minmax(0, 1.3fr); min-height: clamp(600px, calc(100vh - 68px), 860px); }
+.ap-hero-copy { padding: 40px 40px 36px max(32px, calc((100vw - 1200px) / 2 + 32px)); display: flex; flex-direction: column; justify-content: center; align-items: flex-start; }
+.ap-hero-copy .ap-lede { margin-bottom: 30px; max-width: 46ch; }
+.ap-h1 .ap-w { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: .08em; margin-bottom: -.08em; }
+.ap-h1 .ap-w > span { display: inline-block; will-change: transform; }
+.ap-hero-panel { position: relative; background: var(--ap-tint); overflow: hidden; padding: 32px max(28px, calc((100vw - 1200px) / 2 + 32px)) 32px 48px; display: flex; flex-direction: column; justify-content: center; }
+.ap-hero-art { position: absolute; inset: 0; width: 100%; height: 100%; }
+.ap-demo-wrap { position: relative; z-index: 2; width: 100%; max-width: 800px; margin-left: auto; }
+.ap-demo-tabs { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+.ap-demo-tab { cursor: pointer; padding: 8px 15px; border-radius: 999px; border: 1px solid transparent; background: rgba(255,255,255,.7); color: var(--ap-body); font-size: .8125rem; font-weight: 500; transition: all .2s; }
+.ap-demo-tab:hover { background: #fff; }
+.ap-demo-tab[aria-selected="true"] { background: var(--ap-mag); color: #fff; }
+.ap-demo { display: grid; grid-template-columns: .9fr 1.1fr; grid-template-rows: minmax(0, 1fr); height: 486px; background: #fff; border: 1px solid var(--ap-line); border-radius: 12px; overflow: hidden; box-shadow: 0 30px 70px rgba(75,5,50,.16), 0 4px 14px rgba(26,21,32,.05); }
+.ap-pane { display: none; } .ap-pane.on { display: contents; }
+.ap-doccol { background: var(--ap-soft); padding: 12px; min-height: 0; overflow: hidden; border-right: 1px solid var(--ap-line); }
+.ap-cap { font-family: var(--ap-mono); font-size: .625rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ap-muted); margin-bottom: 10px; }
+.ap-doc { background: #fff; border: 1px solid var(--ap-line); border-radius: 4px; padding: 13px; font-size: 10.5px; line-height: 1.4; color: #2b2630; box-shadow: 0 6px 20px rgba(26,21,32,.06); }
+.ap-doc-top { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 9px; }
+.ap-doc-top b { display: block; font-family: var(--ap-serif); font-size: 13px; font-weight: 500; }
+.ap-doc-top .r { text-align: right; } .ap-doc-top .r b { font-family: var(--ap-mono); font-size: 12px; letter-spacing: .14em; } .ap-doc-top .r span { font-family: var(--ap-mono); font-size: 10px; color: var(--ap-muted); }
+.ap-meta { margin-bottom: 8px; display: grid; gap: 4px; }
+.ap-meta dt { font-family: var(--ap-mono); font-size: 8.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--ap-muted); }
+.ap-meta dd { margin: 0 0 3px; }
+.ap-meta .g { display: grid; grid-template-columns: 1fr 1fr; gap: 0 10px; }
+.ap-tbl { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
+.ap-tbl th { font-family: var(--ap-mono); font-size: 8.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--ap-muted); text-align: right; padding: 4px 2px; border-bottom: 1px solid var(--ap-line); font-weight: 500; }
+.ap-tbl td { text-align: right; padding: 4px 2px; border-bottom: 1px solid #F0F0F2; vertical-align: top; white-space: nowrap; }
+.ap-tbl th:first-child, .ap-tbl td:first-child { text-align: left; white-space: normal; }
+.ap-tot { margin-left: auto; width: 78%; }
+.ap-tot div { display: flex; justify-content: space-between; padding: 2px 0; }
+.ap-tot .g { border-top: 1.5px solid var(--ap-ink); margin-top: 3px; padding-top: 5px; font-weight: 600; font-size: 12px; }
+[data-f] { border-radius: 3px; transition: background .15s, box-shadow .15s; }
+[data-f].hl { background: rgba(132,0,85,.12); box-shadow: 0 0 0 2px rgba(132,0,85,.12); }
+.ap-jcol { display: flex; flex-direction: column; min-width: 0; min-height: 0; overflow: hidden; background: #fff; }
+.ap-api { display: flex; align-items: center; gap: 10px; padding: 11px 14px; background: var(--ap-soft); border-bottom: 1px solid var(--ap-line); font-family: var(--ap-mono); font-size: 11.5px; }
+.ap-api .v { background: rgba(46,123,64,.12); color: var(--ap-ok); padding: 2px 8px; border-radius: 4px; font-weight: 600; }
+.ap-api .ok { margin-left: auto; color: var(--ap-ok); }
+.ap-json { flex: 1; min-height: 0; overflow-y: auto; padding: 10px 12px; font-family: var(--ap-mono); font-size: 10.5px; line-height: 1.5; background: var(--ap-soft); }
+.ap-jl { display: block; white-space: pre-wrap; overflow-wrap: anywhere; padding: 0 6px 0 26px; text-indent: -20px; border-radius: 3px; }
+.ap-jl.hl { background: rgba(132,0,85,.10); }
+.ap-jk { color: var(--ap-mag); } .ap-js { color: var(--ap-ok); } .ap-jn { color: #A8620F; } .ap-jc { color: var(--ap-muted); }
+.ap-jfoot { display: flex; justify-content: space-between; gap: 12px; padding: 9px 14px; border-top: 1px solid var(--ap-line); font-family: var(--ap-mono); font-size: 10px; color: var(--ap-muted); }
+.ap-demo-note { margin-top: 12px; font-size: .78rem; color: var(--ap-body); opacity: .8; }
+
+/* ---------- 2. ribbon + logos ---------- */
+.ap-ribbon { background: var(--ap-soft); border-top: 1px solid var(--ap-line); border-bottom: 1px solid var(--ap-line); }
+.ap-ribbon-grid { display: grid; grid-template-columns: repeat(4, 1fr); }
+.ap-ribbon-cell { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 3px; padding: 19px 22px 17px; border-left: 1px solid var(--ap-line); }
+.ap-ribbon-cell:first-child { border-left: 0; }
+.ap-ribbon-v { font-family: var(--ap-serif); font-weight: 400; font-size: 1.375rem; line-height: 1.05; }
+.ap-ribbon-l { font-family: var(--ap-mono); font-size: .625rem; letter-spacing: .12em; text-transform: uppercase; color: var(--ap-muted); }
+.ap-logos { padding: 34px 0 38px; overflow: hidden; }
+.ap-logos-cap { text-align: center; font-family: var(--ap-mono); font-size: .75rem; letter-spacing: .1em; text-transform: uppercase; color: var(--ap-muted); margin-bottom: 20px; }
+.ap-logos-track { display: inline-flex; align-items: center; gap: 88px; white-space: nowrap; animation: ap-marq 28s linear infinite; }
+.ap-logos-track img { height: 34px; width: auto; max-width: 150px; object-fit: contain; display: block; flex: none; }
+@keyframes ap-marq { to { transform: translateX(-50%); } }
+
+/* ---------- 3. chaos panel ---------- */
+.ap-chaos { position: relative; display: grid; grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); background: var(--ap-soft); border-radius: 18px; overflow: hidden; min-height: 620px; }
+.ap-chaos-copy { padding: 72px 40px 64px 64px; display: flex; flex-direction: column; justify-content: center; }
+.ap-chaos-copy .ap-h2 { font-size: clamp(1.8rem, 2.8vw, 2.25rem); margin-bottom: 26px; }
+.ap-bullets { display: grid; gap: 16px; margin-bottom: 36px; }
+.ap-bullets li { position: relative; padding-left: 26px; font-size: 1.0625rem; line-height: 1.45; }
+.ap-bullets li::before { content: ''; position: absolute; left: 0; top: .6em; width: 7px; height: 7px; background: var(--ap-ink); }
+.ap-chaos-stage { position: relative; }
+.ap-chaos-svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.ap-chaos-label { position: absolute; inset: 0; font-family: var(--ap-serif); font-size: clamp(1.6rem, 2.6vw, 2.25rem); letter-spacing: -.015em; white-space: nowrap; text-align: center; pointer-events: none; }
+.ap-chaos-label span { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); background: var(--ap-soft); padding: 4px 14px; }
+.ap-chaos-label .b { opacity: 0; color: var(--ap-mag); top: auto; bottom: 3%; transform: translate(-50%, 0); font-size: .78em; background: transparent; }
+.ap-cs-hl { opacity: 0; }
+
+/* ---------- 4. hairline grids ---------- */
+.ap-grid { display: grid; border-top: 1px solid var(--ap-line); border-bottom: 1px solid var(--ap-line); }
+.ap-g4 { grid-template-columns: repeat(4, 1fr); } .ap-g5 { grid-template-columns: repeat(5, 1fr); } .ap-g3 { grid-template-columns: repeat(3, 1fr); }
+.ap-cell { padding: 40px 32px 44px; border-left: 1px solid var(--ap-line); position: relative; }
+.ap-cell:first-child { border-left: 0; }
+.ap-g3 .ap-cell:nth-child(3n+1) { border-left: 0; }
+.ap-g3 .ap-cell:nth-child(n+4) { border-top: 1px solid var(--ap-line); }
+.ap-num { display: flex; align-items: center; gap: 10px; font-family: var(--ap-mono); font-size: .75rem; letter-spacing: .1em; color: var(--ap-muted); }
+#bs-challenges .ap-num { width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid var(--ap-ink); justify-content: center; font-size: .75rem; color: var(--ap-ink); margin-bottom: 4px; }
+#bs-challenges .ap-num::before { display: none; }
+#bs-challenges .ap-num .ap-tagline { position: absolute; margin-left: 46px; white-space: nowrap; }
+#bs-challenges .ap-cell { position: relative; }
+.ap-num::before { content: ''; width: 5px; height: 5px; background: currentColor; }
+.ap-cell h3 { font-family: var(--ap-serif); font-weight: 500; font-size: 1.25rem; line-height: 1.15; letter-spacing: -.01em; margin: 26px 0 12px; }
+.ap-cell p { font-size: .9688rem; line-height: 1.6; color: var(--ap-body); }
+.ap-cell .ap-tagline { font-family: var(--ap-mono); font-size: .625rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ap-mag); margin-left: auto; }
+.ap-mini { display: block; width: 100%; max-width: 220px; height: auto; margin-top: 34px; }
+.ap-mini .m1, .ap-mini .m2, .ap-mini .m3 { transition: transform .45s cubic-bezier(.2,.7,.2,1); }
+.ap-cell:hover .ap-mini .m1 { transform: translate(5px, -4px); } .ap-cell:hover .ap-mini .m2 { transform: translate(-3px, 5px); } .ap-cell:hover .ap-mini .m3 { transform: translate(4px, 6px); }
+.ap-icon { width: 46px; height: 46px; display: block; }
+.ap-cell .ap-icon { transition: transform .4s cubic-bezier(.2,.7,.2,1); }
+.ap-cell:hover .ap-icon { transform: translateY(-4px) rotate(-4deg); }
+.ap-cell .ap-icon + h3 { margin-top: 30px; }
+.ap-plain { font-size: .9688rem; line-height: 1.7; color: var(--ap-body); }
+.ap-plain i { font-style: normal; color: var(--ap-muted); margin: 0 5px; }
+
+/* ---------- 5. fields ---------- */
+.ap-fields { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 64px; align-items: start; }
+.ap-fields-nav { position: sticky; top: 96px; }
+.ap-fields-nav .ap-h2 { margin-bottom: 20px; }
+.ap-fields-nav .ap-lede { font-size: 1rem; margin-bottom: 30px; }
+.ap-ftabs { border-top: 1px solid var(--ap-line); }
+.ap-ftab { display: flex; align-items: baseline; gap: 14px; width: 100%; text-align: left; background: none; border: 0; border-bottom: 1px solid var(--ap-line); padding: 18px 0; cursor: pointer; color: var(--ap-muted); transition: color .2s, padding .3s; }
+.ap-ftab .n { font-family: var(--ap-mono); font-size: .6875rem; letter-spacing: .14em; }
+.ap-ftab .t { font-family: var(--ap-serif); font-size: 1.25rem; letter-spacing: -.01em; }
+.ap-ftab .c { margin-left: auto; font-family: var(--ap-mono); font-size: .6875rem; }
+.ap-ftab:hover { color: var(--ap-ink); }
+.ap-ftab[aria-selected="true"] { color: var(--ap-ink); padding-left: 12px; box-shadow: inset 3px 0 0 var(--ap-mag); }
+.ap-fpane { display: none; } .ap-fpane.on { display: block; }
+.ap-frow { display: grid; grid-template-columns: .85fr 1.6fr 1.9fr 88px; gap: 18px; padding: 13px 0; align-items: center; border-bottom: 1px solid var(--ap-line); font-size: .875rem; color: var(--ap-body); line-height: 1.45; }
+.ap-frow.h { font-family: var(--ap-mono); font-size: .625rem; letter-spacing: .12em; text-transform: uppercase; color: var(--ap-muted); padding-top: 4px; }
+.ap-fpane { min-height: 560px; }
+.ap-fname { font-family: var(--ap-serif); font-size: 1rem; font-weight: 500; color: var(--ap-ink); }
+.ap-frow code { font-family: var(--ap-mono); font-size: .75rem; color: var(--ap-mag); background: rgba(132,0,85,.06); padding: 2px 6px; border-radius: 4px; }
+.ap-type { font-family: var(--ap-mono); font-size: .6875rem; padding: 3px 8px; border-radius: 999px; border: 1px solid var(--ap-line); background: var(--ap-soft); }
+.ap-type.t-date { color: var(--ap-mag); border-color: rgba(132,0,85,.2); background: rgba(132,0,85,.05); }
+.ap-type.t-currency, .ap-type.t-number { color: #A8620F; border-color: rgba(216,139,31,.3); background: rgba(216,139,31,.08); }
+.ap-chk { font-family: var(--ap-mono); font-size: .6875rem; font-weight: 600; color: var(--ap-ok); background: rgba(46,123,64,.10); padding: 3px 9px; border-radius: 999px; }
+.ap-more { margin-top: 28px; padding-top: 22px; border-top: 2px solid var(--ap-ink); display: flex; gap: 22px; align-items: baseline; flex-wrap: wrap; font-size: .9375rem; color: var(--ap-body); }
+.ap-more b { font-family: var(--ap-serif); font-weight: 500; font-size: 1.15rem; color: var(--ap-ink); }
+
+/* ---------- 6. how it works (tinted band) ---------- */
+.ap-band { background: var(--ap-soft); }
+.ap-cards { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; position: relative; }
+.ap-card { background: #fff; border: 1px solid var(--ap-line); border-radius: 12px; padding: 20px 20px 24px; display: flex; flex-direction: column; }
+.ap-card .art { background: var(--ap-soft); border-radius: 8px; padding: 6px 2px; margin-bottom: 22px; }
+.ap-card .art svg { display: block; width: 100%; height: auto; }
+.ap-card h3 { font-family: var(--ap-serif); font-weight: 500; font-size: 1.25rem; margin: 10px 0 8px; letter-spacing: -.01em; }
+.ap-card p { font-size: .9063rem; line-height: 1.55; color: var(--ap-body); flex: 1; }
+.ap-io { margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--ap-line); font-family: var(--ap-mono); font-size: .6875rem; line-height: 1.7; color: var(--ap-muted); }
+.ap-io b { color: var(--ap-mag); font-weight: 500; display: inline-block; width: 30px; }
+.ap-draw { stroke-dasharray: 1; stroke-dashoffset: 0; }
+.ap-scope { display: flex; align-items: center; gap: 16px; margin-top: 34px; }
+.ap-scope i { flex: 1; height: 1px; background: var(--ap-ink); transform-origin: left; }
+.ap-scope span { font-family: var(--ap-mono); font-size: .75rem; letter-spacing: .14em; text-transform: uppercase; }
+.ap-then { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 20px; padding: 26px 0; }
+.ap-then .k { font-family: var(--ap-mono); font-size: .75rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ap-muted); padding-top: 3px; }
+.ap-then p { font-size: 1.0625rem; line-height: 1.6; max-width: 76ch; color: var(--ap-body); }
+.ap-trace { display: flex; flex-wrap: wrap; gap: 6px 26px; padding-top: 22px; border-top: 1px solid var(--ap-line); font-family: var(--ap-mono); font-size: .75rem; }
+.ap-trace .tl { color: var(--ap-muted); text-transform: uppercase; letter-spacing: .12em; font-size: .6875rem; }
+.ap-trace .k { color: var(--ap-mag); } .ap-trace .v { color: #A8620F; }
+
+/* ---------- 7. validation ---------- */
+.ap-val { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 80px; align-items: start; }
+.ap-val .ap-lede { margin-top: 24px; }
+.ap-checks { border-top: 2px solid var(--ap-ink); }
+.ap-checks-h { display: flex; justify-content: space-between; padding: 13px 0; font-family: var(--ap-mono); font-size: .6875rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ap-muted); border-bottom: 1px solid var(--ap-line); }
+.ap-check { display: grid; grid-template-columns: 26px 1fr auto; gap: 14px; align-items: start; padding: 18px 0; border-bottom: 1px solid var(--ap-line); }
+.ap-check .ic { width: 22px; height: 22px; border-radius: 50%; background: var(--ap-ok); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; margin-top: 1px; }
+.ap-check.flag { background: #FFF7EA; margin: 0 -14px; padding: 18px 14px; } .ap-check.flag .ic { background: var(--ap-warn); }
+.ap-check b { display: block; font-size: .9375rem; font-weight: 500; margin-bottom: 2px; }
+.ap-check .d { font-size: .84rem; color: var(--ap-body); line-height: 1.5; }
+.ap-check .res { font-family: var(--ap-mono); font-size: .75rem; color: var(--ap-muted); white-space: nowrap; }
+.ap-check.flag .res { color: #A8620F; }
+.ap-quote { margin-top: 96px; padding-top: 72px; border-top: 1px solid var(--ap-line); display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 32px; }
+.ap-quote blockquote { margin: 0; position: relative; padding-left: 92px; }
+.ap-quote blockquote::before { content: '\201C'; position: absolute; left: 0; top: -18px; font-family: var(--ap-serif); font-size: 8rem; line-height: 1; color: var(--ap-mag); }
+.ap-quote p { font-family: var(--ap-serif); font-size: clamp(1.4rem, 2.3vw, 1.9rem); line-height: 1.35; letter-spacing: -.01em; max-width: 34ch; }
+.ap-quote .ap-qw { opacity: 1; }
+.ap-quote cite { display: block; margin-top: 28px; font-style: normal; font-family: var(--ap-mono); font-size: .75rem; letter-spacing: .12em; text-transform: uppercase; color: var(--ap-muted); }
+
+/* ---------- 8. managed / 9. formats ---------- */
+.ap-mgd .ap-btns { justify-content: center; margin-top: 32px; }
+.ap-fmt-list { margin-top: 18px; }
+
+/* ---------- 10. faq ---------- */
+.ap-faq { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.4fr); gap: 80px; align-items: start; }
+.ap-faq-head { position: sticky; top: 96px; }
+.ap-faq-head .ap-lede { margin-top: 20px; font-size: 1.0625rem; }
+.ap-faq-list { border-top: 2px solid var(--ap-ink); }
+.ap-q { border-bottom: 1px solid var(--ap-line); }
+.ap-q summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; gap: 20px; padding: 22px 0; font-family: var(--ap-serif); font-weight: 500; font-size: 1.125rem; line-height: 1.3; }
+.ap-q summary::-webkit-details-marker { display: none; }
+.ap-q summary i { font-style: normal; font-size: 1.5rem; line-height: 1; color: var(--ap-mag); transition: transform .25s; flex: none; }
+.ap-q[open] summary i { transform: rotate(45deg); }
+.ap-q-a { padding: 0 40px 26px 0; font-size: .96rem; line-height: 1.65; color: var(--ap-body); max-width: 64ch; }
+.ap-q-a p + p { margin-top: 10px; }
+.ap-q-a a { color: var(--ap-mag); }
+
+/* ---------- reveal (progressive enhancement: only hidden when JS + GSAP are present) ---------- */
+.ap-js [data-reveal] { opacity: 0; transform: translateY(26px); }
+
+/* ---------- responsive ---------- */
+@media (max-width: 1180px) {
+  .ap-cards { grid-template-columns: repeat(3, 1fr); }
+  .ap-g5 { grid-template-columns: repeat(3, 1fr); }
+  .ap-g5 .ap-cell { border-top: 1px solid var(--ap-line); } .ap-g5 .ap-cell:nth-child(3n+1) { border-left: 0; }
+  .ap-fields { grid-template-columns: 1fr; gap: 36px; } .ap-fields-nav { position: static; }
+  .ap-ftabs { display: flex; gap: 22px; border-bottom: 1px solid var(--ap-line); } .ap-ftab { width: auto; border-bottom: 0; } .ap-ftab[aria-selected="true"] { box-shadow: inset 0 -3px 0 var(--ap-mag); padding-left: 0; }
+}
+@media (max-width: 991px) {
+  .ap-hero { grid-template-columns: 1fr; } .ap-hero-copy { padding: 48px 32px 40px; }
+  .ap-hero-panel { padding: 32px; } .ap-demo { grid-template-columns: 1fr; grid-template-rows: none; height: auto; } .ap-jcol { max-height: 440px; }
+  .ap-chaos { grid-template-columns: 1fr; } .ap-chaos-copy { padding: 44px 32px 20px; } .ap-chaos-stage { min-height: 360px; }
+  .ap-g4 { grid-template-columns: 1fr 1fr; } .ap-g4 .ap-cell:nth-child(odd) { border-left: 0; } .ap-g4 .ap-cell:nth-child(n+3) { border-top: 1px solid var(--ap-line); }
+  .ap-g3 { grid-template-columns: 1fr 1fr; } .ap-g3 .ap-cell { border-left: 1px solid var(--ap-line); border-top: 1px solid var(--ap-line); } .ap-g3 .ap-cell:nth-child(odd) { border-left: 0; } .ap-g3 .ap-cell:nth-child(-n+2) { border-top: 0; }
+  .ap-val, .ap-faq { grid-template-columns: 1fr; gap: 40px; } .ap-faq-head { position: static; }
+  .ap-quote { grid-template-columns: 1fr; } .ap-quote blockquote { padding-left: 64px; } .ap-quote blockquote::before { font-size: 6rem; }
+  .ap-ribbon-grid { grid-template-columns: 1fr 1fr; } .ap-ribbon-cell:nth-child(3) { border-left: 0; } .ap-ribbon-cell:nth-child(n+3) { border-top: 1px solid var(--ap-line); }
+  .ap-frow { grid-template-columns: 1fr auto; gap: 6px 12px; } .ap-frow.h { display: none; } .ap-frow > :nth-child(n+2):not(.ap-tp) { grid-column: 1 / -1; } .ap-frow .ap-tp { grid-column: 2; grid-row: 1; text-align: right; }
+}
+@media (max-width: 767px) {
+  .ap-wrap { padding: 0 20px; } .ap-sec { padding: 72px 0; } .ap-head { margin-bottom: 40px; }
+  .ap-cards { grid-template-columns: 1fr; }
+  .ap-g4, .ap-g5, .ap-g3 { grid-template-columns: 1fr; } .ap-cell, .ap-g3 .ap-cell, .ap-g4 .ap-cell, .ap-g5 .ap-cell { border-left: 0 !important; border-top: 1px solid var(--ap-line) !important; padding: 32px 20px 36px; } .ap-cell:first-child { border-top: 0 !important; }
+  .ap-then { grid-template-columns: 1fr; gap: 6px; }
+  .ap-hero-copy, .ap-chaos-copy { padding-left: 20px; padding-right: 20px; } .ap-hero-panel { padding: 24px 12px; }
+  .ap-ribbon-cell { padding: 16px 10px 14px; }
+}
+@media (prefers-reduced-motion: reduce) { .ap-logos-track { animation: none; } .ap-js [data-reveal] { opacity: 1; transform: none; } }
+
+/* hero starts hidden only while GSAP is going to animate it */
+.ap-js [data-hero], .ap-js .ap-h1 { opacity: 0; }
+.ap-num + .ap-icon { margin-top: 34px; }
+.ap-quote .ap-w { display: inline-block; }
+
+/* fields: merged key/type column + invoice schematic */
+.ap-fkey { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.ap-fnote code { font-family: var(--ap-mono); font-size: .75rem; color: var(--ap-mag); background: rgba(132,0,85,.06); padding: 1px 5px; border-radius: 4px; }
+.ap-fchk { text-align: right; }
+.ap-frow:not(.h):hover { background: linear-gradient(90deg, transparent, rgba(132,0,85,.03), transparent); }
+.ap-schem-wrap { margin-top: 34px; max-width: 250px; }
+.ap-schem { display: block; width: 100%; height: auto; overflow: visible; }
+.ap-schem .bg { fill: transparent; stroke: transparent; stroke-dasharray: 4 4; transition: fill .35s, stroke .35s; }
+.ap-schem .lb { opacity: 0; transition: opacity .35s; }
+.ap-schem[data-active="header"] .rg-header .bg, .ap-schem[data-active="lines"] .rg-lines .bg, .ap-schem[data-active="totals"] .rg-totals .bg { fill: rgba(132,0,85,.07); stroke: var(--ap-mag); }
+.ap-schem[data-active="header"] .rg-header .lb, .ap-schem[data-active="lines"] .rg-lines .lb, .ap-schem[data-active="totals"] .rg-totals .lb { opacity: 1; }
+@media (max-width: 1180px) { .ap-schem-wrap { display: none; } }
+@media (max-width: 991px) { .ap-frow { grid-template-columns: 1fr; gap: 4px; } .ap-fchk { text-align: left; } }
+
+/* no italics anywhere on this page */
+.ap, .ap * { font-style: normal !important; }
+
+/* ==========================================================================
+   Sensible /doc-types/bank-statements
+   Doc-Type Layout & Interactive Workbench Styles
+   ========================================================================== */
+
+/* ---------- Breadcrumbs ---------- */
+.bs-crumbs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--ap-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ap-muted);
+  margin-bottom: 20px;
+}
+.bs-crumbs a { color: var(--ap-muted); transition: color 0.2s; }
+.bs-crumbs a:hover { color: var(--ap-mag); }
+.bs-crumbs span.sep { opacity: 0.5; }
+.bs-crumbs span.curr { color: var(--ap-ink); font-weight: 500; }
+
+/* ---------- Spec Chips Grid in Hero ---------- */
+.bs-spec-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin: 20px 0 24px;
+  width: 100%;
+  max-width: 480px;
+}
+.bs-spec-card {
+  background: var(--ap-soft);
+  border: 1px solid var(--ap-line);
+  border-radius: 6px;
+  padding: 10px 14px;
+}
+.bs-spec-label {
+  font-family: var(--ap-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ap-muted);
+  margin-bottom: 3px;
+}
+.bs-spec-val {
+  font-family: var(--ap-mono);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--ap-ink);
+}
+
+/* ---------- Case Study Strip ---------- */
+.bs-cases { padding-top: 72px; padding-bottom: 72px; }
+.bs-case { text-align: center; display: flex; flex-direction: column; align-items: center; }
+.bs-case-logo { height: 26px; max-width: 140px; object-fit: contain; margin-bottom: 22px; opacity: 0.85; }
+.bs-case-stat { font-family: var(--ap-serif); font-weight: 500; font-size: 1.75rem; letter-spacing: -0.015em; color: var(--ap-mag); margin-bottom: 10px; }
+.bs-case-p { font-size: 0.9375rem; line-height: 1.55; color: var(--ap-body); max-width: 32ch; }
+
+/* ---------- Pipeline (hybrid extraction steps) ---------- */
+.bs-pipe { counter-reset: bs-pipe; }
+.bs-pipe-track { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; margin-top: 56px; }
+.bs-pipe-track::before { content: ''; position: absolute; top: 27px; left: 12%; right: 12%; height: 2px; background: repeating-linear-gradient(90deg, var(--ap-line) 0 8px, transparent 8px 14px); z-index: 0; }
+.bs-pipe-step { position: relative; z-index: 1; padding: 0 18px; text-align: left; }
+.bs-pipe-num { counter-increment: bs-pipe; width: 54px; height: 54px; border-radius: 50%; background: #fff; border: 2px solid var(--ap-ink); display: flex; align-items: center; justify-content: center; font-family: var(--ap-mono); font-size: 1.125rem; font-weight: 600; margin-bottom: 22px; }
+.bs-pipe-step:nth-child(3) .bs-pipe-num, .bs-pipe-step:nth-child(4) .bs-pipe-num { border-color: var(--ap-mag); color: var(--ap-mag); }
+.bs-pipe-step h3 { font-family: var(--ap-serif); font-weight: 500; font-size: 1.1875rem; letter-spacing: -0.01em; margin-bottom: 10px; }
+.bs-pipe-step p { font-size: 0.9375rem; line-height: 1.55; color: var(--ap-body); }
+.bs-pipe-step .bs-pipe-tag { display: inline-block; margin-top: 14px; font-family: var(--ap-mono); font-size: 0.6875rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ap-mag); background: rgba(132,0,85,.06); padding: 4px 9px; border-radius: 4px; }
+@media (max-width: 991px) {
+  .bs-pipe-track { grid-template-columns: 1fr 1fr; gap: 40px 0; }
+  .bs-pipe-track::before { display: none; }
+}
+@media (max-width: 600px) {
+  .bs-pipe-track { grid-template-columns: 1fr; }
+}
+
+/* ---------- Head-to-head comparison table (Sensible vs raw LLM vs template OCR) ---------- */
+.bs-vs-table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+.bs-vs-table th, .bs-vs-table td { padding: 16px 18px; border-bottom: 1px solid var(--ap-line); text-align: center; vertical-align: middle; }
+.bs-vs-table td:first-child, .bs-vs-table th:first-child { text-align: left; }
+.bs-vs-table thead th { font-family: var(--ap-mono); font-size: 0.6875rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ap-muted); font-weight: 500; border-bottom: 2px solid var(--ap-ink); }
+.bs-vs-table thead th.bs-vs-us { color: var(--ap-mag); }
+.bs-vs-table tbody td:first-child { font-size: 0.9375rem; color: var(--ap-ink); }
+.bs-vs-table col.bs-vs-us-col, .bs-vs-table td.bs-vs-us, .bs-vs-table th.bs-vs-us { background: rgba(132,0,85,.045); }
+.bs-vs-yes { color: var(--ap-ok); font-weight: 700; font-size: 1.0625rem; }
+.bs-vs-no { color: var(--ap-muted); font-size: 1.0625rem; }
+.bs-vs-partial { color: #A8620F; font-weight: 600; font-size: 0.8125rem; font-family: var(--ap-mono); }
+@media (max-width: 767px) {
+  .bs-vs-table { font-size: 0.8125rem; }
+  .bs-vs-table th, .bs-vs-table td { padding: 12px 8px; }
+}
+
+
+/* ---------- Worked Example Section ---------- */
+.bs-worked-grid { display: grid; grid-template-columns: minmax(0, .95fr) minmax(0, .85fr); gap: 72px; align-items: center; }
+.bs-worked-steps { margin-top: 34px; display: grid; gap: 18px; }
+.bs-worked-step { display: grid; grid-template-columns: 30px 1fr; gap: 12px; align-items: baseline; }
+.bs-worked-step .n { font-family: var(--ap-mono); font-size: 0.75rem; color: var(--ap-mag); }
+.bs-worked-step p { font-size: 0.9375rem; line-height: 1.5; color: var(--ap-body); }
+.bs-receipt { background: #fff; border: 1px solid var(--ap-line); border-radius: 12px; padding: 8px 28px 26px; box-shadow: 0 24px 60px rgba(20,17,24,0.07); }
+.bs-receipt-head { display: flex; flex-direction: column; gap: 4px; padding: 22px 0 18px; border-bottom: 1.5px dashed var(--ap-line); font-family: var(--ap-mono); font-size: 0.6875rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ap-muted); }
+.bs-receipt-head .v { font-family: var(--ap-serif); font-size: 1.0625rem; letter-spacing: 0; text-transform: none; color: var(--ap-ink); margin-top: 2px; }
+.bs-receipt-row { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid var(--ap-line); font-size: 0.9375rem; color: var(--ap-body); }
+.bs-receipt-row .v { font-family: var(--ap-mono); color: var(--ap-ink); }
+.bs-receipt-row .v.ok { color: var(--ap-ok); }
+.bs-receipt-row.total { border-bottom: 0; border-top: 2px solid var(--ap-ink); margin-top: 4px; font-weight: 600; color: var(--ap-ink); }
+.bs-receipt-row.total .v { font-family: var(--ap-serif); font-size: 1.25rem; }
+.bs-receipt-foot { display: flex; justify-content: space-between; padding-top: 18px; font-family: var(--ap-mono); font-size: 0.75rem; color: var(--ap-muted); }
+.bs-receipt-foot .ok { color: var(--ap-ok); font-weight: 600; }
+@media (max-width: 991px) { .bs-worked-grid { grid-template-columns: 1fr; gap: 44px; } }
+
+/* ==========================================================================
+   Bold full-bleed sections: mega hero, why band, illustrated how-it-works
+   ========================================================================== */
+
+/* ---------- Hero: solid brand-tint band, left-aligned split layout ---------- */
+.bs-megahero {
+  background: linear-gradient(115deg, #fff 0%, #fdf9fb 22%, var(--ap-tint) 62%, var(--ap-tint) 100%);
+  color: var(--ap-ink);
+  display: grid;
+  grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr);
+  grid-template-rows: 1fr auto;
+  min-height: calc(100vh - 68px);
+  overflow: hidden;
+  position: relative;
+}
+.bs-megahero-inner { grid-column: 1; grid-row: 1; align-self: center; max-width: 640px; padding: 40px 40px 24px max(32px, calc((100vw - 1200px) / 2 + 32px)); text-align: left; position: relative; z-index: 1; }
+.bs-hero-ribbon { grid-column: 1 / -1; grid-row: 2; border-bottom: 0; }
+.bs-megahero .bs-crumbs { justify-content: flex-start; }
+.bs-megahero .bs-crumbs a, .bs-megahero .bs-crumbs span.sep { color: rgba(26,21,32,.5); }
+.bs-megahero .bs-crumbs span.curr { color: var(--ap-ink); }
+.bs-megahero .ap-tag { background: #fff; color: var(--ap-ink); border: 1px solid rgba(26,21,32,.14); display: inline-flex; align-items: center; gap: 8px; }
+.bs-megahero h1 { color: var(--ap-ink); margin: 22px 0 20px; max-width: none; text-align: left; font-size: clamp(1.875rem, 3vw, 2.75rem); white-space: nowrap; }
+.bs-megahero h1 em { color: var(--ap-mag); font-style: normal; }
+.bs-megahero .ap-lede { color: var(--ap-body); max-width: 50ch; margin: 0 0 32px; text-align: left; font-size: 1.0625rem; }
+.bs-megahero .ap-btns { justify-content: flex-start; }
+.bs-megahero .ap-note { color: var(--ap-muted); margin-top: 18px; }
+
+.bs-hero-art { grid-column: 2; grid-row: 1; align-self: center; position: relative; height: 100%; display: flex; align-items: center; justify-content: center; padding: 24px max(16px, calc((100vw - 1200px) / 2 + 16px)) 24px 8px; }
+
+/* ---------- Hero dashboard card: miniature replica of the real Sensible app ---------- */
+.bs-hero-demo { background: #fff; border-radius: 12px; box-shadow: 0 0 0 1px rgba(132,0,85,.05), 0 44px 100px rgba(75,5,50,.24), 0 8px 22px rgba(26,21,32,.09); overflow: hidden; width: 100%; max-width: 1040px; border: 1px solid var(--ap-line); font-family: var(--ap-sans); }
+
+/* toolbar */
+.bs-dash-top { display: flex; align-items: center; gap: 10px; padding: 13px 18px; background: #fff; border-bottom: 1px solid var(--ap-line); }
+.bs-dash-logo { width: 20px; height: 20px; border-radius: 5px; flex: none; display: block; }
+.bs-dash-crumb { font-family: var(--ap-mono); font-size: .6875rem; color: var(--ap-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bs-dash-crumb b { color: var(--ap-ink); font-weight: 600; }
+.bs-dash-pill { margin-left: auto; font-family: var(--ap-mono); font-size: .625rem; border: 1px solid var(--ap-line); border-radius: 5px; padding: 5px 9px; color: var(--ap-body); flex: none; white-space: nowrap; }
+.bs-dash-publish { font-size: .6875rem; font-weight: 600; background: var(--ap-mag); color: #fff; border-radius: 5px; padding: 6px 12px; flex: none; white-space: nowrap; }
+
+/* three working panes */
+.bs-dash-body { display: grid; grid-template-columns: .8fr 1.15fr 1.05fr; }
+.bs-dash-pane { border-right: 1px solid var(--ap-line); display: flex; flex-direction: column; min-width: 0; }
+.bs-dash-pane:last-child { border-right: 0; }
+.bs-dash-pane-h { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 14px; border-bottom: 1px solid var(--ap-line); background: var(--ap-soft); font-family: var(--ap-mono); font-size: .625rem; letter-spacing: .05em; text-transform: uppercase; color: var(--ap-muted); white-space: nowrap; overflow: hidden; }
+.bs-dash-pane-h span:first-child { overflow: hidden; text-overflow: ellipsis; }
+.bs-dash-pane-h .live { color: var(--ap-ok); display: flex; align-items: center; gap: 5px; text-transform: none; letter-spacing: 0; flex: none; }
+.bs-dash-pane-h .live .pulse { width: 5px; height: 5px; border-radius: 50%; background: var(--ap-ok); animation: bs-pulse 1.6s ease-in-out infinite; }
+@keyframes bs-pulse { 0%, 100% { opacity: 1; } 50% { opacity: .25; } }
+
+/* code pane */
+.bs-dash-code { padding: 12px 0; font-family: var(--ap-mono); font-size: .6875rem; line-height: 1.9; flex: 1; overflow: hidden; }
+.bs-dash-code .ln { display: flex; padding: 0 14px; border-radius: 3px; transition: background .35s; white-space: nowrap; }
+.bs-dash-code .ln .no { width: 18px; color: #C9C2B6; flex: none; }
+.bs-dash-code .ln.active { background: rgba(132,0,85,.07); }
+.bs-dash-code .ln.dim { opacity: .35; }
+.bs-dash-code .k { color: var(--ap-mag); } .bs-dash-code .s { color: var(--ap-ok); } .bs-dash-code .p { color: var(--ap-muted); }
+
+/* doc preview pane */
+.bs-dash-doc { padding: 16px; font-size: .6875rem; line-height: 1.6; flex: 1; display: flex; flex-direction: column; }
+.bs-dash-doc .blk { border: 1px dashed transparent; border-radius: 5px; padding: 9px 10px; margin-bottom: 9px; transition: border-color .35s, background .35s; color: var(--ap-body); }
+.bs-dash-doc .blk b { display: block; color: var(--ap-ink); font-weight: 600; margin-bottom: 1px; }
+.bs-dash-doc .blk.active { border-color: #3B82C4; background: rgba(59,130,196,.06); }
+.bs-dash-doc .blk u { text-decoration-color: #3B82C4; text-decoration-style: dashed; text-underline-offset: 2px; }
+.bs-dash-doc-foot { margin-top: auto; padding-top: 10px; border-top: 1px solid var(--ap-line); font-family: var(--ap-mono); font-size: .625rem; color: var(--ap-muted); }
+
+/* extraction results pane */
+.bs-dash-res { padding: 6px 0; flex: 1; overflow: hidden; display: flex; flex-direction: column; }
+.bs-dash-row { display: flex; align-items: flex-start; gap: 8px; padding: 11px 14px; border-radius: 4px; transition: background .35s; }
+.bs-dash-row.active { background: rgba(132,0,85,.06); }
+.bs-dash-row .q { color: var(--ap-mag); font-size: .8125rem; line-height: 1; flex: none; margin-top: 1px; }
+.bs-dash-row .k { font-family: var(--ap-mono); font-size: .6875rem; color: var(--ap-ink); font-weight: 600; display: block; }
+.bs-dash-row .v { font-size: .6875rem; color: var(--ap-body); line-height: 1.5; }
+.bs-dash-res-foot { margin-top: auto; padding: 10px 14px 0; font-family: var(--ap-mono); font-size: .625rem; color: var(--ap-muted); border-top: 1px solid var(--ap-line); }
+
+@media (max-width: 1180px) {
+  .bs-dash-body { grid-template-columns: 1fr 1fr; }
+  .bs-dash-pane:first-child { display: none; }
+}
+@media (max-width: 991px) {
+  .bs-megahero { grid-template-columns: 1fr; grid-template-rows: auto auto auto; min-height: 0; padding: 48px 0 0; }
+  .bs-megahero-inner { grid-column: 1; grid-row: 1; max-width: none; padding: 0 32px; }
+  .bs-hero-art { grid-column: 1; grid-row: 2; padding: 32px; }
+  .bs-hero-ribbon { grid-row: 3; }
+}
+@media (max-width: 640px) {
+  .bs-dash-body { grid-template-columns: 1fr; min-height: 0; }
+  .bs-dash-pane { border-right: 0; border-bottom: 1px solid var(--ap-line); }
+}
+
+/* ---------- Why band (oversized statement + icon trio) ---------- */
+.bs-why { background: var(--ap-soft); text-align: center; }
+.bs-why-stmt { font-family: var(--ap-serif); font-weight: 400; font-size: clamp(1.75rem, 4.4vw, 3.375rem); line-height: 1.14; letter-spacing: -.02em; max-width: 20ch; margin: 0 auto; }
+.bs-why-stmt em { font-style: normal; color: var(--ap-mag); }
+.bs-why-trio { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-top: 72px; border-top: 1px solid var(--ap-line); padding-top: 48px; }
+.bs-why-item { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+.bs-why-ic { width: 64px; height: 64px; border-radius: 50%; border: 1.5px solid var(--ap-ink); display: flex; align-items: center; justify-content: center; }
+.bs-why-item h4 { font-family: var(--ap-serif); font-weight: 500; font-size: 1.1875rem; letter-spacing: -.01em; }
+.bs-why-item p { font-size: .875rem; color: var(--ap-body); max-width: 26ch; line-height: 1.5; }
+@media (max-width: 767px) { .bs-why-trio { grid-template-columns: 1fr; gap: 40px; } }
+
+/* ---------- Illustrated how-it-works (solid magenta-tint band) ---------- */
+.bs-how { background: var(--ap-tint); }
+.bs-how-divider { text-align: center; max-width: 640px; margin: 72px auto 0; padding-top: 48px; border-top: 1px solid rgba(26,21,32,.1); }
+.bs-how-divider h3 { font-family: var(--ap-serif); font-weight: 400; font-size: clamp(1.375rem, 2.4vw, 1.75rem); letter-spacing: -.01em; line-height: 1.25; margin-bottom: 14px; }
+.bs-how-divider .ap-lede { margin: 0 auto; }
+.bs-how-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 56px; }
+.bs-how-card { background: #fff; border-radius: 14px; padding: 22px 20px 26px; box-shadow: 0 14px 34px rgba(75,5,50,.08); display: flex; flex-direction: column; }
+.bs-how-card .n { font-family: var(--ap-mono); font-size: .6875rem; letter-spacing: .12em; color: var(--ap-mag); margin-bottom: 14px; }
+.bs-how-art { background: var(--ap-soft); border-radius: 8px; min-height: 108px; display: flex; align-items: center; justify-content: center; margin-bottom: 18px; padding: 10px; }
+.bs-how-card h4 { font-family: var(--ap-serif); font-weight: 500; font-size: 1.0625rem; letter-spacing: -.01em; margin-bottom: 8px; }
+.bs-how-card p { font-size: .8438rem; color: var(--ap-body); line-height: 1.5; }
+@media (max-width: 991px) { .bs-how-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px) { .bs-how-grid { grid-template-columns: 1fr; } }
+
+/* ---------- SenseML vs LLM Comparison Section ---------- */
+.bs-cmp-wrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 36px;
+  align-items: center;
+  background: var(--ap-soft);
+  border-radius: 16px;
+  padding: 48px;
+  border: 1px solid var(--ap-line);
+}
+.bs-cmp-list {
+  display: grid;
+  gap: 18px;
+}
+.bs-cmp-item {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+.bs-cmp-item .bullet {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--ap-mag);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  flex: none;
+  margin-top: 2px;
+}
+.bs-cmp-item b {
+  display: block;
+  font-size: 1rem;
+  color: var(--ap-ink);
+  margin-bottom: 2px;
+}
+.bs-cmp-item p {
+  font-size: 0.9063rem;
+  color: var(--ap-body);
+  line-height: 1.5;
+}
+
+/* ---------- Use Cases Grid ---------- */
+.bs-usecase-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+.bs-usecase-card {
+  background: #fff;
+  border: 1px solid var(--ap-line);
+  border-radius: 10px;
+  padding: 28px 24px;
+  display: flex;
+  flex-direction: column;
+  transition: border-color .2s, box-shadow .2s, transform .2s;
+}
+.bs-usecase-card:hover { border-color: var(--ap-mag); box-shadow: 0 14px 32px rgba(75,5,50,.08); transform: translateY(-2px); }
+.bs-usecase-card .bs-ic-wrap { width: 54px; height: 54px; border-radius: 50%; background: var(--ap-tint); display: flex; align-items: center; justify-content: center; margin-bottom: 6px; }
+.bs-usecase-card .bs-ic-wrap .ap-icon { width: 26px; height: 26px; stroke: var(--ap-mag); }
+.bs-usecase-card h3 {
+  font-family: var(--ap-serif);
+  font-size: 1.1875rem;
+  font-weight: 500;
+  margin: 16px 0 10px;
+}
+.bs-usecase-card p {
+  font-size: 0.9063rem;
+  line-height: 1.55;
+  color: var(--ap-body);
+  flex: 1;
+}
+.bs-usecase-tag {
+  font-family: var(--ap-mono);
+  font-size: 0.6875rem;
+  color: var(--ap-mag);
+  margin-top: 18px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* ---------- Related Doc Types Grid ---------- */
+.bs-related-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 14px;
+}
+.bs-related-card {
+  background: #fff;
+  border: 1px solid var(--ap-line);
+  border-top: 3px solid var(--ap-line);
+  border-radius: 8px;
+  padding: 20px 18px;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+  display: flex;
+  flex-direction: column;
+}
+.bs-related-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--ap-mag);
+  border-top-color: var(--ap-mag);
+  box-shadow: 0 10px 30px rgba(132, 0, 85, 0.08);
+}
+.bs-related-card h4 {
+  font-family: var(--ap-serif);
+  font-size: 1.0625rem;
+  font-weight: 500;
+  margin: 12px 0 6px;
+  color: var(--ap-ink);
+}
+.bs-related-card p {
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--ap-muted);
+  flex: 1;
+}
+.bs-related-arrow {
+  margin-top: 12px;
+  font-family: var(--ap-mono);
+  font-size: 0.75rem;
+  color: var(--ap-mag);
+  font-weight: 600;
+}
+
+/* ---------- Quickstart Tabbed Code Block ---------- */
+.bs-api-box {
+  background: #17121C;
+  border-radius: 12px;
+  overflow: hidden;
+  color: #E8E3DB;
+  font-family: var(--ap-mono);
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+}
+.bs-api-nav {
+  display: flex;
+  background: rgba(255,255,255,0.04);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  padding: 4px 12px;
+}
+.bs-api-tab {
+  padding: 10px 16px;
+  background: transparent;
+  border: 0;
+  color: #8B857B;
+  font-family: var(--ap-mono);
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.bs-api-tab.active {
+  color: #FEFDFB;
+  border-bottom: 2px solid var(--ap-mag);
+  font-weight: 600;
+}
+.bs-api-code {
+  padding: 22px 24px;
+  font-size: 0.84rem;
+  line-height: 1.65;
+  overflow-x: auto;
+  display: none;
+}
+.bs-api-code.active {
+  display: block;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1180px) {
+  .bs-usecase-grid { grid-template-columns: repeat(2, 1fr); }
+  .bs-related-grid { grid-template-columns: repeat(3, 1fr); }
+  .bs-cmp-wrap { grid-template-columns: 1fr; }
+}
+@media (max-width: 991px) {
+  .bs-related-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 767px) {
+  .bs-usecase-grid, .bs-related-grid { grid-template-columns: 1fr; }
+  .bs-spec-grid { grid-template-columns: 1fr; }
+  .bs-cmp-wrap { padding: 24px 16px; }
+}
+
+  </style>
+</head>
+<body>
+<!-- Navbar -->
+  <nav class="navbar">
+    <div class="container navbar-inner">
+      <a href="https://www.sensible.so" class="nav-logo" style="display: flex; align-items: center;">
+        <img src="https://cdn.prod.website-files.com/69d90e4abf8f50428ec28825/69d90e4abf8f50428ec2888c_LogoDefault.svg" alt="Sensible" style="height: 28px; display: block;" />
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="https://www.sensible.so/how-it-works">Product</a></li>
+        <li><a href="https://www.sensible.so/solutions">Solutions</a></li>
+        <li><a href="https://www.sensible.so/pricing">Pricing</a></li>
+        <li><a href="https://www.sensible.so/customers">Customers</a></li>
+        <li><a href="https://docs.sensible.so" target="_blank" rel="noopener">Docs ↗</a></li>
+      </ul>
+
+      <div class="nav-cta-group" style="display: flex; gap: 16px; align-items: center;">
+        <a href="https://app.sensible.so/signin/" class="nav-signin">Sign in</a>
+        <a href="https://www.sensible.so/meeting" class="btn btn-primary" style="padding: 8px 16px; font-size: 0.8125rem;">Book a Demo</a>
+      </div>
+
+      <button type="button" class="mobile-toggle" aria-label="Menu" aria-expanded="false" aria-controls="mobile-panel" onclick="var p=document.getElementById('mobile-panel');var open=p.classList.toggle('is-open');this.setAttribute('aria-expanded',open);this.textContent=open?'✕':'☰';">☰</button>
+    </div>
+
+    <div class="mobile-panel" id="mobile-panel">
+      <a class="mobile-link" href="https://www.sensible.so/how-it-works">Product</a>
+      <a class="mobile-link" href="https://www.sensible.so/solutions">Solutions</a>
+      <a class="mobile-link" href="https://www.sensible.so/pricing">Pricing</a>
+      <a class="mobile-link" href="https://www.sensible.so/customers">Customers</a>
+      <a class="mobile-link" href="https://www.sensible.so/managed-services">Managed Services</a>
+      <a class="mobile-link" href="https://docs.sensible.so" target="_blank" rel="noopener">Docs ↗</a>
+      <a class="mobile-signin" href="https://app.sensible.so/signin/">Sign in</a>
+      <a class="mobile-cta" href="https://www.sensible.so/meeting">Book a Demo</a>
+    </div>
+  </nav>
+
+  
+<div class="ap">
+
+  <!-- 1. HERO: SOLID BRAND-TINT BAND, LEFT-ALIGNED, SINGLE FOLD -->
+  <section class="bs-megahero" id="bs-hero">
+    <div class="bs-megahero-inner">
+      <div class="bs-crumbs" data-hero>
+        <a href="https://www.sensible.so">Home</a>
+        <span class="sep">/</span>
+        <a href="https://www.sensible.so/doc-types">Document Types</a>
+        <span class="sep">/</span>
+        <span class="curr">Bank Statements</span>
+      </div>
+      <span class="ap-tag" data-hero><svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="1" y="2" width="11" height="10" rx="1.2"/><path d="M1 5.2h11M4 1v2.4M9 1v2.4"/></svg> DOC TYPE &middot; BANK STATEMENTS</span>
+      <h1 class="ap-h1" data-hero>Bank statements,<br><em>reconciled</em>,<br>not just read</h1>
+      <p class="ap-lede" data-hero>150+ bank formats prebuilt. Every balance is mathematically verified and every field is traced to its exact page coordinate, so a misread digit never reaches underwriting silently.</p>
+      <div class="ap-btns" data-hero>
+        <a class="ap-btn p" href="https://app.sensible.so/register/">Test with your statement</a>
+        <a class="ap-btn s" href="#bs-comparison">See how it works</a>
+      </div>
+    </div>
+
+    <div class="bs-hero-art" data-hero>
+      <div class="bs-hero-demo">
+        <div class="bs-dash-top">
+          <img class="bs-dash-logo" src="../assets/logos/sensible-mark.png" alt="Sensible"/>
+          <span class="bs-dash-crumb"><b>bank_statement_oct2024</b> / chase_commercial</span>
+          <span class="bs-dash-pill">Live in Dev</span>
+          <span class="bs-dash-publish">Publish configuration</span>
+        </div>
+        <div class="bs-dash-body">
+          <div class="bs-dash-pane">
+            <div class="bs-dash-pane-h"><span>SenseML config</span></div>
+            <div class="bs-dash-code" id="bs-dash-code">
+              <div class="ln"><span class="no">1</span><span>&#123;</span></div>
+              <div class="ln"><span class="no">2</span><span>&nbsp;&nbsp;<span class="k">"queries"</span>: [</span></div>
+              <div class="ln active" data-ln="0"><span class="no">3</span><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="p">&#123;</span> <span class="k">"id"</span>: <span class="s">"institution"</span> <span class="p">&#125;</span>,</span></div>
+              <div class="ln" data-ln="1"><span class="no">4</span><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="p">&#123;</span> <span class="k">"id"</span>: <span class="s">"account_holder"</span> <span class="p">&#125;</span>,</span></div>
+              <div class="ln" data-ln="2"><span class="no">5</span><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="p">&#123;</span> <span class="k">"id"</span>: <span class="s">"balances"</span> <span class="p">&#125;</span>,</span></div>
+              <div class="ln" data-ln="3"><span class="no">6</span><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="p">&#123;</span> <span class="k">"id"</span>: <span class="s">"transactions"</span> <span class="p">&#125;</span>,</span></div>
+              <div class="ln" data-ln="4"><span class="no">7</span><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="p">&#123;</span> <span class="k">"id"</span>: <span class="s">"reconciliation"</span> <span class="p">&#125;</span></span></div>
+              <div class="ln"><span class="no">8</span><span>&nbsp;&nbsp;]</span></div>
+              <div class="ln"><span class="no">9</span><span>&#125;</span></div>
+              <div class="ln dim"><span class="no">10</span><span></span></div>
+            </div>
+          </div>
+          <div class="bs-dash-pane">
+            <div class="bs-dash-pane-h"><span>Preview &middot; page 1/4</span><span class="live"><span class="pulse"></span>Live</span></div>
+            <div class="bs-dash-doc" id="bs-dash-doc">
+              <div class="blk active" data-doc="0"><b><u>JPMorgan Chase Bank, N.A.</u></b>Account &hellip;8842 &middot; Routing 021000021</div>
+              <div class="blk" data-doc="1"><b>Stillwater Robotics, Inc.</b>Cambridge, MA &middot; Period Oct 01&ndash;31, 2024</div>
+              <div class="blk" data-doc="2"><b>Beginning <u>$124,660.90</u></b>Ending <u>$148,920.40</u></div>
+              <div class="blk" data-doc="3"><b>10/04 ACH Deposit</b>Stripe Payout &middot; <u>+$42,500.00</u></div>
+              <div class="blk" data-doc="3"><b>10/12 ACH Debit</b>Gusto Payroll &middot; <u>&minus;$15,120.50</u></div>
+              <div class="blk" data-doc="4"><b>Reconciliation check</b>Beginning + Deposits &minus; Withdrawals = Ending &middot; <u>0.00 delta</u></div>
+              <div class="bs-dash-doc-foot">chase_commercial_oct2024.pdf &middot; 4 pages &middot; 38 transactions</div>
+            </div>
+          </div>
+          <div class="bs-dash-pane">
+            <div class="bs-dash-pane-h"><span>Extraction</span><span>0 errors</span></div>
+            <div class="bs-dash-res" id="bs-dash-res">
+              <div class="bs-dash-row active" data-res="0"><span class="q">&#10077;</span><div><span class="k">institution</span><span class="v">JPMorgan Chase Bank, N.A.</span></div></div>
+              <div class="bs-dash-row" data-res="1"><span class="q">&#10077;</span><div><span class="k">account_holder</span><span class="v">Stillwater Robotics, Inc., Cambridge, MA</span></div></div>
+              <div class="bs-dash-row" data-res="2"><span class="q">&#10077;</span><div><span class="k">balances</span><span class="v">Beginning $124,660.90, Ending $148,920.40</span></div></div>
+              <div class="bs-dash-row" data-res="3"><span class="q">&#10077;</span><div><span class="k">transactions</span><span class="v">38 rows &middot; Show table</span></div></div>
+              <div class="bs-dash-row" data-res="4"><span class="q">&#10077;</span><div><span class="k">reconciliation</span><span class="v">0.00 delta &middot; Reconciled</span></div></div>
+              <div class="bs-dash-res-foot">58 fields extracted &middot; 0.99 confidence</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ap-ribbon bs-hero-ribbon"><div class="ap-wrap"><div class="ap-ribbon-grid">
+      <div class="ap-ribbon-cell"><p class="ap-ribbon-v">150+</p><p class="ap-ribbon-l">Pre-built bank configs</p></div>
+      <div class="ap-ribbon-cell"><p class="ap-ribbon-v">75M+</p><p class="ap-ribbon-l">Documents processed</p></div>
+      <div class="ap-ribbon-cell"><p class="ap-ribbon-v">SOC 2 + HIPAA</p><p class="ap-ribbon-l">Certified infrastructure</p></div>
+      <div class="ap-ribbon-cell"><p class="ap-ribbon-v">0.00 Delta</p><p class="ap-ribbon-l">Ledger math verification</p></div>
+    </div></div></div>
+  </section>
+
+  <!-- 2. LOGOS -->
+  <div class="ap-logos"><div class="ap-logos-cap">Trusted by fintechs and lenders turning complex financial documents into production data</div><div class="ap-logos-track"><img src="../assets/logos/vouch.svg" alt=""><img src="../assets/logos/limit.png" alt=""><img src="../assets/logos/ledgebrook.svg" alt=""><img src="../assets/logos/obie.svg" alt=""><img src="../assets/logos/neptune-flood.svg" alt=""><img src="../assets/logos/insurance-quantified.svg" alt=""><img src="../assets/logos/lettuce.svg" alt=""><img src="../assets/logos/founder-shield.svg" alt=""><img src="../assets/logos/compscience.svg" alt=""><img src="../assets/logos/inclined.png" alt=""><img src="../assets/logos/sterlingrisk.png" alt=""><img src="../assets/logos/vouch.svg" alt=""><img src="../assets/logos/limit.png" alt=""><img src="../assets/logos/ledgebrook.svg" alt=""><img src="../assets/logos/obie.svg" alt=""><img src="../assets/logos/neptune-flood.svg" alt=""><img src="../assets/logos/insurance-quantified.svg" alt=""><img src="../assets/logos/lettuce.svg" alt=""><img src="../assets/logos/founder-shield.svg" alt=""><img src="../assets/logos/compscience.svg" alt=""><img src="../assets/logos/inclined.png" alt=""><img src="../assets/logos/sterlingrisk.png" alt=""></div></div>
+
+  <!-- 2b. CASE STUDY STRIP: LOGOS PAIRED WITH REAL OUTCOME NUMBERS -->
+  <section class="ap-sec ap-band bs-cases" id="bs-cases">
+    <div class="ap-wrap">
+      <div class="ap-grid ap-g3">
+        <div class="ap-cell bs-case" data-reveal>
+          <img src="../assets/logos/vouch.svg" alt="Vouch" class="bs-case-logo"/>
+          <p class="bs-case-stat">4.5 hrs &rarr; 12 min</p>
+          <p class="bs-case-p">Average underwriter review time per applicant, after bank statement math checks replaced manual line-by-line reconciliation.</p>
+        </div>
+        <div class="ap-cell bs-case" data-reveal>
+          <img src="../assets/logos/founder-shield.svg" alt="Founder Shield" class="bs-case-logo"/>
+          <p class="bs-case-stat">3 new bank formats / week</p>
+          <p class="bs-case-p">Onboarded without waiting on Sensible engineering: new SenseML configs shipped by their own team from the config library.</p>
+        </div>
+        <div class="ap-cell bs-case" data-reveal>
+          <img src="../assets/logos/compscience.svg" alt="CompScience" class="bs-case-logo"/>
+          <p class="bs-case-stat">0 silent balance errors</p>
+          <p class="bs-case-p">Across 40,000+ processed statements, every reconciliation failure is flagged and routed to review, never passed downstream.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. A REAL STATEMENT, WORKED END TO END -->
+  <section class="ap-sec" id="bs-worked">
+    <div class="ap-wrap">
+      <div class="bs-worked-grid">
+        <div data-reveal>
+          <span class="ap-kicker">Not A Mockup</span>
+          <h2 class="ap-h2">One real April statement, worked end to end</h2>
+          <p class="ap-lede" style="margin-top:20px;">This is what actually comes back for a single commercial checking statement: not a marketing number, the output of one extraction run.</p>
+          <div class="bs-worked-steps">
+            <div class="bs-worked-step"><span class="n">01</span><p>Header and account metadata located and typed from the top block.</p></div>
+            <div class="bs-worked-step"><span class="n">02</span><p>All 11 transactions anchored across the table, including a page break mid-cycle.</p></div>
+            <div class="bs-worked-step"><span class="n">03</span><p>Beginning + deposits &minus; withdrawals checked against the printed ending balance.</p></div>
+            <div class="bs-worked-step"><span class="n">04</span><p>Typed JSON returned with a bounding box on every single value.</p></div>
+          </div>
+        </div>
+        <div class="bs-receipt" data-reveal>
+          <div class="bs-receipt-head">
+            <span>STATEMENT PERIOD</span>
+            <span class="v">04/01/2024 &ndash; 04/30/2024</span>
+          </div>
+          <div class="bs-receipt-row"><span>Beginning balance</span><span class="v">$3,322.14</span></div>
+          <div class="bs-receipt-row"><span>Total deposits (+)</span><span class="v ok">+$6,294.32</span></div>
+          <div class="bs-receipt-row"><span>Total withdrawals (&minus;)</span><span class="v">&minus;$1,453.51</span></div>
+          <div class="bs-receipt-row total"><span>Ending balance</span><span class="v">$8,162.95</span></div>
+          <div class="bs-receipt-foot">
+            <span>11 transactions</span>
+            <span class="ok">&#10003; Reconciled, 0.00 delta</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3b. WHY BAND: OVERSIZED STATEMENT + ICON TRIO -->
+  <section class="ap-sec bs-why" id="bs-why">
+    <div class="ap-wrap">
+      <p class="bs-why-stmt" data-reveal>Built for teams who reconcile <em>real money</em>, not just read text off a page.</p>
+      <div class="bs-why-trio" data-reveal>
+        <div class="bs-why-item">
+          <div class="bs-why-ic"><svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="var(--ap-ink)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13l6 6L22 6"/></svg></div>
+          <h4>Zero hallucinated pennies</h4>
+          <p>Every balance is computed from raw coordinates, then checked against ledger arithmetic before it ships.</p>
+        </div>
+        <div class="bs-why-item">
+          <div class="bs-why-ic"><svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="var(--ap-ink)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="13" cy="13" r="9"/><circle cx="13" cy="13" r="2.6" fill="var(--ap-ink)" stroke="none"/></svg></div>
+          <h4>Pixel-level provenance</h4>
+          <p>Every extracted value carries its exact page and bounding box, back to the original PDF.</p>
+        </div>
+        <div class="bs-why-item">
+          <div class="bs-why-ic"><svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="var(--ap-ink)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V6M13 20V4M22 20v-9"/></svg></div>
+          <h4>150+ formats, hours not weeks</h4>
+          <p>A bank layout we've never seen gets a working config the same day, reused across every customer after.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. SENSEML VS PURE LLM PARSING (WHY DETERMINISTIC RULES MATTER) -->
+  <section class="ap-sec bs-how" id="bs-comparison">
+    <div class="ap-wrap">
+      <div class="ap-head ap-center" data-reveal>
+        <span class="ap-kicker">Under the Hood</span>
+        <h2 class="ap-h2">"Just prompt an LLM" doesn&rsquo;t survive a real bank statement</h2>
+        <p class="ap-lede">Agentic parsers are fast to demo and slow to trust: they hallucinate pennies, lose rows past a context window, and hand you a number with no way to check it. Sensible pairs layout-aware anchors with ledger arithmetic so every value is provable, not just plausible.</p>
+      </div>
+
+      <div class="bs-vs-wrap" data-reveal style="overflow-x:auto; margin-bottom:72px;">
+        <table class="bs-vs-table">
+          <thead>
+            <tr>
+              <th>&nbsp;</th>
+              <th>Raw LLM prompting</th>
+              <th>Template / rules-only OCR</th>
+              <th class="bs-vs-us">Sensible (SenseML + Math)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Continuous tables past 30+ pages</td><td class="bs-vs-no">&#10005;</td><td class="bs-vs-partial">TEMPLATE-LOCKED</td><td class="bs-vs-us bs-vs-yes">&#10003;</td></tr>
+            <tr><td>Mathematically reconciled balances</td><td class="bs-vs-no">&#10005;</td><td class="bs-vs-no">&#10005;</td><td class="bs-vs-us bs-vs-yes">&#10003;</td></tr>
+            <tr><td>Exact page + bounding box per value</td><td class="bs-vs-no">&#10005;</td><td class="bs-vs-partial">PAGE-LEVEL ONLY</td><td class="bs-vs-us bs-vs-yes">&#10003;</td></tr>
+            <tr><td>Handles new bank layout in hours</td><td class="bs-vs-partial">NO GUARANTEE</td><td class="bs-vs-no">&#10005;</td><td class="bs-vs-us bs-vs-yes">&#10003;</td></tr>
+            <tr><td>Flags tampered / altered statements</td><td class="bs-vs-no">&#10005;</td><td class="bs-vs-no">&#10005;</td><td class="bs-vs-us bs-vs-yes">&#10003;</td></tr>
+            <tr><td>Deterministic output on re-run</td><td class="bs-vs-no">&#10005;</td><td class="bs-vs-us bs-vs-yes" style="background:transparent;">&#10003;</td><td class="bs-vs-us bs-vs-yes">&#10003;</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="bs-cmp-wrap" data-reveal>
+        <div class="bs-cmp-list">
+          <div class="bs-cmp-item">
+            <span class="bullet">1</span>
+            <div>
+              <b>Zero Hallucinated Pennies</b>
+              <p>Numbers are pulled from raw coordinate boxes and validated mathematically. If a digit doesn&rsquo;t sum, it is flagged immediately.</p>
+            </div>
+          </div>
+          <div class="bs-cmp-item">
+            <span class="bullet">2</span>
+            <div>
+              <b>Continuous Multi-Page Table Anchors</b>
+              <p>SenseML table methods track table headers across page boundaries without dropping rows on multi-page statements.</p>
+            </div>
+          </div>
+          <div class="bs-cmp-item">
+            <span class="bullet">3</span>
+            <div>
+              <b>Exact Audit Trails to Source Coordinates</b>
+              <p>Every single transaction row retains its exact bounding box and page index for compliance audits.</p>
+            </div>
+          </div>
+        </div>
+
+        <div style="text-align:center;">
+          <svg class="bs-cmp-svg" viewBox="0 0 440 240" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#1A1520" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="10" y="10" width="200" height="220" rx="6" fill="#FBFBF9" stroke="#E6E6E9"/><text x="24" y="34" font-size="11" font-family="IBM Plex Serif, serif" fill="#1A1520" stroke="none" text-anchor="start" font-weight="600" letter-spacing="0">Pure LLMs / OCR APIs</text><text x="24" y="48" font-size="8" font-family="IBM Plex Sans, sans-serif" fill="#8B857B" stroke="none" text-anchor="start" font-weight="400" letter-spacing="0">Token-by-token text guessing</text><rect x="24" y="60" width="172" height="88" rx="3" fill="#fff" stroke="#E6E6E9"/><path d="M34 76h152M34 90h110M34 104h130M34 118h90M34 132h140" stroke="#E6E6E9" stroke-width="1.5"/><rect x="30" y="100" width="160" height="20" fill="rgba(216,139,31,0.12)" stroke="#D88B1F" stroke-dasharray="2 2" rx="2"/><text x="36" y="114" font-size="7.5" font-family="IBM Plex Mono, monospace" fill="#D88B1F" stroke="none" text-anchor="start" font-weight="600" letter-spacing="0">Row 48 dropped · Math delta -$320.00</text><text x="24" y="168" font-size="8.5" font-family="IBM Plex Sans, sans-serif" fill="#993333" stroke="none" text-anchor="start" font-weight="400" letter-spacing="0">✕ Fails on 30+ page statements</text><text x="24" y="186" font-size="8.5" font-family="IBM Plex Sans, sans-serif" fill="#993333" stroke="none" text-anchor="start" font-weight="400" letter-spacing="0">✕ Pennies hallucinated in balances</text><text x="24" y="204" font-size="8.5" font-family="IBM Plex Sans, sans-serif" fill="#993333" stroke="none" text-anchor="start" font-weight="400" letter-spacing="0">✕ No audit trail to source coordinates</text><rect x="230" y="10" width="200" height="220" rx="6" fill="#fff" stroke="#840055" stroke-width="1.5"/><text x="244" y="34" font-size="11" font-family="IBM Plex Serif, serif" fill="#840055" stroke="none" text-anchor="start" font-weight="600" letter-spacing="0">Sensible (SenseML + Math)</text><text x="244" y="48" font-size="8" font-family="IBM Plex Sans, sans-serif" fill="#8B857B" stroke="none" text-anchor="start" font-weight="400" letter-spacing="0">Deterministic anchors & table bounds</text><rect x="244" y="60" width="172" height="88" rx="3" fill="#F7F3F6" stroke="rgba(132,0,85,0.2)"/><path d="M254 76h152M254 90h152M254 104h152M254 118h152M254 132h152M290 60v88M360 60v88" stroke="rgba(132,0,85,0.2)" stroke-width="1"/><circle cx="394" cy="76" r="5" fill="#2E7B40"/><path d="M392 76l1.5 1.5 3-3" stroke="#fff" stroke-width="1.2"/><circle cx="394" cy="104" r="5" fill="#2E7B40"/><path d="M392 104l1.5 1.5 3-3" stroke="#fff" stroke-width="1.2"/><text x="244" y="168" font-size="8.5" font-family="IBM Plex Sans, sans-serif" fill="#2E7B40" stroke="none" text-anchor="start" font-weight="400" letter-spacing="0">✓ Continuous tables over 100+ pages</text><text x="244" y="186" font-size="8.5" font-family="IBM Plex Sans, sans-serif" fill="#2E7B40" stroke="none" text-anchor="start" font-weight="400" letter-spacing="0">✓ Starting + Credits - Debits = Ending verified</text><text x="244" y="204" font-size="8.5" font-family="IBM Plex Sans, sans-serif" fill="#2E7B40" stroke="none" text-anchor="start" font-weight="400" letter-spacing="0">✓ Exact page + bounding box on every value</text></svg>
+        </div>
+      </div>
+
+      <div class="bs-how-divider" data-reveal>
+        <h3>From rules to results: four steps between your PDF and a number you can trust</h3>
+        <p class="ap-lede">This is the pipeline underneath every extraction, not a black box. LLMs only touch the parts of the document that are genuinely ambiguous; everything with a fixed structure is handled deterministically.</p>
+      </div>
+      <div class="bs-how-grid" data-reveal>
+        <div class="bs-how-card">
+          <div class="n">01</div>
+          <div class="bs-how-art">
+            <svg viewBox="0 0 140 108" fill="none" stroke="#1A1520" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="40" y="10" width="60" height="88" rx="3" fill="#fff" stroke-opacity=".5"/><path d="M50 26h40M50 38h40M50 50h28M50 62h34M50 74h20" stroke-opacity=".35"/><rect x="34" y="4" width="60" height="88" rx="3" fill="#fff"/><path d="M44 20h40M44 32h40M44 44h28M44 56h34M44 68h20" stroke-opacity=".55"/><path d="M34 44h60" stroke="#840055" stroke-width="2"/><circle cx="34" cy="44" r="3" fill="#840055" stroke="none"/><circle cx="94" cy="44" r="3" fill="#840055" stroke="none"/></svg>
+          </div>
+          <h4>OCR &amp; layout parse</h4>
+          <p>Native text and scanned pages are both normalized into a coordinate-anchored layout tree; every character keeps its page and pixel position.</p>
+        </div>
+        <div class="bs-how-card">
+          <div class="n">02</div>
+          <div class="bs-how-art">
+            <svg viewBox="0 0 140 108" fill="none" stroke="#1A1520" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="34" y="4" width="60" height="96" rx="3" fill="#fff"/><rect x="42" y="14" width="44" height="14" rx="2" fill="rgba(132,0,85,.1)" stroke="#840055"/><path d="M42 46h44M42 54h30" stroke-opacity=".3"/><rect x="42" y="64" width="44" height="24" rx="2" fill="rgba(132,0,85,.1)" stroke="#840055"/><text x="98" y="22" font-size="7" font-family="IBM Plex Mono, monospace" fill="#840055" stroke="none">HEADER</text><text x="98" y="80" font-size="7" font-family="IBM Plex Mono, monospace" fill="#840055" stroke="none">BALANCE</text><path d="M90 20h6M90 76h6" stroke="#840055" stroke-dasharray="2 2"/></svg>
+          </div>
+          <h4>Layout-based field location</h4>
+          <p>SenseML anchors locate the header block, balance summary, and transaction table using structural rules matched to the bank&rsquo;s known format.</p>
+        </div>
+        <div class="bs-how-card">
+          <div class="n">03</div>
+          <div class="bs-how-art">
+            <svg viewBox="0 0 140 108" fill="none" stroke="#1A1520" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="20" y="34" width="100" height="40" rx="4" fill="#fff" stroke-dasharray="3 3" stroke="#D88B1F"/><text x="30" y="50" font-size="7" font-family="IBM Plex Mono, monospace" fill="#8B857B" stroke="none">"memo":</text><text x="30" y="62" font-size="7" font-family="IBM Plex Mono, monospace" fill="#D88B1F" stroke="none">"WIRE IN &ndash; REF #88213"</text><path d="M70 20l3 8 8 1-6 6 1.5 8-6.5-4-6.5 4 1.5-8-6-6 8-1z" fill="#840055" stroke="none"/></svg>
+          </div>
+          <h4>LLM parsing for ambiguous cells</h4>
+          <p>Only genuinely unstructured spans, like multi-line wire memos or unfamiliar footnotes, get routed to an LLM, scoped to that one cell.</p>
+        </div>
+        <div class="bs-how-card">
+          <div class="n">04</div>
+          <div class="bs-how-art">
+            <svg viewBox="0 0 140 108" fill="none" stroke="#1A1520" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="28" y="14" width="84" height="80" rx="4" fill="#fff"/><circle cx="42" cy="32" r="6" fill="rgba(46,123,64,.12)" stroke="#2E7B40"/><path d="M39 32l2 2 4-4" stroke="#2E7B40"/><path d="M54 32h42" stroke-opacity=".35"/><circle cx="42" cy="52" r="6" fill="rgba(46,123,64,.12)" stroke="#2E7B40"/><path d="M39 52l2 2 4-4" stroke="#2E7B40"/><path d="M54 52h42" stroke-opacity=".35"/><circle cx="42" cy="72" r="6" fill="rgba(46,123,64,.12)" stroke="#2E7B40"/><path d="M39 72l2 2 4-4" stroke="#2E7B40"/><path d="M54 72h30" stroke-opacity=".35"/></svg>
+          </div>
+          <h4>Schema validation &amp; type casting</h4>
+          <p>Every field is cast to its declared type and checked against ledger arithmetic before it ever reaches your JSON response.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. FOUR PRODUCTION CHALLENGES -->
+  <section class="ap-sec" id="bs-challenges">
+    <div class="ap-wrap ap-head ap-center" data-reveal>
+      <span class="ap-kicker">Production Reliability</span>
+      <h2 class="ap-h2">Where bank statement parsing breaks in production</h2>
+      <p class="ap-lede">Multi-page splits, altered balances, and combined statements break generic OCR tools. Here is how Sensible solves them.</p>
+    </div>
+    <div class="ap-grid ap-g4"><div class="ap-cell" data-reveal><div class="ap-num">01</div><h3>Multi-page transaction tables</h3><p>Statements frequently span 10, 30, or 100+ pages with repeated headers, variable column widths, multi-line wire descriptions, and footnote breaks. Deterministic SenseML table anchors parse transactions continuously across breaks without losing row alignment.</p><svg class="ap-mini" viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#1A1520" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="19" y="15" width="78" height="94" rx="3" fill="#E6E6E9" stroke="none"/><rect class="" x="14" y="10" width="78" height="94" rx="3" fill="#fff" stroke="#1A1520"/><rect x="109" y="15" width="78" height="94" rx="3" fill="#E6E6E9" stroke="none"/><rect class="" x="104" y="10" width="78" height="94" rx="3" fill="#fff" stroke="#1A1520"/><path d="M22 24h62M22 36h62M22 48h62M22 60h62M22 72h62M22 24v48M46 24v48M84 24v48" stroke-width="1.1" opacity=".55"/><path d="M112 24h62M112 36h62M112 48h62M112 60h62M112 24v36M136 24v36M174 24v36" stroke-width="1.1" opacity=".55"/><path d="M92 56h12" stroke="#840055" stroke-dasharray="2 3"/><rect class="m1" x="22" y="48" width="62" height="12" fill="rgba(132,0,85,.15)" stroke="#840055"/><rect class="m2" x="112" y="24" width="62" height="12" fill="rgba(132,0,85,.15)" stroke="#840055"/></svg></div><div class="ap-cell" data-reveal><div class="ap-num">02<span class=ap-tagline>Math-verified</span></div><h3>Running balance arithmetic</h3><p>Do all transaction credits and debits equal the stated period change? Does the running balance reconcile after every single row? Sensible re-calculates the ledger mathematically to catch OCR character misreads before they reach underwriting.</p><svg class="ap-mini" viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#1A1520" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="35" y="13" width="100" height="104" rx="3" fill="#E6E6E9" stroke="none"/><rect class="" x="30" y="8" width="100" height="104" rx="3" fill="#fff" stroke="#1A1520"/><path d="M42 24h50M42 38h50M42 52h50" stroke-width="1.2" opacity=".55"/><path d="M100 24h18M100 38h18M100 52h18" stroke-width="1.6"/><path d="M42 66h76" stroke-width="1.6"/><path class="m1" d="M100 82h18" stroke="#840055" stroke-width="2"/><path d="M42 82h34" stroke-width="1.2" opacity=".55"/><circle class="m2" cx="158" cy="64" r="20" fill="#fff" stroke="#2E7B40"/><path d="M148 64l7 7 13-14" stroke="#2E7B40" stroke-width="2"/></svg></div><div class="ap-cell" data-reveal><div class="ap-num">03</div><h3>Tamper & layout anomaly signals</h3><p>Detecting font inconsistencies, bounding box misalignments, suspicious metadata, and balance math contradictions that signal altered or fabricated statements before loans or credit lines are approved.</p><svg class="ap-mini" viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#1A1520" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="25" y="19" width="110" height="92" rx="3" fill="#E6E6E9" stroke="none"/><rect class="" x="20" y="14" width="110" height="92" rx="3" fill="#fff" stroke="#1A1520"/><path d="M30 30h40M30 42h60M30 54h70M30 66h50M30 78h60" stroke-width="1.1" opacity=".45"/><rect class="m1" x="72" y="48" width="48" height="18" fill="rgba(216,139,31,.15)" stroke="#D88B1F" stroke-dasharray="2 2"/><circle class="m2" cx="156" cy="58" r="18" fill="#fff" stroke="#D88B1F"/><path d="M156 48v12M156 64v2" stroke="#D88B1F" stroke-width="2"/></svg></div><div class="ap-cell" data-reveal><div class="ap-num">04</div><h3>Multi-account package splitting</h3><p>Banks frequently bundle commercial checking, operating reserves, and money market schedules into a single PDF packet. Sensible isolates each account schedule and extracts them into discrete, cleanly keyed sub-ledgers.</p><svg class="ap-mini" viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#1A1520" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="15" y="17" width="50" height="64" rx="3" fill="#E6E6E9" stroke="none"/><rect class="" x="10" y="12" width="50" height="64" rx="3" fill="#fff" stroke="#1A1520"/><path d="M18 24h30" stroke-width="1.2" opacity=".55"/><path d="M18 32h16" stroke-width="1.2" opacity=".55"/><rect x="80" y="49" width="50" height="64" rx="3" fill="#E6E6E9" stroke="none"/><rect class="" x="75" y="44" width="50" height="64" rx="3" fill="#fff" stroke="#1A1520"/><path d="M83 56h30" stroke-width="1.2" opacity=".55"/><path d="M83 64h16" stroke-width="1.2" opacity=".55"/><rect x="145" y="17" width="50" height="64" rx="3" fill="#E6E6E9" stroke="none"/><rect class="" x="140" y="12" width="50" height="64" rx="3" fill="#fff" stroke="#1A1520"/><path d="M148 24h30" stroke-width="1.2" opacity=".55"/><path d="M148 32h16" stroke-width="1.2" opacity=".55"/><text x="18" y="66" font-size="8" font-family="IBM Plex Mono, monospace" stroke="none" fill="#1A1520">CHK</text><text x="83" y="98" font-size="8" font-family="IBM Plex Mono, monospace" stroke="none" fill="#1A1520">SAV</text><text x="148" y="66" font-size="8" font-family="IBM Plex Mono, monospace" stroke="none" fill="#1A1520">MMA</text><path class="m1" d="M60 56C68 56 68 70 75 70M125 70C132 70 132 56 140 56" stroke="#840055" stroke-width="1.6" stroke-dasharray="3 3"/></svg></div></div>
+  </section>
+
+  <!-- 6. DOCUMENT ANATOMY & EXTRACTED FIELDS EXPLORER -->
+  <!-- 7. VALIDATION & RECONCILIATION ENGINE -->
+  <section class="ap-sec ap-band" id="bs-validation">
+    <div class="ap-wrap">
+      <div class="ap-val">
+        <div data-reveal>
+          <span class="ap-kicker">Automated Reconciliation</span>
+          <h2 class="ap-h2">How the ledger math gets checked</h2>
+          <p class="ap-lede">A single OCR typo in a transaction amount ruins downstream debt-to-income and cash flow modeling. Sensible executes strict mathematical verification on every document: beginning balance + credits &minus; debits must equal ending balance, and running balances are checked row-by-row.</p>
+        </div>
+        <div class="ap-checks"><div class="ap-checks-h"><span>Reconciliation status</span><span>CHASE-...8842</span></div><div class="ap-check"><span class="ic">&#10003;</span><div><b>Beginning balance matches statement</b><span class="d">Opening balance verified against account opening ledger</span></div><span class="res" data-count="124660.90">$124,660.90</span></div><div class="ap-check"><span class="ic">&#10003;</span><div><b>Transactions sum to period totals</b><span class="d">All 38 credits &amp; debits sum exactly to +$42,500.00 / &minus;$18,240.50</span></div><span class="res" data-count="24259.50">+$24,259.50</span></div><div class="ap-check"><span class="ic">&#10003;</span><div><b>Ending balance reconciles</b><span class="d">Beginning balance + total deposits &minus; total withdrawals = ending balance</span></div><span class="res" data-count="148920.40">$148,920.40</span></div><div class="ap-check"><span class="ic">&#10003;</span><div><b>Running balance continuous</b><span class="d">Every row balance equals previous row plus transaction amount</span></div><span class="res">38 / 38 rows pass</span></div><div class="ap-check flag"><span class="ic">!</span><div><b>A check that fails</b><span class="d">Transactions sum to +$42,500.00 but summary header reads +$45,200.00 (transposition typo in document or altered PDF), flagged with 0.38 confidence and sent to underwriting review</span></div><span class="res">review flagged</span></div></div>
+      </div>
+      <div class="ap-quote">
+        <div><span class="ap-kicker">Our position</span></div>
+        <blockquote><p class="ap-qtext">We don&rsquo;t publish a flat accuracy percentage. Financial statements demand exact mathematical reconciliation, not probabilistic guesses.</p><cite>Sensible</cite></blockquote>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. DOWNSTREAM USE CASES -->
+  <section class="ap-sec" id="bs-usecases">
+    <div class="ap-wrap">
+      <div class="ap-head ap-center" data-reveal>
+        <span class="ap-kicker">Use Cases</span>
+        <h2 class="ap-h2">Built for high-volume financial workflows</h2>
+        <p class="ap-lede">Delivering verified financial feeds directly to underwriting models, ERPs, and risk engines.</p>
+      </div>
+      <div class="bs-usecase-grid" data-reveal>
+        <div class="bs-usecase-card"><div class="bs-ic-wrap"><svg class="ap-icon" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="8" y="6" width="32" height="36" rx="2"/><path d="M8 16h32M8 26h32M18 6v36"/></svg></div><h3>SME Lending & MCA Underwriting</h3><p>Calculate Debt Service Coverage Ratios (DSCR), monthly revenue velocity, average daily balances, and NSF instances directly from verified transaction feeds.</p><span class="bs-usecase-tag">Lending & Credit</span></div><div class="bs-usecase-card"><div class="bs-ic-wrap"><svg class="ap-icon" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="6" y="8" width="14" height="12" rx="2"/><rect x="28" y="8" width="14" height="12" rx="2"/><rect x="17" y="28" width="14" height="12" rx="2"/><path d="M13 20v4h11v4M35 20v4H24"/></svg></div><h3>Automated Bookkeeping & ERP Sync</h3><p>Feed cleared transaction tables directly into NetSuite, QuickBooks, or Xero with continuous bank reconciliation and double-entry validation.</p><span class="bs-usecase-tag">Accounting & ERP</span></div><div class="bs-usecase-card"><div class="bs-ic-wrap"><svg class="ap-icon" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M24 6l16 6v12c0 10-7 18-16 20-9-2-16-10-16-20V12l16-6zM18 24l4 4 8-8"/></svg></div><h3>Mortgage & Income Verification</h3><p>Instantly verify borrower cash reserves, check deposit sourcing, and validate recurring payroll income without human line-item reviews.</p><span class="bs-usecase-tag">Mortgage & VOI</span></div><div class="bs-usecase-card"><div class="bs-ic-wrap"><svg class="ap-icon" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 18h40M6 18l18-12 18 12M8 18v18M16 18v18M24 18v18M32 18v18M40 18v18M4 36h40M2 42h44"/></svg></div><h3>Corporate Treasury & Liquidity</h3><p>Consolidate multi-bank balances across dozens of institutions into a unified cash visibility ledger with automated sweep auditing.</p><span class="bs-usecase-tag">Treasury Ops</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. DEVELOPER QUICKSTART (API & SDKs) -->
+  <!-- 10. RELATED DOC TYPES CROSS-NAVIGATION -->
+  <section class="ap-sec" id="bs-related">
+    <div class="ap-wrap">
+      <div class="ap-head ap-center" data-reveal>
+        <span class="ap-kicker">Document Type Library</span>
+        <h2 class="ap-h2">Explore related financial document types</h2>
+        <p class="ap-lede">Sensible supports hundreds of structured and unstructured document types across lending, insurance, and accounting.</p>
+      </div>
+      <div class="bs-related-grid" data-reveal>
+        <a class="bs-related-card" href="tax-returns.html"><svg class="ap-icon" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#1A1520" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="8" y="6" width="32" height="36" rx="2"/><path d="M14 14h20M14 20h20M14 26h12M14 32h8"/></svg><h4>Tax Returns (1040 & 1120S)</h4><p>Extract schedules, AGI, business income, and W-2 attachments with IRS schema mapping.</p><span class="bs-related-arrow">View Doc Type &rarr;</span></a><a class="bs-related-card" href="paystubs.html"><svg class="ap-icon" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#1A1520" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="8" y="8" width="32" height="32" rx="2"/><circle cx="24" cy="18" r="4"/><path d="M16 30c0-4 4-5 8-5s8 1 8 5"/></svg><h4>Pay Stubs & Earnings</h4><p>Capture gross pay, net pay, YTD totals, tax withholdings, and employer metadata.</p><span class="bs-related-arrow">View Doc Type &rarr;</span></a><a class="bs-related-card" href="financial-statements.html"><svg class="ap-icon" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#1A1520" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="8" y="6" width="32" height="36" rx="2"/><path d="M14 32l6-8 6 4 8-10"/></svg><h4>Balance Sheets & P&L</h4><p>Parse financial statement tables, assets, liabilities, and revenue schedules.</p><span class="bs-related-arrow">View Doc Type &rarr;</span></a><a class="bs-related-card" href="accounts-payable.html"><svg class="ap-icon" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#1A1520" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="8" y="6" width="32" height="36" rx="2"/><path d="M14 14h20M14 22h14M14 30h20"/></svg><h4>Accounts Payable Invoices</h4><p>Extract vendor headers, multi-line item tables, and tax reconciliations.</p><span class="bs-related-arrow">View Doc Type &rarr;</span></a><a class="bs-related-card" href="acord-certificates.html"><svg class="ap-icon" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#1A1520" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M24 6l16 6v12c0 10-7 18-16 20-9-2-16-10-16-20V12l16-6z"/><path d="M18 22h12M18 28h8"/></svg><h4>ACORD Insurance Certificates</h4><p>Extract policy limits, insured entities, carriers, and expiration dates.</p><span class="bs-related-arrow">View Doc Type &rarr;</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11. FAQ -->
+  <section class="ap-sec ap-band" id="bs-faq">
+    <div class="ap-wrap"><div class="ap-faq">
+      <div class="ap-faq-head" data-reveal>
+        <span class="ap-kicker">Common questions</span>
+        <h2 class="ap-h2">Questions from engineering &amp; risk teams</h2>
+        <p class="ap-lede">Starting with the one everyone's actually asking now that LLMs can read PDFs.</p>
+      </div>
+      <div class="ap-faq-list"><details class="ap-q" data-reveal open><summary>Why not just prompt GPT-4 or Claude on the PDF directly?<i>+</i></summary><div class="ap-q-a"><p>You can, and it'll work great on page one of a demo. It also has no way to prove a balance is right, no fixed output schema across runs, and it silently drops or merges rows on long tables. Sensible uses LLMs too, but only for the genuinely ambiguous cells, inside a pipeline that mathematically verifies every number before it reaches you. The failure mode isn't "wrong answer," it's "flagged for review."</p></div></details><details class="ap-q" data-reveal><summary>How does arithmetic validation catch OCR errors and hallucinations?<i>+</i></summary><div class="ap-q-a"><p>Sensible executes automated math checks on every statement. It computes the delta between beginning balance and ending balance, sums all extracted credit and debit transactions, and checks that every single running balance row adds up. If an OCR misread turns a $1,200.00 charge into $1,700.00, the arithmetic mismatch is flagged immediately with an exact error breakdown and low confidence score.</p></div></details><details class="ap-q" data-reveal><summary>How does Sensible handle multi-page bank statements where tables span 20+ pages?<i>+</i></summary><div class="ap-q-a"><p>Sensible uses deterministic SenseML table definitions paired with layout-aware anchors. It recognizes column boundaries, multi-line transaction narratives, and page break headers, stitching rows together into a single continuous transaction array without skipping lines or misaligning debits and credits.</p></div></details><details class="ap-q" data-reveal><summary>What happens when you hit a bank format that isn't in the 150+ library?<i>+</i></summary><div class="ap-q-a"><p>You send us a sample statement and we build (or you build, using the same SenseML editor) a new config, typically same-day for a standard layout, and it's reused across every customer needing that institution from then on. It's not a multi-week onboarding project.</p></div></details><details class="ap-q" data-reveal><summary>Can Sensible split statements that combine multiple accounts in one PDF?<i>+</i></summary><div class="ap-q-a"><p>Yes. Commercial banking statements frequently package checking, savings, payroll, and sweep accounts into a single file. Sensible classifies and partitions the document into individual account schedules, returning discrete JSON objects with their own account numbers, balance summaries, and transaction tables.</p></div></details><details class="ap-q" data-reveal><summary>Can Sensible help detect altered or fraudulent bank statements?<i>+</i></summary><div class="ap-q-a"><p>Yes. Because Sensible verifies mathematical consistency across beginning balances, total deposits, total withdrawals, and running transaction rows, altered numbers (such as edited balances or injected deposits) immediately fail reconciliation. Additionally, Sensible exposes PDF metadata, font layout anomalies, and coordinate bounding boxes for every field so your risk engine can spot tampered documents.</p></div></details><details class="ap-q" data-reveal><summary>Does Sensible support password-protected bank statements?<i>+</i></summary><div class="ap-q-a"><p>Yes. When submitting documents via the Sensible API, you can provide the document password in the request payload. Sensible unlocks the document in memory, processes the extraction, and ensures no unencrypted passwords or raw credentials are persisted.</p></div></details><details class="ap-q" data-reveal><summary>How is sensitive financial data protected, and what is your retention policy?<i>+</i></summary><div class="ap-q-a"><p>Sensible is SOC 2 Type II certified and HIPAA compliant. All document payloads and extracted data are encrypted with AES-256 in transit and at rest. We support configurable data retention policies, including zero-data retention (immediate purging after extraction) for regulated fintech and banking environments.</p></div></details></div>
+    </div></div>
+  </section>
+
+</div>
+<section class="cta-banner">
+    <div class="cta-inner">
+      <h2 class="cta-h2">Try <span class="sensible-font">Sensible</span> on your documents.</h2>
+      <p class="cta-p">Bring the document your team dreads. If it works on that one, you'll know.</p>
+      <div class="cta-btns">
+        <a href="https://app.sensible.so/register/" class="cta-btn-primary">Start Free</a>
+        <a href="https://www.sensible.so/meeting" class="cta-btn-secondary">Book a Demo</a>
+      </div>
+      <p class="cta-note">14-day free trial on the Growth Plan · No credit card</p>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <a href="https://www.sensible.so" style="display: inline-flex;">
+            <img src="https://cdn.prod.website-files.com/69d90e4abf8f50428ec28825/69d90e4abf8f50428ec2888c_LogoDefault.svg" alt="Sensible" class="footer-logo-img"/>
+          </a>
+          <p class="footer-brand-blurb">Document extraction you can trust.</p>
+          <div class="footer-social">
+            <a href="https://github.com/sensible-hq/" aria-label="GitHub">GitHub</a>
+            <a href="https://twitter.com/sensiblehq" aria-label="Twitter">Twitter</a>
+            <a href="https://www.linkedin.com/company/usesensible/" aria-label="LinkedIn">LinkedIn</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-label">Product</div>
+          <a href="https://docs.sensible.so/docs/getting-started">SenseML</a>
+          <a href="https://www.sensible.so/managed-services">Managed Services</a>
+          <a href="https://www.sensible.so/how-it-works">How it Works</a>
+          <a href="https://www.sensible.so/pricing">Pricing</a>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-label">Developers</div>
+          <a href="https://docs.sensible.so/">Documentation</a>
+          <a href="https://docs.sensible.so/reference">API Reference</a>
+          <a href="https://docs.sensible.so/changelog">Changelog</a>
+          <a href="https://sensible.statuspage.io/">API Status</a>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-label">Company</div>
+          <a href="https://www.sensible.so/about">About</a>
+          <a href="https://www.sensible.so/contact-us">Talk to our team</a>
+          <a href="https://www.sensible.so/blog">Blog</a>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-label">Compare</div>
+          <a href="https://www.sensible.so/sensible-vs-docsumo">Docsumo</a>
+          <a href="https://www.sensible.so/sensible-vs-nanonets">Nanonets</a>
+          <a href="https://www.sensible.so/sensible-vs-ocrolus">Ocrolus</a>
+          <a href="https://www.sensible.so/sensible-vs-reducto">Reducto</a>
+          <a href="https://www.sensible.so/sensible-vs-parseur">Parseur</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div class="footer-copyright">© <span class="sensible-font">Sensible</span> 2026</div>
+        <div class="footer-bottom-links">
+          <a href="https://www.sensible.so/terms">Terms</a>
+          <a href="https://www.sensible.so/privacy">Privacy Policy</a>
+          <a href="https://www.sensible.so/security-overview">Security</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script>
+/* Sensible /doc-types/bank-statements Interactive Scripts & Motion */
+(function () {
+  'use strict';
+  var root = document.querySelector('.ap');
+  if (!root) return;
+  var $ = function (s, c) { return (c || root).querySelector(s); };
+  var $$ = function (s, c) { return Array.prototype.slice.call((c || root).querySelectorAll(s)); };
+  var html = document.documentElement;
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- Hero: mini dashboard, synced 3-pane highlight cycle ---------- */
+  (function () {
+    var lines = $$('.bs-dash-code .ln[data-ln]');
+    var blocks = $$('.bs-dash-doc .blk[data-doc]');
+    var rows = $$('.bs-dash-res .bs-dash-row[data-res]');
+    if (!lines.length || !blocks.length || !rows.length) return;
+    var active = 0;
+    var n = rows.length;
+    function setActive(i) {
+      active = i;
+      lines.forEach(function (l) { l.classList.toggle('active', Number(l.dataset.ln) === i); });
+      blocks.forEach(function (b) { b.classList.toggle('active', Number(b.dataset.doc) === i); });
+      rows.forEach(function (r) { r.classList.toggle('active', Number(r.dataset.res) === i); });
+    }
+    if (!reduce) {
+      setInterval(function () { setActive((active + 1) % n); }, 2600);
+    }
+    rows.forEach(function (r) {
+      r.addEventListener('mouseenter', function () { setActive(Number(r.dataset.res)); });
+    });
+  })();
+
+  /* ---------- FAQ Details Accordions ---------- */
+  $$('.ap-q').forEach(function (q) {
+    q.addEventListener('toggle', function () {
+      if (q.open) {
+        $$('.ap-q').forEach(function (other) { if (other !== q && other.open) other.open = false; });
+      }
+    });
+  });
+
+  /* ---------- GSAP Animations ---------- */
+  if (!window.gsap || !window.ScrollTrigger || reduce) { html.classList.remove('ap-js'); return; }
+  gsap.registerPlugin(ScrollTrigger);
+
+  function splitWords(el) {
+    function walk(node, host) {
+      Array.prototype.slice.call(node.childNodes).forEach(function (n) {
+        if (n.nodeType === 3) {
+          var frag = document.createDocumentFragment();
+          n.textContent.split(/(\s+)/).forEach(function (part) {
+            if (!part) return;
+            if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(' ')); return; }
+            var w = document.createElement('span'); w.className = 'ap-w';
+            var i = document.createElement('span'); i.textContent = part; w.appendChild(i);
+            frag.appendChild(w);
+          });
+          host.replaceChild(frag, n);
+        } else if (n.nodeType === 1) { walk(n, n); }
+      });
+    }
+    walk(el, el);
+  }
+
+  var h1 = $('.ap-h1');
+  if (h1) {
+    gsap.set(h1, { opacity: 1 });
+    var intro = gsap.timeline({ defaults: { ease: 'power3.out' } });
+    intro
+      .fromTo($$('[data-hero]'), { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.7, stagger: 0.08 }, 0.05)
+      .from($('.bs-hero-demo'), { y: 32, opacity: 0, duration: 0.8 }, 0.25);
+  }
+
+  ScrollTrigger.batch('[data-reveal]', {
+    start: 'top 89%', once: true,
+    onEnter: function (els) { gsap.to(els, { opacity: 1, y: 0, duration: 0.85, stagger: 0.09, ease: 'power3.out', overwrite: true }); }
+  });
+
+  /* Validation checks counter animation */
+  var rows = $$('.ap-check');
+  if (rows.length) {
+    gsap.set(rows, { opacity: 0, y: 14 });
+    var icons = rows.map(function (r) { return $('.ic', r); });
+    gsap.set(icons, { scale: 0 });
+    var vt = gsap.timeline({ scrollTrigger: { trigger: '.ap-checks', start: 'top 78%', once: true } });
+    rows.forEach(function (r, i) {
+      vt.to(r, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, i * 0.38)
+        .to(icons[i], { scale: 1, duration: 0.45, ease: 'back.out(2.6)' }, i * 0.38 + 0.15);
+      var res = $('.res[data-count]', r);
+      if (res) {
+        var target = parseFloat(res.dataset.count); var o = { v: 0 };
+        vt.to(o, { v: target, duration: 0.9, ease: 'power2.out', onUpdate: function () {
+          res.textContent = '$' + o.v.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        } }, i * 0.38 + 0.1);
+      }
+    });
+    vt.fromTo('.ap-check.flag', { backgroundColor: '#FFE3B8' }, { backgroundColor: '#FFF7EA', duration: 1.1, repeat: 1, yoyo: true }, '>-0.3');
+  }
+
+  /* Quote words animation */
+  var q = $('.ap-qtext');
+  if (q) {
+    splitWords(q);
+    var words = $$('.ap-w', q);
+    words.forEach(function (w) { w.style.overflow = 'visible'; });
+    gsap.fromTo(words, { opacity: 0.16 }, { opacity: 1, ease: 'none', stagger: 0.12,
+      scrollTrigger: { trigger: '.ap-quote', start: 'top 72%', end: 'bottom 62%', scrub: true } });
+  }
+
+  window.addEventListener('load', function () { ScrollTrigger.refresh(); });
+})();
+
+</script>
+</body>
+</html>
