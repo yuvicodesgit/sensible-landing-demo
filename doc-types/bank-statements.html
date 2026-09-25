@@ -546,7 +546,8 @@
 .ap-num { display: flex; align-items: center; gap: 10px; font-family: var(--ap-mono); font-size: .75rem; letter-spacing: .1em; color: var(--ap-muted); }
 #bs-challenges .ap-num { width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid var(--ap-ink); justify-content: center; font-size: .75rem; color: var(--ap-ink); margin-bottom: 4px; }
 #bs-challenges .ap-num::before { display: none; }
-#bs-challenges .ap-num .ap-tagline { position: absolute; margin-left: 46px; white-space: nowrap; }
+#bs-challenges .ap-num { position: relative; }
+#bs-challenges .ap-num .ap-tagline { position: absolute; left: 46px; top: 50%; transform: translateY(-50%); margin-left: 0; white-space: nowrap; }
 #bs-challenges .ap-cell { position: relative; }
 .ap-num::before { content: ''; width: 5px; height: 5px; background: currentColor; }
 .ap-cell h3 { font-family: var(--ap-serif); font-weight: 500; font-size: 1.25rem; line-height: 1.15; letter-spacing: -.01em; margin: 26px 0 12px; }
